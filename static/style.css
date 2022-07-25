@@ -1,3 +1,20 @@
-._ab6- {
-    position:relative;
+nav {
+    /* min-width: 320px; */
 }
+._ab6- {
+    height: 3vh;
+    /* margin-top: 1.5px!important; */
+}
+
+.w3-button {
+    height: 3.5rem;
+    width: 14%;
+    /* margin-top: 1.5px!important; */
+}
+.brand_b {
+    font-size: 0.5rem;
+    line-height: 1;
+}
+/* ._ab6- {
+    position:relative;
+} */

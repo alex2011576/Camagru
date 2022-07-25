@@ -1,0 +1,18 @@
+html {
+	min-width: 350px;
+}
+
+.nav-link {
+    padding-left:0.6rem!important;
+    padding-right:0.4rem!important;
+}
+/* .nav-item {
+        padding-right: 0;
+        padding-right: 0.4rem !important;
+        padding-left: 0.4rem !important;
+      } */
+
+/* .navbar-brand {
+    font-size: 2rem!important;
+    margin-left: 1rem;
+} */
