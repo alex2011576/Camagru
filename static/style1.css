@@ -3,9 +3,14 @@ html {
 }
 
 .nav-link {
-    padding-left:0.6rem!important;
+    padding-left:0.8rem!important;
     padding-right:0.4rem!important;
 }
+
+h1{
+    font-family: 'Molle', cursive!important;
+}
+
 /* .nav-item {
         padding-right: 0;
         padding-right: 0.4rem !important;
