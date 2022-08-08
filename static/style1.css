@@ -17,6 +17,16 @@ h1{
     /* font-family: 'Stalinist One', cursive!important; */
 }
 
+.picture {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    object-fit: contain;
+}
+
+.pic-btn:hover, .pic-btn:focus, .pic-btn:active, .pic-btn.active, .open>.dropdown-toggle.pic-btn {
+    border-color: transparent;
+}
 /* .nav-item {
         padding-right: 0;
         padding-right: 0.4rem !important;
