@@ -54,6 +54,10 @@ h1{
 .post-description{
 
 }
+
+.comment-input:hover, .comment-input:focus, .comment-input:active, .comment-input.active, .open>.dropdown-toggle.comment-input {
+    /* border:none; */
+}
 /* .nav-item {
         padding-right: 0;
         padding-right: 0.4rem !important;
