@@ -42,6 +42,18 @@ h1{
 .comment-a{
     font-size: 0.9rem!important;
 }
+
+.comments {
+    overflow-y: auto;
+    max-height: 15em;
+}
+
+.comment-text{
+    overflow-y: auto;
+}
+.post-description{
+
+}
 /* .nav-item {
         padding-right: 0;
         padding-right: 0.4rem !important;
