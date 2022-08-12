@@ -58,6 +58,11 @@ h1{
 .comment-input:hover, .comment-input:focus, .comment-input:active, .comment-input.active, .open>.dropdown-toggle.comment-input {
     /* border:none; */
 }
+
+.forms-container
+{
+    max-width:340px;
+}
 /* .nav-item {
         padding-right: 0;
         padding-right: 0.4rem !important;
