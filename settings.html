@@ -67,7 +67,7 @@
     <main class="">
         
         <div class="container-fluid forms-container d-flex flex-column ">
-
+<!-- Notification settings -->
               <form class="form-container border rounded border-dark px-4 py-3 my-3">
                 <p class="h5 text-center fw-normal my-2">Notifications Settings</p>
                 <div class="d-grid pt-3 pb-2">
@@ -77,17 +77,33 @@
                     <button class="btn btn-dark" type="button">Subscribe</button>
                 </div>
               </form>
-<!--  1111111111111111111111111111111111111111111111111 -->
+<!-- Change Email-->
               <form class="form-container border rounded border-dark px-4 py-3 my-3">
                 <p class="h5 text-center fw-normal mt-2 mb-3">Change Email</p>
                 <div class="row mb-3">
                   <!-- <label for="" class="col-form-label">New Email</label> -->
                   <div class="">
-                    <input type="email" class="form-control bg-light" id="" placeholder="New email" aria-label="Add comment">
+                    <input type="email" class="form-control bg-light" id="" placeholder="New email" aria-label="New Email">
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <!-- <label for="" class="col-form-label ">Password</label> -->
+                  <div class="">
+                    <input type="password" class="form-control bg-light" id="" placeholder="Password" aria-label="Password">
+                  </div>
+                </div>
+                <div class="d-grid pt-2 pb-2">
+                    <button class="btn btn-dark p-1" type="button">Submit</button>
+                  </div>
+              </form>
+<!-- Change Username -->
+              <form class="form-container border rounded border-dark px-4 py-3 my-3">
+                <p class="h5 text-center fw-normal mt-2 mb-3">Change Username</p>
+                <div class="row mb-3">
+                  <div class="">
+                    <input type="text" class="form-control bg-light" placeholder="New Username" aria-label="New Username" aria-describedby="">
+                  </div>
+                </div>
+                <div class="row mb-3">
                   <div class="">
                     <input type="password" class="form-control bg-light" id="" placeholder="Password" aria-label="Add comment">
                   </div>
@@ -96,27 +112,41 @@
                     <button class="btn btn-dark p-1" type="button">Submit</button>
                   </div>
               </form>
-
+              <!-- Change Password -->
               <form class="form-container border rounded border-dark px-4 py-3 my-3">
-                <p class="h5 text-center fw-normal mt-2 mb-3">Change Email</p>
+                <p class="h5 text-center fw-normal mt-2 mb-3">Change Password</p>
                 <div class="row mb-3">
-                  <!-- <label for="" class="col-form-label">New Email</label> -->
                   <div class="">
-                    <input type="email" class="form-control bg-light" id="" placeholder="New email" aria-label="Add comment">
+                    <input type="text" class="form-control bg-light" placeholder="Old Password" aria-label="Old Password" aria-describedby="">
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <!-- <label for="" class="col-form-label ">Password</label> -->
                   <div class="">
-                    <input type="password" class="form-control bg-light" id="" placeholder="Password" aria-label="Add comment">
+                    <input type="text" class="form-control bg-light" placeholder="New Password" aria-label="New Password" aria-describedby="">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="">
+                    <input type="password" class="form-control bg-light" id="" placeholder="Confirm New Password" aria-label="Confirm New Password">
                   </div>
                 </div>
                 <div class="d-grid pt-2 pb-2">
-                    <button class="btn btn-dark p-1" type="button">Submit</button>
+                  <button class="btn btn-dark p-1" type="button">Submit</button>
+                </div>
+              </form>
+              <!-- Delete Account -->
+              <form class="form-container border rounded border-dark px-4 py-3 my-3">
+                <p class="h5 text-center fw-normal mt-2 mb-3">Delete Account</p>
+                <div class="row mb-3">
+                  <div class="">
+                    <input type="text" class="form-control bg-light" placeholder="Confirm With Password" aria-label="Confirm With Password" aria-describedby="">
+                  </div>
+                </div>
+                <div class="d-grid pt-2 pb-2">
+                    <button class="btn btn-danger p-1" type="button">Submit</button>
                   </div>
               </form>
-
-        </div>
+</div>
     </main>
     <footer class="text-center text-muted mt-2">
       <div class="p-3" style="background-color: rgba(0, 0, 0, 0.05);">
