@@ -71,6 +71,8 @@ h1{
 
 .logo-h2{
     font-family: 'Righteous', cursive;
+    font-size: calc(3.5rem + 4 * ((100vw - 320px) / 680));
+
 }
 
 .line {
