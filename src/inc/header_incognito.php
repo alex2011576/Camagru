@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Molle&family=Righteous&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
-  <script type="text/javascript" src="/camagru/mine/static/view_actions.js"></script>
+  <script type="text/javascript" src="/camagru/mine/public/static/view_actions.js"></script>
 </head>
 
 <body>

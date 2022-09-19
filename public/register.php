@@ -1,6 +1,10 @@
 <?php
-
+require __DIR__ . '/../src/bootstrap.php';
+require __DIR__ . '/../src/register.php';
 ?>
+
+<?php view('header_incognito', ['title' => 'Register']) ?>
+
 <main class="">
     <div class="container-fluid logforms-container d-flex flex-column">
         <!-- FORM-->
@@ -13,17 +17,17 @@
             </p>
             <div class="row mb-3">
                 <div class="">
-                    <input type="email" class="form-control bg-light" placeholder="Email" aria-label="Email" aria-describedby="" autocomplete="on" />
+                    <input type="email" class="form-control bg-light" placeholder="Email" aria-label="Email" aria-describedby="" autocomplete="on" value="<?= $inputs['email'] ?? '' ?>" />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="text" class="form-control bg-light" placeholder="Username" aria-label="Username" aria-describedby="" autocomplete="on" />
+                    <input type="text" class="form-control bg-light" placeholder="Username" aria-label="Username" aria-describedby="" autocomplete="on" value="<?= $inputs['username'] ?? '' ?>" />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" class="form-control bg-light" placeholder="Password" aria-label="new-password" aria-describedby="passHel" autocomplete="on" />
+                    <input type="password" class="form-control bg-light" placeholder="Password" aria-label="new-password" aria-describedby="passHel" autocomplete="on" value="<?= $inputs['password'] ?? '' ?>" />
                     <div id="passHelp" class="form-text">
                         Your password must be at least 8 characters long, contain
                         uppercase and lowercase letters, numbers and at least one
@@ -33,7 +37,7 @@
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" class="form-control bg-light" placeholder="Confirm Password" aria-label="confirm-password" aria-describedby="cpassHelp" autocomplete="on" />
+                    <input type="password" class="form-control bg-light" placeholder="Confirm Password" aria-label="confirm-password" aria-describedby="cpassHelp" autocomplete="on" value="<?= $inputs['password2'] ?? '' ?>" />
                     <div id="cpassHelp" class="form-text"></div>
                 </div>
             </div>
@@ -53,3 +57,5 @@
         </form>
     </div>
 </main>
+
+<?php view('footer') ?>
