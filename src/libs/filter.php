@@ -12,6 +12,8 @@ function filter(array $data, array $fields, array $messages = []): array
     $sanitization = [];
     $validation = [];
 
+    // var_dump($data);
+    // die();
     // extract sanitization & validation rules
     foreach ($fields as $field => $rules) {
         if (strpos($rules, '|')) {
@@ -20,9 +22,11 @@ function filter(array $data, array $fields, array $messages = []): array
             $sanitization[$field] = $rules;
         }
     }
+
     $inputs = sanitize($data, $sanitization);
     $errors = validate($inputs, $validation, $messages);
     // var_dump($inputs);
     // var_dump($errors);
+    // die();
     return [$inputs, $errors];
 }
