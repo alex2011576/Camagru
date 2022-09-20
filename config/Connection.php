@@ -1,19 +1,21 @@
 <?php
 
-// class Connection
-// {
-// 	public static function make($DB_DSN, $DB_USER, $DB_PASSWORD)
-// 	{
-// 		//$DB_DSN = "mysql:host=$host;dbname=$db;charset=UTF8";
+require_once __DIR__ . "/../config/database.php";
 
-// 		try {
-// 			$options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+class Connection
+{
+	public static function make($DB_DSN, $DB_USER, $DB_PASSWORD)
+	{
+		//$DB_DSN = "mysql:host=$host;dbname=$db;charset=UTF8";
 
-// 			return new PDO($DB_DSN, $DB_USER, $DB_PASSWORD, $options);
-// 		} catch (PDOException $e) {
-// 			die($e->getMessage());
-// 		}
-// 	}
-// }
+		try {
+			$options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
 
-// return Connection::make($DB_DSN, $DB_USER, $DB_PASSWORD);
+			return new PDO($DB_DSN, $DB_USER, $DB_PASSWORD, $options);
+		} catch (PDOException $e) {
+			die($e->getMessage());
+		}
+	}
+}
+
+return Connection::make($DB_DSN, $DB_USER, $DB_PASSWORD);
