@@ -23,6 +23,10 @@ function register_user(string $email, string $username, string $password, bool $
     $statement->bindValue(':is_admin', (int)$is_admin, PDO::PARAM_INT);
     $statement->bindValue(':activation_code', $activation_code, PDO::PARAM_STR);
 
-
-    return $statement->execute();
+    try {
+        return $statement->execute();
+    } catch (PDOException $e) {
+        echo "registration failed";
+        die($e->getMessage());
+    }
 }
