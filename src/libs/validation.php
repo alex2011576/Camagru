@@ -198,10 +198,10 @@ function is_unique(array $data, string $field, string $table, string $column): b
     if (!isset($data[$field])) {
         return true;
     }
-    if (isset($table) && isset($column))
-        return true;
-    return false;
-    /*
+    // if (isset($table) && isset($column))
+    //     return true;
+    // return false;
+
     $sql = "SELECT $column FROM $table WHERE $column = :value";
 
     $stmt = db()->prepare($sql);
@@ -210,5 +210,4 @@ function is_unique(array $data, string $field, string $table, string $column): b
     $stmt->execute();
 
     return $stmt->fetchColumn() === false;
-    */
 }

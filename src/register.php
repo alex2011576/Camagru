@@ -21,31 +21,22 @@ if (is_post_request()) {
             'required' => 'You need to agree to the term of services to register'
         ]
     ];
-    // var_dump($_POST);
-    // die();
+
     [$inputs, $errors] = filter($_POST, $fields, $messages);
-    //STOPPED HERE!!!!!
     if ($errors) {
-        // echo "HERE";
-        // var_dump($inputs);
-        // die();
+
         redirect_with('register.php', [
             'inputs' => $inputs,
             'errors' => $errors
         ]);
     }
-    // echo "HERE";
-    // var_dump($inputs);
-    // die();
+
     if (register_user($inputs['email'], $inputs['username'], $inputs['password'])) {
         redirect_with_message(
             'login.php',
             'Your account has been created successfully. Please login here.'
         );
     }
-    // echo "HERE";
-    // var_dump($inputs);
-    // die();
 } else if (is_get_request()) {
     [$inputs, $errors] = session_flash('inputs', 'errors');
 }
