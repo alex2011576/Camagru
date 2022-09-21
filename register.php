@@ -31,7 +31,7 @@ require __DIR__ . '/src/register.php';
             <div class="row mb-3">
                 <div class="">
                     <input name="password" type="password" class="form-control bg-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}" placeholder="Password" aria-label="new-password" aria-describedby="passHel" autocomplete="on" value="<?= $inputs['password'] ?? '' ?>" required />
-                    <small id="passHelp" class="form-text <?= error_class($errors, 'username') ?>">
+                    <small id="passHelp" class="form-text <?= error_class($errors, 'password') ?>">
                         Your password must be at least 8 characters long, contain
                         uppercase and lowercase letters, numbers and at least one
                         special character.
