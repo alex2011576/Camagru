@@ -26,7 +26,7 @@ function view(string $filename, array $data = []): void
  */
 function error_class(array $errors, string $field): string
 {
-    return isset($errors[$field]) ? 'error' : '';
+    return isset($errors[$field]) ? 'text-danger' : '';
 }
 
 /**

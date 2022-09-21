@@ -5,7 +5,7 @@ $inputs = [];
 
 if (is_post_request()) {
     $fields = [
-        'username' => 'string | required | alphanumeric | between: 3, 25 | unique: users, username',
+        'username' => 'string | required | alphanumeric | between: 3, 15 | unique: users, username',
         'email' => 'email | required | email | unique: users, email',
         'password' => 'string | required | secure',
         'password2' => 'string | required | same: password',
