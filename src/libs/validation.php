@@ -198,9 +198,6 @@ function is_unique(array $data, string $field, string $table, string $column): b
     if (!isset($data[$field])) {
         return true;
     }
-    // if (isset($table) && isset($column))
-    //     return true;
-    // return false;
 
     $sql = "SELECT $column FROM $table WHERE $column = :value";
 

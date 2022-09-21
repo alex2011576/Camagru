@@ -64,8 +64,5 @@ function sanitize(array $inputs, array $fields = [], int $default_filter = FILTE
         $data = filter_var_array($inputs, $default_filter);
     }
 
-    // echo "<br>";
-    // var_dump($data);
-    // echo "</br>";
     return $trim ? array_trim($data) : $data;
 }
