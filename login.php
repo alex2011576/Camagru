@@ -39,7 +39,7 @@ require __DIR__ . '/src/login.php';
         <div class="line"></div>
       </div>
       <div class="form-footer text-center mb-4">
-        <a class="text-decoration-none fs-6" href="">Forgot password?</a>
+        <a class="text-decoration-none fs-6" href="forgot_pass.php">Forgot password?</a>
       </div>
     </form>
 
