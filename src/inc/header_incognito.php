@@ -23,14 +23,14 @@
       </a>
       <ul class="nav px-0 justify-content-end flex-nowrap">
         <li class="nav-item">
-          <a class="btn btn-outline-dark me-2 fs-6 border-0 mt-sm-1" href="#" role="button" style="
+          <a class="btn btn-outline-dark me-2 fs-6 border-0 mt-sm-1" href="login.php" role="button" style="
                 --bs-btn-padding-y: 0.25rem;
                 --bs-btn-padding-x: 0.5rem;
                 --bs-btn-font-size: 0.75rem;
               ">Log In</a>
         </li>
         <li class="nav-item">
-          <a class="btn btn-outline-dark me-2 fs-6 border-0 mt-sm-1" href="#" role="button" style="
+          <a class="btn btn-outline-dark me-2 fs-6 border-0 mt-sm-1" href="register.php" role="button" style="
                 --bs-btn-padding-y: 0.25rem;
                 --bs-btn-padding-x: 0.5rem;
                 --bs-btn-font-size: 0.75rem;

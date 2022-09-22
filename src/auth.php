@@ -40,7 +40,7 @@ function register_user(string $email, string $username, string $password, string
  */
 function find_user_by_username(string $username): mixed
 {
-    $sql = 'SELECT username, password, active, email
+    $sql = 'SELECT user_id, username, password, active, email
             FROM users
             WHERE username=:username';
 
@@ -147,6 +147,11 @@ function send_activation_email(string $email, string $activation_code): void
     $header = "From:" . SENDER_EMAIL_ADDRESS;
 
     // send the email
+    // var_dump($email);
+    // var_dump($message);
+    // var_dump($activation_link);
+    // var_dump($header);
+    // die();
     mail($email, $subject, nl2br($message), $header);
 }
 
@@ -175,7 +180,11 @@ function find_unverified_user(string $activation_code, string $email)
     $statement->execute();
 
     $user = $statement->fetch(PDO::FETCH_ASSOC);
-
+    // var_dump($activation_code);
+    // var_dump($user['activation_code']);
+    // var_dump($email);
+    // var_dump($user);
+    // die();
     if ($user) {
         // already expired, delete the in active user with expired activation code
         if ((int)$user['expired'] === 1) {
@@ -187,7 +196,8 @@ function find_unverified_user(string $activation_code, string $email)
             return $user;
         }
     }
-
+    // var_dump($user);
+    // die();
     return null;
 }
 

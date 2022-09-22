@@ -41,7 +41,8 @@ if (is_post_request()) {
 
         // send the activation email
         send_activation_email($inputs['email'], $activation_code);
-
+        // echo $activation_code;
+        // die;
         redirect_with_message(
             'login.php',
             'Please check your email to activate your account before signing in'
