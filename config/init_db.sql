@@ -16,3 +16,15 @@ create table if not exists mycamagru_db.users (
 	created_at timestamp not null default current_timestamp(),
 	updated_at datetime default current_timestamp() on update current_timestamp()
 );
+
+-- Reset Password Table --
+create table if not exists mycamagru_db.password_reset(
+	id int not null auto_increment primary key,
+	user_id int not null,
+	email varchar(255) not null,
+	reset_expiry datetime not null,
+	reset_code varchar(255) collate utf8_unicode_ci not null,
+	foreign key (user_id)
+		references camagru_db.users (user_id)
+		on delete cascade
+);

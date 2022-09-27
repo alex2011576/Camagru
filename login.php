@@ -5,7 +5,7 @@ require __DIR__ . '/src/login.php';
 
 
 <?php view('header_incognito', ['title' => 'Login']) ?>
-<!-- <?php flash() ?> -->
+<?php flash() ?>
 
 <?php if (isset($errors['login'])) : ?>
   <div class="alert alert-danger">

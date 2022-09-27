@@ -52,6 +52,27 @@ function find_user_by_username(string $username): mixed
 }
 
 /**
+ * Find a user by username or email,
+ * return asocciative array[username, password] or false.
+ * 
+ * @param string $username
+ * @return mixed
+ */
+function find_user_by_identifier(string $identifier): mixed
+{
+    $sql = 'SELECT user_id, username, password, active, email
+            FROM users
+            WHERE email=:email OR username =:username';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':username', $identifier, PDO::PARAM_STR);
+    $statement->bindValue(':email', $identifier, PDO::PARAM_STR);
+    $statement->execute();
+
+    return $statement->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
  * Return true if the user is logged in
  *
  * @return boolean
@@ -155,6 +176,30 @@ function send_activation_email(string $email, string $activation_code): void
     mail($email, $subject, nl2br($message), $header);
 }
 
+function send_pass_reset_email(string $email, string $activation_code): void
+{
+    // create the activation link
+    $activation_link = APP_URL . "/reset_pass.php?email=$email&reset_code=$activation_code";
+
+    // set email subject & body
+    $subject = 'Please, reset password for your account';
+    $message = <<<MESSAGE
+            Hi,
+            Please click the following link to reset password for your account:
+            $activation_link
+            MESSAGE;
+    // email header
+    $header = "From:" . SENDER_EMAIL_ADDRESS;
+
+    // send the email
+    // var_dump($email);
+    // var_dump($message);
+    // var_dump($activation_link);
+    // var_dump($header);
+    // die();
+    mail($email, $subject, nl2br($message), $header);
+}
+
 function delete_user_by_id(int $id, int $active = 0)
 {
     $sql = 'DELETE FROM users
@@ -212,4 +257,61 @@ function activate_user(int $user_id): bool
     $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 
     return $statement->execute();
+}
+
+/**
+ * Check if user exists and create a request to reset user password
+ *
+ * @param string $identifier
+ * @return boolean
+ */
+function recover_user(string $identifier): bool
+{
+    $user = find_user_by_identifier($identifier);
+
+    if ($user && is_user_active($user)) {
+
+        $reset_code = generate_activation_code();
+
+        if (request_reset_password($user['user_id'], $user['email'], $reset_code)) {
+            send_pass_reset_email($user['email'], $reset_code);
+        } else {
+            return false;
+        }
+
+
+        return true;
+    }
+
+    return false;
+}
+
+
+/**
+ * Register a user
+ *
+ * @param string $email
+ * @param string $username
+ * @param string $password
+ * @param bool $is_admin
+ * @return bool
+ */
+function request_reset_password(int $user_id, string $email, string $reset_code, int $expiry = 30 * 60): bool
+{
+    $sql = 'INSERT INTO password_reset(user_id, email, reset_code, reset_expiry)
+            VALUES(:user_id, :email, :reset_code, :reset_expiry)';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':user_id', $user_id);
+    $statement->bindValue(':email', $email);
+    $statement->bindValue(':reset_code', password_hash($reset_code, PASSWORD_DEFAULT));
+    $statement->bindValue(':reset_expiry', date('Y-m-d H:i:s',  time() + $expiry));
+
+    try {
+        return $statement->execute();
+    } catch (PDOException $e) {
+        echo "registration failed";
+        die($e->getMessage());
+    }
 }

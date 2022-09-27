@@ -1,22 +1,23 @@
 <?php
 require __DIR__ . '/src/bootstrap.php';
-//require __DIR__ . '/src/forgot_pass.php';
+require __DIR__ . '/src/forgot_pass.php';
 ?>
 
 
 <?php view('header_incognito', ['title' => 'Forgot Password']) ?>
-<!-- <?php flash() ?> -->
+<?php flash() ?>
 
-<?php if (isset($errors['login'])) : ?>
+<?php if (isset($errors['identifier'])) : ?>
     <div class="alert alert-danger">
-        <?= $errors['login'] ?>
+        <?= $errors['identifier'] ?>
     </div>
 <?php endif ?>
+
 
 <main class="">
     <div class="container-fluid logforms-container d-flex flex-column ">
         <!-- FORM-->
-        <form class="form-container border border-light shadow px-5 mt-5 mb-2" action="login.php" method="post">
+        <form class="form-container border border-light shadow px-5 mt-5 mb-2" action="forgot_pass.php" method="post">
             <p class="logo-h2 fw-bolder text-center mt-3 pt-1 mb-2" style="width:inherit">Camagru</p>
             <p class="text text-center fs-5 fw-bold px-2" style="width: inherit">
                 Trouble logging in?
