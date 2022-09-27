@@ -365,13 +365,14 @@ function find_unrecovered_user(string $reset_code, string $email)
     // var_dump($user);
     // die();
     if ($user) {
-        dlt_reset_rqst_by_email($user['email']);
         // already expired, delete the inactive request with expired reset code
         if ((int)$user['expired'] === 1) {
+            dlt_reset_rqst_by_email($user['email']);
             return null;
         }
         // verify the token 
         if (password_verify($reset_code, $user['reset_code'])) {
+            dlt_reset_rqst_by_email($user['email']);
             return $user;
         }
     }
