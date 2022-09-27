@@ -288,12 +288,12 @@ function recover_user(string $identifier): bool
 
 
 /**
- * Register a user
+ * Request_reset_password
  *
+ * @param int $user_id
  * @param string $email
- * @param string $username
- * @param string $password
- * @param bool $is_admin
+ * @param string $reset_code
+ * @param int $expiry
  * @return bool
  */
 function request_reset_password(int $user_id, string $email, string $reset_code, int $expiry = 30 * 60): bool
@@ -314,4 +314,79 @@ function request_reset_password(int $user_id, string $email, string $reset_code,
         echo "registration failed";
         die($e->getMessage());
     }
+}
+
+/**
+ * Register a user
+ *
+ * @param string $email
+ * @param string $username
+ * @param string $password
+ * @param bool $is_admin
+ * @return bool
+ */
+function reset_password(int $user_id, string $email, string $reset_code, int $expiry = 30 * 60): bool
+{
+    $sql = 'INSERT INTO password_reset(user_id, email, reset_code, reset_expiry)
+            VALUES(:user_id, :email, :reset_code, :reset_expiry)';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':user_id', $user_id);
+    $statement->bindValue(':email', $email);
+    $statement->bindValue(':reset_code', password_hash($reset_code, PASSWORD_DEFAULT));
+    $statement->bindValue(':reset_expiry', date('Y-m-d H:i:s',  time() + $expiry));
+
+    try {
+        return $statement->execute();
+    } catch (PDOException $e) {
+        echo "registration failed";
+        die($e->getMessage());
+    }
+}
+
+function find_unrecovered_user(string $reset_code, string $email)
+{
+
+    $sql = 'SELECT id, user_id, email, reset_code, reset_expiry < now() as expired
+            FROM password_reset
+            WHERE email=:email
+            ORDER BY id DESC LIMIT 1';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':email', $email);
+    $statement->execute();
+
+    $user = $statement->fetch(PDO::FETCH_ASSOC);
+    // var_dump($activation_code);
+    // var_dump($user['activation_code']);
+    // var_dump($email);
+    // var_dump($user);
+    // die();
+    if ($user) {
+        // already expired, delete the inactive user with expired activation code
+        if ((int)$user['expired'] === 1) {
+            delete_expired_reset_requests($user['email']);
+            return null;
+        }
+        // verify the password
+        if (password_verify($reset_code, $user['reset_code'])) {
+            return $user;
+        }
+    }
+    // var_dump($user);
+    // die();
+    return null;
+}
+
+function delete_expired_reset_requests(int $email)
+{
+    $sql = 'DELETE FROM password_reset
+            WHERE email=:email';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':email', $email);
+
+    return $statement->execute();
 }

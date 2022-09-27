@@ -1,10 +1,10 @@
 <?php
 require __DIR__ . '/src/bootstrap.php';
-//require __DIR__ . '/src/reset_pass.php';
+require __DIR__ . '/src/reset_pass.php';
 ?>
 
 
-<?php view('header_incognito', ['title' => 'Forgot Password']) ?>
+<?php view('header_incognito', ['title' => 'Reset Password']) ?>
 <!-- <?php flash() ?> -->
 
 <main class="">
