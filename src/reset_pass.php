@@ -24,7 +24,8 @@ if (is_post_request()) {
     if (reset_password($_SESSION['user_id'], $inputs['password'])) {
 
         unset($_SESSION['username'], $_SESSION['user_id'], $_SESSION['password_reset']);
-        session_destroy();
+        //maybe not to not break flash
+        //session_destroy();
         redirect_with_message(
             'login.php',
             'Your password has been successfully updated!'
@@ -43,6 +44,8 @@ if (is_get_request()) {
         ]);
 
         if (!$errors) {
+            // var_dump($inputs);
+            // die();
             $user = find_unrecovered_user($inputs['reset_code'], $inputs['email']);
             // var_dump($user);
             // die();
@@ -57,13 +60,18 @@ if (is_get_request()) {
                 ]);
             }
         }
+        redirect_with_message(
+            'forgot_pass.php',
+            'The password_reset link is not valid anymore. Please, request password reset again.',
+            FLASH_ERROR
+        );
     }
     // sanitize the email & activation code
 }
 
 // redirect to the register page in other cases
-redirect_with_message(
-    'forgot_pass.php',
-    'The password_reset link is not valid anymore. Please, request password reset again.',
-    FLASH_ERROR
-);
+// redirect_with_message(
+//     'forgot_pass.php',
+//     'The password_reset link is not valid anymore. Please, request password reset again.',
+//     FLASH_ERROR
+// );

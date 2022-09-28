@@ -278,6 +278,8 @@ function recover_user(string $identifier): bool
             return false;
         }
 
+        // echo $reset_code;
+        // die();
 
         return true;
     }
@@ -305,6 +307,7 @@ function request_reset_password(int $user_id, string $email, string $reset_code,
     $statement->bindValue(':user_id', $user_id);
     $statement->bindValue(':email', $email);
     $statement->bindValue(':reset_code', password_hash($reset_code, PASSWORD_DEFAULT));
+    //$statement->bindValue(':reset_code', $reset_code);
     $statement->bindValue(':reset_expiry', date('Y-m-d H:i:s',  time() + $expiry));
 
     try {
@@ -367,10 +370,16 @@ function find_unrecovered_user(string $reset_code, string $email)
             return null;
         }
         // verify the token 
+        // var_dump($reset_code);
+        // var_dump($user['reset_code']);
+        // var_dump(password_verify($reset_code, $user['reset_code']));
+        // die();
         if (password_verify($reset_code, $user['reset_code'])) {
             dlt_reset_rqst_by_email($user['email']);
             return $user;
         }
+        // echo "Here";
+        // die();
     }
     // var_dump($user);
     // die();
