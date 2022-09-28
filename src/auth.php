@@ -223,7 +223,6 @@ function find_unverified_user(string $activation_code, string $email)
 
     $statement->bindValue(':email', $email);
     $statement->execute();
-
     $user = $statement->fetch(PDO::FETCH_ASSOC);
     // var_dump($activation_code);
     // var_dump($user['activation_code']);
@@ -382,7 +381,7 @@ function find_unrecovered_user(string $reset_code, string $email)
 }
 
 
-function dlt_reset_rqst_by_email(int $email)
+function dlt_reset_rqst_by_email(string $email)
 {
     $sql = 'DELETE FROM password_reset
             WHERE email=:email';
