@@ -316,7 +316,7 @@ function request_reset_password(int $user_id, string $email, string $reset_code,
 }
 
 /**
- * Register a user
+ * Reset password
  *
  * @param string $email
  * @param string $username
@@ -326,7 +326,8 @@ function request_reset_password(int $user_id, string $email, string $reset_code,
  */
 function reset_password(int $user_id, string $email, string $reset_code, int $expiry = 30 * 60): bool
 {
-    $sql = 'INSERT INTO password_reset(user_id, email, reset_code, reset_expiry)
+    $sql = 'UPDATE  users
+            SET password = :new_password
             VALUES(:user_id, :email, :reset_code, :reset_expiry)';
 
     $statement = db()->prepare($sql);
