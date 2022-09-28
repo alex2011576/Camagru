@@ -318,29 +318,25 @@ function request_reset_password(int $user_id, string $email, string $reset_code,
 /**
  * Reset password
  *
- * @param string $email
- * @param string $username
+ * @param int $user_id
  * @param string $password
- * @param bool $is_admin
  * @return bool
  */
-function reset_password(int $user_id, string $email, string $reset_code, int $expiry = 30 * 60): bool
+function reset_password(int $user_id, string $new_password): bool
 {
     $sql = 'UPDATE  users
             SET password = :new_password
-            VALUES(:user_id, :email, :reset_code, :reset_expiry)';
+            WHERE user_id = :user_id';
 
     $statement = db()->prepare($sql);
 
     $statement->bindValue(':user_id', $user_id);
-    $statement->bindValue(':email', $email);
-    $statement->bindValue(':reset_code', password_hash($reset_code, PASSWORD_DEFAULT));
-    $statement->bindValue(':reset_expiry', date('Y-m-d H:i:s',  time() + $expiry));
+    $statement->bindValue(':new_password', password_hash($new_password, PASSWORD_BCRYPT));
 
     try {
         return $statement->execute();
     } catch (PDOException $e) {
-        echo "registration failed";
+        echo "password reset failed";
         die($e->getMessage());
     }
 }
