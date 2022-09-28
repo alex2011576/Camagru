@@ -48,6 +48,7 @@ if (is_post_request()) {
             'Please check your email to activate your account before signing in'
         );
     }
+    //maybe some error handling
 } else if (is_get_request()) {
     [$inputs, $errors] = session_flash('inputs', 'errors');
 }

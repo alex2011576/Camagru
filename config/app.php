@@ -6,4 +6,4 @@ date_default_timezone_set('Europe/Helsinki');
 
 
 // http://localhost:8080/camagru/mine/activate.php?email=aleksei.shatalov@outlook.com&activation_code=b00aeec59ccdee536645bd310228767f
-//http://localhost:8080/camagru/mine/activate.php?email=aleksei.shatalov@outlook.com&activation_code=b00aeec59ccdee536645bd310228767f
+//http://localhost:8080/camagru/mine/reset_pass.php?email=aaaa@aa.aa&reset_code=activation_code";

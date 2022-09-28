@@ -1,11 +1,11 @@
 <?php
 require __DIR__ . '/src/bootstrap.php';
-require __DIR__ . '/src/reset_pass.php';
+require __DIR__ . '/src/login.php';
 ?>
 
 
 <?php view('header_incognito', ['title' => 'Reset Password']) ?>
-<?php flash() ?>
+<!-- <?php flash() ?> -->
 
 <main class="">
     <div class="container-fluid logforms-container d-flex flex-column ">
