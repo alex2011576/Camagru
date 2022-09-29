@@ -89,6 +89,31 @@ if (is_post_request()) {
             );
         }
     }
+    if (isset($_POST['change_password'])) {
+        // var_dump($_SESSION['user_id']);
+        // die();
+        $user = find_user_by_username($_SESSION['username']);
+        // var_dump($user);
+        // var_dump($inputs);
+        // die();
+        if ($user && is_user_active($user) && password_verify($inputs['password'], $user['password'])) {
+            // var_dump($_SESSION['user_id']);
+            // die();
+            if (!reset_password($_SESSION['user_id'], $inputs['new_password'])) {
+                redirect_to('error.php');
+            }
+            redirect_with_message(
+                'settings.php',
+                'Password was changed successfully'
+            );
+        } else {
+            redirect_with_message(
+                'settings.php',
+                'Wrong Password!',
+                FLASH_ERROR
+            );
+        }
+    }
     //maybe some error handling
 } else if (is_get_request()) {
     [$inputs, $errors] = session_flash('inputs', 'errors');

@@ -336,12 +336,7 @@ function reset_password(int $user_id, string $new_password): bool
     $statement->bindValue(':user_id', $user_id);
     $statement->bindValue(':new_password', password_hash($new_password, PASSWORD_BCRYPT));
 
-    try {
-        return $statement->execute();
-    } catch (PDOException $e) {
-        echo "password reset failed";
-        die($e->getMessage());
-    }
+    return $statement->execute();
 }
 
 function find_unrecovered_user(string $reset_code, string $email)
