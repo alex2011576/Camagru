@@ -25,6 +25,6 @@ create table if not exists mycamagru_db.password_reset(
 	reset_expiry datetime not null,
 	reset_code varchar(255) not null,
 	foreign key (user_id)
-		references camagru_db.users (user_id)
+		references mycamagru_db.users (user_id)
 		on delete cascade
 );
