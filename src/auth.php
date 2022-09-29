@@ -397,3 +397,17 @@ function dlt_reset_rqst_by_email(string $email)
 
     return $statement->execute();
 }
+
+function change_email(string $email, int $user_id): bool
+{
+    $sql = 'UPDATE  users
+    SET email = :email
+    WHERE user_id = :user_id';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':user_id', $user_id);
+    $statement->bindValue(':email', $email);
+
+    return $statement->execute();
+}

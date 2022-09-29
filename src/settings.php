@@ -8,7 +8,8 @@ $errors = [];
 $inputs = [];
 
 if (is_post_request()) {
-    $fields = [
+
+    $pre_fields = [
         'new_username' => 'string | required | alphanumeric | between: 3, 15 | unique: users, username',
         'password' => 'string | required',
         'new_email' => 'email | required | email | unique: users, email',
@@ -23,28 +24,44 @@ if (is_post_request()) {
             'same' => 'The password does not match'
         ]
     ];
+    //might be better perfomance wise to hardcode fileds for ech form to avoid repetetive filter
+    $fields = array_filter(
+        $pre_fields,
+        fn ($key) => isset($_POST[$key]),
+        ARRAY_FILTER_USE_KEY
+    );
 
     [$inputs, $errors] = filter($_POST, $fields, $messages);
     if ($errors) {
 
-        redirect_with('register.php', [
+        redirect_with('settings.php', [
             'inputs' => $inputs,
             'errors' => $errors
         ]);
     }
-
-    $activation_code = generate_activation_code();
-
-    if (register_user($inputs['email'], $inputs['username'], $inputs['password'], $activation_code)) {
-
-        // send the activation email
-        send_activation_email($inputs['email'], $activation_code);
-        // echo $activation_code;
-        // die;
-        redirect_with_message(
-            'login.php',
-            'Please check your email to activate your account before signing in'
-        );
+    // var_dump($_POST);
+    // die();
+    if (isset($_POST['change_email'])) {
+        // var_dump($_SESSION['user_id']);
+        // die();
+        $user = find_user_by_username($_SESSION['username']);
+        if ($user && is_user_active($user) && password_verify($inputs['password'], $user['password'])) {
+            // var_dump($_SESSION['user_id']);
+            // die();
+            if (!change_email($inputs['new_email'], $_SESSION['user_id'])) {
+                redirect_to('error.php');
+            }
+            redirect_with_message(
+                'settings.php',
+                'Email was changed successfully'
+            );
+        } else {
+            redirect_with_message(
+                'settings.php',
+                'Wrong Password!',
+                FLASH_ERROR
+            );
+        }
     }
     //maybe some error handling
 } else if (is_get_request()) {
