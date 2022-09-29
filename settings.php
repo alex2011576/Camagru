@@ -60,7 +60,7 @@ require __DIR__ . '/src/settings.php';
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" autocomplete="on" class="form-control bg-light" placeholder="Password" aria-label="Add comment">
+                    <input type="password" name="password" autocomplete="on" class="form-control bg-light" placeholder="Password" aria-label="Add comment">
                 </div>
             </div>
             <div class="d-grid pt-2 pb-2">

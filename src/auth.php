@@ -411,3 +411,17 @@ function change_email(string $email, int $user_id): bool
 
     return $statement->execute();
 }
+
+function change_username(string $username, int $user_id): bool
+{
+    $sql = 'UPDATE  users
+    SET username = :username
+    WHERE user_id = :user_id';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':user_id', $user_id);
+    $statement->bindValue(':username', $username);
+
+    return $statement->execute();
+}
