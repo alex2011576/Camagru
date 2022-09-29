@@ -114,6 +114,39 @@ if (is_post_request()) {
             );
         }
     }
+    if (isset($_POST['delete_account'])) {
+        // var_dump($_SESSION['user_id']);
+        // die();
+        $user = find_user_by_username($_SESSION['username']);
+        // var_dump($user);
+        // var_dump($inputs);
+        // die();
+        if ($user && is_user_active($user) && password_verify($inputs['password'], $user['password'])) {
+            // var_dump($_SESSION['user_id']);
+            // die();
+            if (!delete_account($_SESSION['user_id'])) {
+                redirect_to('error.php');
+            }
+            session_unset();
+            session_destroy();
+            //session_write_close();
+            //setcookie(session_name(), '', 0, '/');
+            session_regenerate_id();
+            session_start();
+
+            redirect_with_message(
+                'register.php',
+                'You account has been successfully deleted! We are sorry to lose you :(',
+                FLASH_WARNING
+            );
+        } else {
+            redirect_with_message(
+                'settings.php',
+                'Wrong Password!',
+                FLASH_ERROR
+            );
+        }
+    }
     //maybe some error handling
 } else if (is_get_request()) {
     [$inputs, $errors] = session_flash('inputs', 'errors');

@@ -382,7 +382,7 @@ function find_unrecovered_user(string $reset_code, string $email)
 }
 
 
-function dlt_reset_rqst_by_email(string $email)
+function dlt_reset_rqst_by_email(string $email): bool
 {
     $sql = 'DELETE FROM password_reset
             WHERE email=:email';
@@ -417,6 +417,17 @@ function change_username(string $username, int $user_id): bool
 
     $statement->bindValue(':user_id', $user_id);
     $statement->bindValue(':username', $username);
+
+    return $statement->execute();
+}
+
+function delete_account(string $user_id): bool
+{
+    $sql = 'DELETE FROM users
+            WHERE user_id = :user_id';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':user_id', $user_id);
 
     return $statement->execute();
 }

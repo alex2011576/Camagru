@@ -96,7 +96,7 @@ require __DIR__ . '/src/settings.php';
             <p class="h5 text-center fw-normal mt-2 mb-3">Delete Account</p>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" class="form-control bg-light" placeholder="Confirm With Password" aria-label="Confirm With Password" aria-describedby="" autocomplete="on">
+                    <input type="password" name="password" class="form-control bg-light" placeholder="Confirm With Password" aria-label="Confirm With Password" aria-describedby="" autocomplete="on">
                 </div>
             </div>
             <div class="d-grid pt-2 pb-2">

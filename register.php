@@ -6,6 +6,7 @@ require __DIR__ . '/src/register.php';
 
 <?php view('header_incognito', ['title' => 'Register']) ?>
 <?php flash() ?>
+
 <main class="">
     <div class="container-fluid logforms-container d-flex flex-column">
         <!-- FORM-->
