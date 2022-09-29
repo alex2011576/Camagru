@@ -1,4 +1,9 @@
 <?php
+
+if (is_user_logged_in()) {
+    redirect_to('feed.php');
+}
+
 if (is_post_request()) {
     $fields = [
         'password' => 'string | required | secure',

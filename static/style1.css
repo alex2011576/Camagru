@@ -63,11 +63,11 @@ h1 {
 .comment-input:active,
 .comment-input.active,
 .open > .dropdown-toggle.comment-input {
-  /* border:none; */
+  border:none;
 } */
 
 .forms-container {
-  max-width: 340px;
+  max-width: 340px !important;
 }
 
 .logforms-container {
