@@ -108,3 +108,40 @@ h1 {
     font-size: 2rem!important;
     margin-left: 1rem;
 } */
+
+div.scrollmenu {
+  background-color: #333;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  /* overflow: auto; */
+  white-space: nowrap;
+  height: 12vw;
+  max-height: 130px;
+  min-height: 50px;
+}
+
+div.scrollmenu img {
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  object-fit: contain;
+}
+
+div.scrollmenu img:hover {
+  background-color: #777;
+}
+
+.upload_element {
+  width: 100%;
+}
+@media screen and (min-width: 601px) {
+  .upload_element {
+    font-size: 30px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .upload_element {
+    font-size: 5vw;
+  }
+}

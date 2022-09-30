@@ -105,3 +105,5 @@ require __DIR__ . '/src/settings.php';
         </form>
     </div>
 </main>
+
+<?php view('footer') ?>
