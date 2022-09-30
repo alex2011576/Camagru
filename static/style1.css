@@ -109,6 +109,7 @@ h1 {
     margin-left: 1rem;
 } */
 
+/* NEW POST */
 div.scrollmenu {
   background-color: #333;
   overflow-x: scroll;
@@ -143,5 +144,10 @@ div.scrollmenu img:hover {
 @media screen and (max-width: 600px) {
   .upload_element {
     font-size: 5vw;
+  }
+}
+@media screen and (min-width: 601px) {
+  .post-btn {
+    font-size: 1.3rem !important;
   }
 }

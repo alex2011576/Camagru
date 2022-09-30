@@ -17,16 +17,26 @@ require __DIR__ . '/src/new_post.php';
                     <div class="p-0 p-md-3  border shadow-sm rounded-0 bg-light">
                         <div class="d-flex justify-content-center flex-wrap">
 
-                            <div class="upload_element">
+                            <div class="upload_element border-bottom ">
                                 <p class="text text-center font-upload fw-bold py-2 my-2" style="width: inherit">
                                     Take or upload a picture
                                 </p>
                             </div>
-                            <img src="http://localhost:8080/camagru/ilona/uploads/img_62d6ca64e688e.jpg" class="rounded-0  picture" alt="..." />
+                            <div class="d-flex justify-content-center align-items-center m-1" style="width: 100%">
+                                <button class="btn btn-sm btn-dark post-btn m-2" id="open_web">Webcam</button>
+                                <div class="or">OR</div>
+                                <label for="pic-upload" class="btn btn-sm btn-dark post-btn m-2">
+                                    Upload
+                                </label>
+                                <input class="d-none" type="file" accept="image/png, image/jpeg" id="pic-upload" name="file">
+                            </div>
+                            <!-- <img src="http://localhost:8080/camagru/ilona/uploads/img_62d6ca64e688e.jpg" class="d-none rounded-0  picture" alt="..." /> -->
 
+                            <!-- The part below appears when either webcam or upload is chosen -->
 
-                            <div class="upload_element">
-                                <p class="text text-center fw-bold pt-2 pb-0 mt-2 mb-0" style="width: inherit">
+                            <!-- 
+                            <div class="upload_element border-top">
+                                <p class="text text-center fw-bold pt-2 pb-0 mt-2 mb-0 " style="width: inherit">
                                     Choose stickers
                                 </p>
                             </div>
@@ -39,7 +49,7 @@ require __DIR__ . '/src/new_post.php';
                                 <img class="sticker img-thumbnail" id="stick6" onclick="selectSticker(6)" src="./static/stickers/6.png" alt="">
                                 <img class="sticker img-thumbnail" id="stick7" onclick="selectSticker(7)" src="./static/stickers/7.png" alt="">
                                 <img class="sticker img-thumbnail" id="stick8" onclick="selectSticker(8)" src="./static/stickers/8.png" alt="">
-                            </div>
+                            </div> -->
                             <div class="bg-light">
 
                             </div>
@@ -48,7 +58,7 @@ require __DIR__ . '/src/new_post.php';
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="p-3 border bg-light">
-                        Custom column padding
+                        Previously posted
                     </div>
                 </div>
             </div>
