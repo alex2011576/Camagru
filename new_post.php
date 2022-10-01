@@ -15,7 +15,7 @@ require __DIR__ . '/src/new_post.php';
             <div class="row g-5">
                 <div class="col-12 col-md-8">
                     <div class="p-0 p-md-3  border shadow-sm rounded-0 bg-light">
-                        <form class="d-flex justify-content-center flex-wrap">
+                        <form class="d-flex justify-content-center flex-wrap" method="POST" enctype="multipart/form-data">
 
                             <div class="upload_element border-bottom ">
                                 <p class="text text-center font-upload fw-bold py-2 my-2" style="width: inherit">
@@ -40,8 +40,18 @@ require __DIR__ . '/src/new_post.php';
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <canvas class="toggle-upload canvas-upload d-none my-1 border-0 " id="canvas"></canvas>
                                 </div>
-                                <div class="d-flex justify-content-center" style="width: 100%;">
-                                    <input type="text" class="form-control my-1 border-0 rounded-0" name="description" id="description" value="" placeholder="Add description: " autocomplete="off" />
+                                <div class="d-flex justify-content-center flex-wrap" id="description" style="width: 100%;">
+                                    <div class="scrollmenu bg-light my-0 mb-2 px-2 toggle-upload d-none" style="width: 100%;">
+                                        <img class="sticker img-thumbnail" id="stick1" onclick="selectSticker(1)" src="./static/stickers/1.png" alt="">
+                                        <img class="sticker img-thumbnail" id="stick2" onclick="selectSticker(2)" src="./static/stickers/2.png" alt="">
+                                        <img class="sticker img-thumbnail" id="stick3" onclick="selectSticker(3)" src="./static/stickers/3.png" alt="">
+                                        <img class="sticker img-thumbnail" id="stick4" onclick="selectSticker(4)" src="./static/stickers/4.png" alt="">
+                                        <img class="sticker img-thumbnail" id="stick5" onclick="selectSticker(5)" src="./static/stickers/5.png" alt="">
+                                        <img class="sticker img-thumbnail" id="stick6" onclick="selectSticker(6)" src="./static/stickers/6.png" alt="">
+                                        <img class="sticker img-thumbnail" id="stick7" onclick="selectSticker(7)" src="./static/stickers/7.png" alt="">
+                                        <img class="sticker img-thumbnail" id="stick8" onclick="selectSticker(8)" src="./static/stickers/8.png" alt="">
+                                    </div>
+                                    <input type="text" class="form-control my-1 border-0 rounded-0" name="description" id="description-input" value="" placeholder="Add description: " autocomplete="off" />
                                 </div>
                             </div>
 
@@ -51,21 +61,11 @@ require __DIR__ . '/src/new_post.php';
                                 <button class="btn btn-sm btn-danger post-btn m-2" id="btn-cancel" type="reset">Cancel</button>
                             </div>
 
-                            <!-- 
-                            <div class="upload_element border-top">
+
+                            <!-- <div class="upload_element border-top">
                                 <p class="text text-center fw-bold pt-2 pb-0 mt-2 mb-0 " style="width: inherit">
                                     Choose stickers
                                 </p>
-                            </div>
-                            <div class="scrollmenu bg-light my-0 mb-2 p-2">
-                                <img class="sticker img-thumbnail" id="stick1" onclick="selectSticker(1)" src="./static/stickers/1.png" alt="">
-                                <img class="sticker img-thumbnail" id="stick2" onclick="selectSticker(2)" src="./static/stickers/2.png" alt="">
-                                <img class="sticker img-thumbnail" id="stick3" onclick="selectSticker(3)" src="./static/stickers/3.png" alt="">
-                                <img class="sticker img-thumbnail" id="stick4" onclick="selectSticker(4)" src="./static/stickers/4.png" alt="">
-                                <img class="sticker img-thumbnail" id="stick5" onclick="selectSticker(5)" src="./static/stickers/5.png" alt="">
-                                <img class="sticker img-thumbnail" id="stick6" onclick="selectSticker(6)" src="./static/stickers/6.png" alt="">
-                                <img class="sticker img-thumbnail" id="stick7" onclick="selectSticker(7)" src="./static/stickers/7.png" alt="">
-                                <img class="sticker img-thumbnail" id="stick8" onclick="selectSticker(8)" src="./static/stickers/8.png" alt="">
                             </div> -->
                             <div class="bg-light">
 
@@ -94,6 +94,7 @@ require __DIR__ . '/src/new_post.php';
 
     pic.addEventListener('load', () => {
         // execute drawImage statements here
+        //image_input.disabled = true;
         canvas.width = pic.naturalWidth;
         canvas.height = pic.naturalHeight;
         ctx.drawImage(pic, 0, 0);
@@ -113,6 +114,21 @@ require __DIR__ . '/src/new_post.php';
         reader.readAsDataURL(this.files[0]);
     });
 
+    const button = document.getElementById('btn-cancel');
+    button.addEventListener("click", function() {
+        console.log("HERE");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        toggle_on_upload();
+    });
+
+
+    function cancel_post(ctx) {
+        //button.disabled = true;
+        //toggle_on_upload();
+        // setTimeout(() => {
+        //     button.disabled = false;
+        // }, 2000);
+    }
     // function drawImageScaled(img, ctx) {
     //     var canvas = ctx.canvas;
     //     var hRatio = canvas.width / img.width;
@@ -141,6 +157,8 @@ require __DIR__ . '/src/new_post.php';
         }
     });
 </script> -->
+
+<!-- Helpers functions -->
 <script>
     function adjust_decription(target_width) {
         const description = document.getElementById("description");
@@ -154,4 +172,16 @@ require __DIR__ . '/src/new_post.php';
             box.classList.toggle('d-none');
         }
     }
+
+    // const button = document.getElementById('btn-cancel');
+    // button.addEventListener('click', cancel_post(ctx));
+
+    // function cancel_post(ctx) {
+    //     //button.disabled = true;
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //     //toggle_on_upload();
+    //     // setTimeout(() => {
+    //     //     button.disabled = false;
+    //     // }, 2000);
+    // }
 </script>
