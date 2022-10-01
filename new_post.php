@@ -15,7 +15,7 @@ require __DIR__ . '/src/new_post.php';
             <div class="row g-5">
                 <div class="col-12 col-md-8">
                     <div class="p-0 p-md-3  border shadow-sm rounded-0 bg-light">
-                        <div class="d-flex justify-content-center flex-wrap">
+                        <form class="d-flex justify-content-center flex-wrap">
 
                             <div class="upload_element border-bottom ">
                                 <p class="text text-center font-upload fw-bold py-2 my-2" style="width: inherit">
@@ -33,6 +33,17 @@ require __DIR__ . '/src/new_post.php';
                             <!-- <img src="http://localhost:8080/camagru/ilona/uploads/img_62d6ca64e688e.jpg" class="d-none rounded-0  picture" alt="..." /> -->
 
                             <!-- The part below appears when either webcam or upload is chosen -->
+                            <div class="d-flex justify-content-center" style="width: 100%">
+                            </div>
+                            <canvas class="toggle-upload canvas-upload d-none" id="canvas"></canvas>
+                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
+                                <input type="text" class="form-control" name="description" value="" placeholder="Description: " autocomplete="off" />
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
+                                <button class="btn btn-sm btn-dark post-btn m-2" id="btn-post" type="submit">Post</button>
+                                <div class="or">OR</div>
+                                <button class="btn btn-sm btn-danger post-btn m-2" id="btn-cancel" type="reset">Cancel</button>
+                            </div>
 
                             <!-- 
                             <div class="upload_element border-top">
@@ -53,7 +64,7 @@ require __DIR__ . '/src/new_post.php';
                             <div class="bg-light">
 
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div class="col-12 col-md-4">
@@ -68,3 +79,40 @@ require __DIR__ . '/src/new_post.php';
 </main>
 
 <?php view('footer') ?>
+<!-- UPLOAD Canvas script -->
+<script>
+    const pic = new Image(); // Create new pic element
+    const image_input = document.querySelector("#pic-upload");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    pic.addEventListener('load', () => {
+        // execute drawImage statements here
+        canvas.width = pic.naturalWidth;
+        canvas.height = pic.naturalHeight;
+        // drawImageScaled(pic, ctx);
+        ctx.drawImage(pic, 0, 0);
+    }, false);
+
+
+    image_input.addEventListener("change", function() {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const uploaded_image = reader.result;
+            pic.src = uploaded_image;
+        });
+        reader.readAsDataURL(this.files[0]);
+    });
+
+    function drawImageScaled(img, ctx) {
+        var canvas = ctx.canvas;
+        var hRatio = canvas.width / img.width;
+        var vRatio = canvas.height / img.height;
+        var ratio = Math.min(hRatio, vRatio);
+        var centerShift_x = (canvas.width - img.width * ratio) / 2;
+        var centerShift_y = (canvas.height - img.height * ratio) / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, img.width, img.height,
+            centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+    }
+</script>

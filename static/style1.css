@@ -151,3 +151,8 @@ div.scrollmenu img:hover {
     font-size: 1.3rem !important;
   }
 }
+
+.canvas-upload {
+  border: solid 1px blue;
+  max-width: 100% !important;
+}
