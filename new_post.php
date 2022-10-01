@@ -22,7 +22,7 @@ require __DIR__ . '/src/new_post.php';
                                     Take or upload a picture
                                 </p>
                             </div>
-                            <div class="d-flex justify-content-center align-items-center m-1" style="width: 100%">
+                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload" style="width: 100%">
                                 <button class="btn btn-sm btn-dark post-btn m-2" id="open_web">Webcam</button>
                                 <div class="or">OR</div>
                                 <label for="pic-upload" class="btn btn-sm btn-dark post-btn m-2">
@@ -92,6 +92,12 @@ require __DIR__ . '/src/new_post.php';
         canvas.height = pic.naturalHeight;
         // drawImageScaled(pic, ctx);
         ctx.drawImage(pic, 0, 0);
+        const boxes = document.getElementsByClassName('toggle-upload');
+
+        for (const box of boxes) {
+            box.classList.toggle('d-none');
+        }
+
     }, false);
 
 
@@ -116,3 +122,19 @@ require __DIR__ . '/src/new_post.php';
             centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
     }
 </script>
+<!-- UPLOAD-TOGGLE-->
+<!-- <script>
+    const btn = document.getElementById('pic-upload');
+
+    btn.addEventListener('click', () => {
+        const boxes = document.getElementsByClassName('toggle-upload');
+
+        for (const box of boxes) {
+            // 👇️ Remove element from DOM
+            box.class.display = 'none';
+
+            // 👇️ hide element (still takes up space on page)
+            // box.style.visibility = 'hidden';
+        }
+    });
+</script> -->
