@@ -35,10 +35,16 @@ require __DIR__ . '/src/new_post.php';
                             <!-- The part below appears when either webcam or upload is chosen -->
                             <div class="d-flex justify-content-center" style="width: 100%">
                             </div>
-                            <canvas class="toggle-upload canvas-upload d-none" id="canvas"></canvas>
-                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
-                                <input type="text" class="form-control" name="description" value="" placeholder="Description: " autocomplete="off" />
+
+                            <div class="d-flex justify-content-center flex-wrap m-1 toggle-upload d-none " style="width: 100%">
+                                <div class="d-flex justify-content-center" style="width: 100%;">
+                                    <canvas class="toggle-upload canvas-upload d-none my-1 border-0 " id="canvas"></canvas>
+                                </div>
+                                <div class="d-flex justify-content-center" style="width: 100%;">
+                                    <input type="text" class="form-control my-1 border-0 rounded-0" name="description" id="description" value="" placeholder="Add description: " autocomplete="off" />
+                                </div>
                             </div>
+
                             <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
                                 <button class="btn btn-sm btn-dark post-btn m-2" id="btn-post" type="submit">Post</button>
                                 <div class="or">OR</div>
@@ -90,13 +96,10 @@ require __DIR__ . '/src/new_post.php';
         // execute drawImage statements here
         canvas.width = pic.naturalWidth;
         canvas.height = pic.naturalHeight;
-        // drawImageScaled(pic, ctx);
         ctx.drawImage(pic, 0, 0);
-        const boxes = document.getElementsByClassName('toggle-upload');
 
-        for (const box of boxes) {
-            box.classList.toggle('d-none');
-        }
+        adjust_decription(pic.naturalWidth + 2);
+        toggle_on_upload();
 
     }, false);
 
@@ -110,17 +113,17 @@ require __DIR__ . '/src/new_post.php';
         reader.readAsDataURL(this.files[0]);
     });
 
-    function drawImageScaled(img, ctx) {
-        var canvas = ctx.canvas;
-        var hRatio = canvas.width / img.width;
-        var vRatio = canvas.height / img.height;
-        var ratio = Math.min(hRatio, vRatio);
-        var centerShift_x = (canvas.width - img.width * ratio) / 2;
-        var centerShift_y = (canvas.height - img.height * ratio) / 2;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, img.width, img.height,
-            centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
-    }
+    // function drawImageScaled(img, ctx) {
+    //     var canvas = ctx.canvas;
+    //     var hRatio = canvas.width / img.width;
+    //     var vRatio = canvas.height / img.height;
+    //     var ratio = Math.min(hRatio, vRatio);
+    //     var centerShift_x = (canvas.width - img.width * ratio) / 2;
+    //     var centerShift_y = (canvas.height - img.height * ratio) / 2;
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //     ctx.drawImage(img, 0, 0, img.width, img.height,
+    //         centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+    // }
 </script>
 <!-- UPLOAD-TOGGLE-->
 <!-- <script>
@@ -138,3 +141,17 @@ require __DIR__ . '/src/new_post.php';
         }
     });
 </script> -->
+<script>
+    function adjust_decription(target_width) {
+        const description = document.getElementById("description");
+        description.style.width = `${target_width}px`;
+    }
+
+    function toggle_on_upload() {
+        const boxes = document.getElementsByClassName('toggle-upload');
+
+        for (const box of boxes) {
+            box.classList.toggle('d-none');
+        }
+    }
+</script>
