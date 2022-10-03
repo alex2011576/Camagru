@@ -22,7 +22,7 @@ require __DIR__ . '/src/new_post.php';
                                     Take or upload a picture
                                 </p>
                             </div>
-                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload" style="width: 100%">
+                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload toggle-web" style="width: 100%">
                                 <button class="btn btn-sm btn-dark post-btn m-2" id="open_web" type="button">Webcam</button>
                                 <div class="or">OR</div>
                                 <label for="pic-upload" class="btn btn-sm btn-dark post-btn m-2">
@@ -38,12 +38,12 @@ require __DIR__ . '/src/new_post.php';
                                 </div>
                             </div>
                             <!-- CANVAS -->
-                            <div class="d-flex justify-content-center flex-wrap m-1 toggle-upload d-none " style="width: 100%">
+                            <div class="d-flex justify-content-center flex-wrap m-1 toggle-upload toggle-web d-none " style="width: 100%">
                                 <video class="d-none" id="video" style="width: 100%" autoplay></video>
                                 <!-- <video class="toggle-upload toggle-web" id="video" style="width: 100%" autoplay></video> -->
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas-stickers"></canvas> -->
-                                    <canvas class="toggle-upload d-none canvas-upload my-1 border-0 " id="canvas-stickers"></canvas>
+                                    <canvas class=" canvas-upload my-1 border-0 " id="canvas-stickers"></canvas>
                                 </div>
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas"></canvas> -->
@@ -51,7 +51,7 @@ require __DIR__ . '/src/new_post.php';
                                 </div>
                                 <!-- STICKERS -->
                                 <div class="d-flex justify-content-center flex-wrap" id="description" style="width: 100%;">
-                                    <div class="scrollmenu bg-light my-0 mb-2 px-2 toggle-upload d-none" style="width: 100%;">
+                                    <div class="scrollmenu bg-light my-0 mb-2 px-2" style="width: 100%;">
                                         <img class="sticker img-thumbnail" id="stick1" onclick="selectSticker(1)" src="./static/stickers/1.png" alt="">
                                         <img class="sticker img-thumbnail" id="stick2" onclick="selectSticker(2)" src="./static/stickers/2.png" alt="">
                                         <img class="sticker img-thumbnail" id="stick3" onclick="selectSticker(3)" src="./static/stickers/3.png" alt="">
@@ -71,12 +71,12 @@ require __DIR__ . '/src/new_post.php';
                                 <button class="btn btn-sm btn-danger post-btn m-2" id="btn-cancel" type="reset">Cancel</button>
                             </div> -->
 
-                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
-                                <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-web" id="btn-shot" type="button">Shoot</button>
+                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload toggle-web d-none" style="width: 100%">
+                                <button class="btn btn-sm btn-dark post-btn m-2 toggle-upload toggle-web2" id="btn-shot" type="button">Shoot</button>
                                 <button class="btn btn-sm btn-dark post-btn m-2 toggle-web" id="btn-post" type="button">Post</button>
                                 <div class="or">OR</div>
-                                <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-web" id="btn-cancel" type="reset">Cancel</button>
-                                <button class="btn btn-sm btn-danger post-btn m-2 toggle-web" id="btn-retry" type="button">Retry</button>
+                                <button class="btn btn-sm btn-danger post-btn m-2 toggle-web2" id="btn-cancel" type="reset">Cancel</button>
+                                <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-web2" id="btn-retry" type="button">Retry</button>
                             </div>
 
 
@@ -147,13 +147,18 @@ require __DIR__ . '/src/new_post.php';
         console.log("HERE");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
-        stream = video.srcObject;
-        tracks = stream.getTracks();
-        tracks.forEach(function(track) {
-            track.stop();
-        });
         //turn off webcam here
-        toggle_by_class('toggle-upload');
+        if (video.srcObject) {
+            toggle_by_class('toggle-web');
+            toggle_by_class();
+            video.pause();
+            tracks = video.srcObject.getTracks();
+            tracks.forEach(function(track) {
+                track.stop();
+            });
+        } else {
+            toggle_by_class('toggle-upload');
+        }
     });
 
     // BTN-POST CLICK
@@ -207,8 +212,6 @@ require __DIR__ . '/src/new_post.php';
             .then((stream) => {
                 video.srcObject = stream;
                 video.play();
-                // toggle_by_class('toggle-upload');
-                // toggle_by_class('toggle-web');
             })
             .catch((err) => {
                 console.error(`An error occurred: ${err}`);
@@ -218,12 +221,13 @@ require __DIR__ . '/src/new_post.php';
 
     video.addEventListener('canplay', (ev) => {
         toggle_by_class('toggle-loader');
-        toggle_by_class('toggle-upload');
         toggle_by_class('toggle-web');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas_stickers.width = video.videoWidth;
         canvas_stickers.height = video.videoHeight;
+        adjust_decription(video.videoWidth + 2);
+
     }, false);
 
     video.addEventListener('play', () => {
@@ -232,7 +236,7 @@ require __DIR__ . '/src/new_post.php';
                 return;
             ctx.drawImage(video, 0, 0);
             ctx_stickers.drawImage(video, 0, 0);
-            setTimeout(loop, 1000 / 80); //fps
+            setTimeout(loop, 1000 / 60); //fps
             console.log(1);
         })();
     }, false);
@@ -243,14 +247,13 @@ require __DIR__ . '/src/new_post.php';
     }, false);
 
     function takepicture() {
-        toggle_by_class('toggle-web');
+        toggle_by_class('toggle-web2');
         // console.log(video.videoWidth);
         // console.log(video.videoHeight);
         ctx_stickers.drawImage(video, 0, 0);
         ctx.drawImage(video, 0, 0);
         video.pause();
-        stream = video.srcObject;
-        tracks = stream.getTracks();
+        tracks = video.srcObject.getTracks();
         tracks.forEach(function(track) {
             track.stop();
         });
