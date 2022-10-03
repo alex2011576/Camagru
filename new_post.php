@@ -126,23 +126,7 @@ require __DIR__ . '/src/new_post.php';
 
         const formData = new FormData();
         const fileField = document.querySelector('input[type="file"]');
-        const person = {
-            firstName: "John",
-            lastName: "Doe",
-            age: 50,
-            eyeColor: "blue"
-        };
-        const person1 = {
-            firstName: "Johnsavc",
-            lastName: "Dcx oe",
-            age: 530,
-            eyeColor: "blufve"
-        };
-        const persons = {
-            stiker1: person,
-            stiker2: person1
-        }
-        formData.append('stikers', persons);
+        //formData.append('stickers', stickers_data);
         formData.append('avatar', fileField.files[0]);
 
         //const parsedUrl = new URL(window.location.href);
