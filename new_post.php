@@ -32,14 +32,22 @@ require __DIR__ . '/src/new_post.php';
                             </div>
 
                             <!-- The part below appears when either webcam or upload is chosen -->
-                            <div class="d-flex justify-content-center" style="width: 100%">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border toggle-loader d-none m-5" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
                             </div>
                             <!-- CANVAS -->
                             <div class="d-flex justify-content-center flex-wrap m-1 toggle-upload d-none " style="width: 100%">
+                                <video class="d-none" id="video" style="width: 100%" autoplay></video>
+                                <!-- <video class="toggle-upload toggle-web" id="video" style="width: 100%" autoplay></video> -->
                                 <div class="d-flex justify-content-center" style="width: 100%;">
-                                    <canvas class="toggle-upload canvas-upload d-none my-1 border-0 " id="canvas">
-                                        <video id="video" style="width: 100%" autoplay></video>
-                                    </canvas>
+                                    <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas-stickers"></canvas> -->
+                                    <canvas class="toggle-upload d-none canvas-upload my-1 border-0 " id="canvas-stickers"></canvas>
+                                </div>
+                                <div class="d-flex justify-content-center" style="width: 100%;">
+                                    <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas"></canvas> -->
+                                    <canvas class="canvas-upload d-none my-1 border-0 " id="canvas"></canvas>
                                 </div>
                                 <!-- STICKERS -->
                                 <div class="d-flex justify-content-center flex-wrap" id="description" style="width: 100%;">
@@ -64,11 +72,11 @@ require __DIR__ . '/src/new_post.php';
                             </div> -->
 
                             <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
-                                <button class="btn btn-sm btn-dark post-btn m-2 toggle-web" id="btn-post" type="button">Post</button>
                                 <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-web" id="btn-shot" type="button">Shoot</button>
+                                <button class="btn btn-sm btn-dark post-btn m-2 toggle-web" id="btn-post" type="button">Post</button>
                                 <div class="or">OR</div>
-                                <button class="btn btn-sm btn-danger post-btn m-2 toggle-web" id="btn-cancel" type="reset">Cancel</button>
-                                <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-web" id="btn-retry" type="button">Retry</button>
+                                <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-web" id="btn-cancel" type="reset">Cancel</button>
+                                <button class="btn btn-sm btn-danger post-btn m-2 toggle-web" id="btn-retry" type="button">Retry</button>
                             </div>
 
 
@@ -97,17 +105,28 @@ require __DIR__ . '/src/new_post.php';
 <?php view('footer') ?>
 <!-- UPLOAD Canvas script -->
 <script>
-    const pic = new Image(); // Create new pic element
-    const image_input = document.querySelector("#pic-upload");
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
+    const canvas_stickers = document.getElementById("canvas-stickers");
+    const ctx_stickers = canvas_stickers.getContext("2d");
+    const pic = new Image(); // Create new pic element
+    const image_input = document.querySelector("#pic-upload");
+    const button_cancel = document.getElementById('btn-cancel');
+    const button_post = document.getElementById('btn-post');
+    const button_webcam = document.querySelector("#open_web");
+    const video = document.querySelector("#video");
+    const button_shot = document.querySelector("#btn-shot");
+
 
     pic.addEventListener('load', () => {
         // execute drawImage statements here
         //image_input.disabled = true;
         canvas.width = pic.naturalWidth;
         canvas.height = pic.naturalHeight;
+        canvas_stickers.width = pic.naturalWidth;
+        canvas_stickers.height = pic.naturalHeight;
         ctx.drawImage(pic, 0, 0);
+        ctx_stickers.drawImage(pic, 0, 0);
 
         adjust_decription(pic.naturalWidth + 2);
         toggle_by_class('toggle-upload');
@@ -124,15 +143,20 @@ require __DIR__ . '/src/new_post.php';
         reader.readAsDataURL(this.files[0]);
     });
 
-    const button_cancel = document.getElementById('btn-cancel');
     button_cancel.addEventListener("click", function() {
         console.log("HERE");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
+        stream = video.srcObject;
+        tracks = stream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+        //turn off webcam here
         toggle_by_class('toggle-upload');
     });
 
     // BTN-POST CLICK
-    const button_post = document.getElementById('btn-post');
     button_post.addEventListener("click", function() {
 
         const formData = new FormData();
@@ -175,6 +199,97 @@ require __DIR__ . '/src/new_post.php';
             });
     });
 
+    button_webcam.addEventListener('click', async function() {
+        navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+                // toggle_by_class('toggle-upload');
+                // toggle_by_class('toggle-web');
+            })
+            .catch((err) => {
+                console.error(`An error occurred: ${err}`);
+            });
+        toggle_by_class('toggle-loader');
+    });
+
+    video.addEventListener('canplay', (ev) => {
+        toggle_by_class('toggle-loader');
+        toggle_by_class('toggle-upload');
+        toggle_by_class('toggle-web');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas_stickers.width = video.videoWidth;
+        canvas_stickers.height = video.videoHeight;
+    }, false);
+
+    video.addEventListener('play', () => {
+        (function loop() {
+            if (video.paused)
+                return;
+            ctx.drawImage(video, 0, 0);
+            ctx_stickers.drawImage(video, 0, 0);
+            setTimeout(loop, 1000 / 80); //fps
+            console.log(1);
+        })();
+    }, false);
+
+    button_shot.addEventListener('click', (ev) => {
+        takepicture();
+        ev.preventDefault();
+    }, false);
+
+    function takepicture() {
+        toggle_by_class('toggle-web');
+        // console.log(video.videoWidth);
+        // console.log(video.videoHeight);
+        ctx_stickers.drawImage(video, 0, 0);
+        ctx.drawImage(video, 0, 0);
+        video.pause();
+        stream = video.srcObject;
+        tracks = stream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+
+        adjust_decription(video.videoWidth + 2);
+        let image_data_url = canvas.toDataURL('image/jpeg');
+
+        // data url of the image
+        console.log(image_data_url);
+    };
+</script>
+
+<!-- Helpers functions -->
+<script>
+    function adjust_decription(target_width) {
+        const description = document.getElementById("description");
+        description.style.width = `${target_width}px`;
+    }
+
+    function toggle_by_class(class_name) {
+        const boxes = document.getElementsByClassName(class_name);
+
+        for (const box of boxes) {
+            box.classList.toggle('d-none');
+        }
+    }
+
+    // const button = document.getElementById('btn-cancel');
+    // button.addEventListener('click', cancel_post(ctx));
+
+    // function cancel_post(ctx) {
+    //     //button.disabled = true;
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //     //toggle_on_upload();
+    //     // setTimeout(() => {
+    //     //     button.disabled = false;
+    //     // }, 2000);
+    // }
+
     function cancel_post(ctx) {
         //button.disabled = true;
         //toggle_on_upload();
@@ -192,79 +307,5 @@ require __DIR__ . '/src/new_post.php';
     //     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //     ctx.drawImage(img, 0, 0, img.width, img.height,
     //         centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
-    // }
-</script>
-<!-- UPLOAD-TOGGLE-->
-<!-- <script>
-    const btn = document.getElementById('pic-upload');
-
-    btn.addEventListener('click', () => {
-        const boxes = document.getElementsByClassName('toggle-upload');
-
-        for (const box of boxes) {
-            // 👇️ Remove element from DOM
-            box.class.display = 'none';
-
-            // 👇️ hide element (still takes up space on page)
-            // box.style.visibility = 'hidden';
-        }
-    });
-</script> -->
-
-<!-- Helpers functions -->
-<script>
-    function adjust_decription(target_width) {
-        const description = document.getElementById("description");
-        description.style.width = `${target_width}px`;
-    }
-
-    function toggle_by_class(class_name) {
-        const boxes = document.getElementsByClassName(class_name);
-
-        for (const box of boxes) {
-            box.classList.toggle('d-none');
-        }
-    }
-
-
-    let button_webcam = document.querySelector("#open_web");
-    let video = document.querySelector("#video");
-    let button_shot = document.querySelector("#btn-shot");
-
-    button_webcam.addEventListener('click', async function() {
-        navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false
-            })
-            .then((stream) => {
-                video.srcObject = stream;
-                video.play();
-            })
-            .catch((err) => {
-                console.error(`An error occurred: ${err}`);
-            });
-        toggle_by_class('toggle-upload');
-        toggle_by_class('toggle-web');
-    });
-
-    button_shot.addEventListener('click', function() {
-        toggle_by_class('toggle-web');
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        let image_data_url = canvas.toDataURL('image/jpeg');
-
-        // data url of the image
-        console.log(image_data_url);
-    });
-
-    // const button = document.getElementById('btn-cancel');
-    // button.addEventListener('click', cancel_post(ctx));
-
-    // function cancel_post(ctx) {
-    //     //button.disabled = true;
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     //toggle_on_upload();
-    //     // setTimeout(() => {
-    //     //     button.disabled = false;
-    //     // }, 2000);
     // }
 </script>
