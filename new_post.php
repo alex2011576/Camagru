@@ -22,7 +22,7 @@ require __DIR__ . '/src/new_post.php';
                                     Take or upload a picture
                                 </p>
                             </div>
-                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload toggle-web" style="width: 100%">
+                            <div class="d-flex justify-content-center align-items-center m-1 btns-menu" style="width: 100%">
                                 <button class="btn btn-sm btn-dark post-btn m-2" id="open_web" type="button">Webcam</button>
                                 <div class="or">OR</div>
                                 <label for="pic-upload" class="btn btn-sm btn-dark post-btn m-2">
@@ -72,10 +72,10 @@ require __DIR__ . '/src/new_post.php';
                             </div> -->
 
                             <div class="d-flex justify-content-center align-items-center m-1 toggle-upload toggle-web d-none" style="width: 100%">
-                                <button class="btn btn-sm btn-dark post-btn m-2 toggle-upload toggle-web2" id="btn-shot" type="button">Shoot</button>
-                                <button class="btn btn-sm btn-dark post-btn m-2 toggle-web" id="btn-post" type="button">Post</button>
+                                <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-web1" id="btn-shot" type="button">Shoot</button>
+                                <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-upload toggle-web2" id="btn-post" type="button">Post</button>
                                 <div class="or">OR</div>
-                                <button class="btn btn-sm btn-danger post-btn m-2 toggle-web2" id="btn-cancel" type="reset">Cancel</button>
+                                <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-upload toggle-web1" id="btn-cancel" type="reset">Cancel</button>
                                 <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-web2" id="btn-retry" type="button">Retry</button>
                             </div>
 
@@ -109,13 +109,14 @@ require __DIR__ . '/src/new_post.php';
     const ctx = canvas.getContext("2d");
     const canvas_stickers = document.getElementById("canvas-stickers");
     const ctx_stickers = canvas_stickers.getContext("2d");
-    const pic = new Image(); // Create new pic element
     const image_input = document.querySelector("#pic-upload");
+    const pic = new Image(); // Create new pic element
+    const video = document.querySelector("#video");
     const button_cancel = document.getElementById('btn-cancel');
     const button_post = document.getElementById('btn-post');
     const button_webcam = document.querySelector("#open_web");
-    const video = document.querySelector("#video");
     const button_shot = document.querySelector("#btn-shot");
+    const button_retry = document.querySelector("#btn-retry");
 
     //UPLOAD PICTURE PART
     image_input.addEventListener("change", function() {
@@ -136,29 +137,22 @@ require __DIR__ . '/src/new_post.php';
         ctx_stickers.drawImage(pic, 0, 0);
 
         adjust_decription(pic.naturalWidth + 2);
-        toggle_by_class('toggle-upload');
+        display_by_class('toggle-upload');
+        hide_by_class('btns-menu');
 
     }, false);
 
     //WEBCAM PHOTO PART
-    button_webcam.addEventListener('click', async function() {
-        navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false
-            })
-            .then((stream) => {
-                video.srcObject = stream;
-                video.play();
-            })
-            .catch((err) => {
-                console.error(`An error occurred: ${err}`);
-            });
-        toggle_by_class('toggle-loader');
+    button_webcam.addEventListener('click', (ev) => {
+        webcam_start();
+        ev.preventDefault();
     });
 
     video.addEventListener('canplay', (ev) => {
         toggle_by_class('toggle-loader');
-        toggle_by_class('toggle-web');
+        hide_by_class('btns-menu');
+        display_by_class('toggle-web');
+        display_by_class('toggle-web1');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas_stickers.width = video.videoWidth;
@@ -173,7 +167,7 @@ require __DIR__ . '/src/new_post.php';
                 return;
             ctx.drawImage(video, 0, 0);
             ctx_stickers.drawImage(video, 0, 0);
-            setTimeout(loop, 1000 / 60); //fps
+            setTimeout(loop, 1000 / 60); //16fps
             console.log(1);
         })();
     }, false);
@@ -183,27 +177,34 @@ require __DIR__ . '/src/new_post.php';
         ev.preventDefault();
     }, false);
 
+    button_retry.addEventListener('click', (ev) => {
+        retry();
+        ev.preventDefault();
+    }, false);
+
     // STICKERS HANDLING
 
 
     //CANCEL, POST BUTTONS 
 
     button_cancel.addEventListener("click", function() {
-        console.log("HERE");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
         //turn off webcam here
         if (video.srcObject) {
-            toggle_by_class('toggle-web');
-            toggle_by_class();
             video.pause();
             tracks = video.srcObject.getTracks();
             tracks.forEach(function(track) {
                 track.stop();
             });
         } else {
-            toggle_by_class('toggle-upload');
+            //hide_by_class('toggle-upload');
         }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
+        hide_by_class('toggle-web');
+        hide_by_class('toggle-web1');
+        hide_by_class('toggle-web2');
+        hide_by_class('toggle-upload');
+        display_by_class('btns-menu');
     });
 
     // BTN-POST CLICK
@@ -253,7 +254,9 @@ require __DIR__ . '/src/new_post.php';
 <!-- Helpers functions -->
 <script>
     function takepicture() {
-        toggle_by_class('toggle-web2');
+        hide_by_class('toggle-web1')
+        display_by_class('toggle-web2');
+
         ctx_stickers.drawImage(video, 0, 0);
         ctx.drawImage(video, 0, 0);
         video.pause();
@@ -269,6 +272,29 @@ require __DIR__ . '/src/new_post.php';
         console.log(image_data_url);
     };
 
+    function retry() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
+        hide_by_class('toggle-web2');
+        display_by_class('toggle-web1');
+        webcam_start();
+    };
+
+    async function webcam_start() {
+        navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((err) => {
+                console.error(`An error occurred: ${err}`);
+            });
+        toggle_by_class('toggle-loader');
+    }
+
     function adjust_decription(target_width) {
         const description = document.getElementById("description");
         description.style.width = `${target_width}px`;
@@ -279,6 +305,22 @@ require __DIR__ . '/src/new_post.php';
 
         for (const box of boxes) {
             box.classList.toggle('d-none');
+        }
+    }
+
+    function display_by_class(class_name) {
+        const boxes = document.getElementsByClassName(class_name);
+
+        for (const box of boxes) {
+            box.classList.remove('d-none');
+        }
+    }
+
+    function hide_by_class(class_name) {
+        const boxes = document.getElementsByClassName(class_name);
+
+        for (const box of boxes) {
+            box.classList.add('d-none');
         }
     }
 
