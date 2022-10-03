@@ -56,7 +56,7 @@ require __DIR__ . '/src/new_post.php';
                             </div>
 
                             <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
-                                <button class="btn btn-sm btn-dark post-btn m-2" id="btn-post" type="submit">Post</button>
+                                <button class="btn btn-sm btn-dark post-btn m-2" id="btn-post" type="button">Post</button>
                                 <div class="or">OR</div>
                                 <button class="btn btn-sm btn-danger post-btn m-2" id="btn-cancel" type="reset">Cancel</button>
                             </div>
@@ -114,13 +114,54 @@ require __DIR__ . '/src/new_post.php';
         reader.readAsDataURL(this.files[0]);
     });
 
-    const button = document.getElementById('btn-cancel');
-    button.addEventListener("click", function() {
+    const button_cancel = document.getElementById('btn-cancel');
+    button_cancel.addEventListener("click", function() {
         console.log("HERE");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         toggle_on_upload();
     });
 
+    const button_post = document.getElementById('btn-post');
+    button_post.addEventListener("click", function() {
+
+        const formData = new FormData();
+        const fileField = document.querySelector('input[type="file"]');
+        const person = {
+            firstName: "John",
+            lastName: "Doe",
+            age: 50,
+            eyeColor: "blue"
+        };
+        const person1 = {
+            firstName: "Johnsavc",
+            lastName: "Dcx oe",
+            age: 530,
+            eyeColor: "blufve"
+        };
+        const persons = {
+            stiker1: person,
+            stiker2: person1
+        }
+        formData.append('stikers', persons);
+        formData.append('avatar', fileField.files[0]);
+
+        //const parsedUrl = new URL(window.location.href);
+        //console.log(parsedUrl);
+
+        fetch('http://localhost:8080/camagru/mine/test_upload.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                response.json();
+            })
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+    });
 
     function cancel_post(ctx) {
         //button.disabled = true;
