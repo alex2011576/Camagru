@@ -23,23 +23,25 @@ require __DIR__ . '/src/new_post.php';
                                 </p>
                             </div>
                             <div class="d-flex justify-content-center align-items-center m-1 toggle-upload" style="width: 100%">
-                                <button class="btn btn-sm btn-dark post-btn m-2" id="open_web">Webcam</button>
+                                <button class="btn btn-sm btn-dark post-btn m-2" id="open_web" type="button">Webcam</button>
                                 <div class="or">OR</div>
                                 <label for="pic-upload" class="btn btn-sm btn-dark post-btn m-2">
                                     Upload
                                 </label>
                                 <input class="d-none" type="file" accept="image/png, image/jpeg" id="pic-upload" name="file">
                             </div>
-                            <!-- <img src="http://localhost:8080/camagru/ilona/uploads/img_62d6ca64e688e.jpg" class="d-none rounded-0  picture" alt="..." /> -->
 
                             <!-- The part below appears when either webcam or upload is chosen -->
                             <div class="d-flex justify-content-center" style="width: 100%">
                             </div>
-
+                            <!-- CANVAS -->
                             <div class="d-flex justify-content-center flex-wrap m-1 toggle-upload d-none " style="width: 100%">
                                 <div class="d-flex justify-content-center" style="width: 100%;">
-                                    <canvas class="toggle-upload canvas-upload d-none my-1 border-0 " id="canvas"></canvas>
+                                    <canvas class="toggle-upload canvas-upload d-none my-1 border-0 " id="canvas">
+                                        <video id="video" style="width: 100%" autoplay></video>
+                                    </canvas>
                                 </div>
+                                <!-- STICKERS -->
                                 <div class="d-flex justify-content-center flex-wrap" id="description" style="width: 100%;">
                                     <div class="scrollmenu bg-light my-0 mb-2 px-2 toggle-upload d-none" style="width: 100%;">
                                         <img class="sticker img-thumbnail" id="stick1" onclick="selectSticker(1)" src="./static/stickers/1.png" alt="">
@@ -55,10 +57,18 @@ require __DIR__ . '/src/new_post.php';
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
+                            <!-- <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
                                 <button class="btn btn-sm btn-dark post-btn m-2" id="btn-post" type="button">Post</button>
                                 <div class="or">OR</div>
                                 <button class="btn btn-sm btn-danger post-btn m-2" id="btn-cancel" type="reset">Cancel</button>
+                            </div> -->
+
+                            <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
+                                <button class="btn btn-sm btn-dark post-btn m-2 toggle-web" id="btn-post" type="button">Post</button>
+                                <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-web" id="btn-shot" type="button">Shoot</button>
+                                <div class="or">OR</div>
+                                <button class="btn btn-sm btn-danger post-btn m-2 toggle-web" id="btn-cancel" type="reset">Cancel</button>
+                                <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-web" id="btn-retry" type="button">Retry</button>
                             </div>
 
 
@@ -100,7 +110,7 @@ require __DIR__ . '/src/new_post.php';
         ctx.drawImage(pic, 0, 0);
 
         adjust_decription(pic.naturalWidth + 2);
-        toggle_on_upload();
+        toggle_by_class('toggle-upload');
 
     }, false);
 
@@ -118,9 +128,10 @@ require __DIR__ . '/src/new_post.php';
     button_cancel.addEventListener("click", function() {
         console.log("HERE");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        toggle_on_upload();
+        toggle_by_class('toggle-upload');
     });
 
+    // BTN-POST CLICK
     const button_post = document.getElementById('btn-post');
     button_post.addEventListener("click", function() {
 
@@ -207,13 +218,43 @@ require __DIR__ . '/src/new_post.php';
         description.style.width = `${target_width}px`;
     }
 
-    function toggle_on_upload() {
-        const boxes = document.getElementsByClassName('toggle-upload');
+    function toggle_by_class(class_name) {
+        const boxes = document.getElementsByClassName(class_name);
 
         for (const box of boxes) {
             box.classList.toggle('d-none');
         }
     }
+
+
+    let button_webcam = document.querySelector("#open_web");
+    let video = document.querySelector("#video");
+    let button_shot = document.querySelector("#btn-shot");
+
+    button_webcam.addEventListener('click', async function() {
+        navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((err) => {
+                console.error(`An error occurred: ${err}`);
+            });
+        toggle_by_class('toggle-upload');
+        toggle_by_class('toggle-web');
+    });
+
+    button_shot.addEventListener('click', function() {
+        toggle_by_class('toggle-web');
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        let image_data_url = canvas.toDataURL('image/jpeg');
+
+        // data url of the image
+        console.log(image_data_url);
+    });
 
     // const button = document.getElementById('btn-cancel');
     // button.addEventListener('click', cancel_post(ctx));
