@@ -117,10 +117,17 @@ require __DIR__ . '/src/new_post.php';
     const video = document.querySelector("#video");
     const button_shot = document.querySelector("#btn-shot");
 
+    //UPLOAD PICTURE PART
+    image_input.addEventListener("change", function() {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const uploaded_image = reader.result;
+            pic.src = uploaded_image;
+        });
+        reader.readAsDataURL(this.files[0]);
+    });
 
     pic.addEventListener('load', () => {
-        // execute drawImage statements here
-        //image_input.disabled = true;
         canvas.width = pic.naturalWidth;
         canvas.height = pic.naturalHeight;
         canvas_stickers.width = pic.naturalWidth;
@@ -133,15 +140,53 @@ require __DIR__ . '/src/new_post.php';
 
     }, false);
 
-
-    image_input.addEventListener("change", function() {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const uploaded_image = reader.result;
-            pic.src = uploaded_image;
-        });
-        reader.readAsDataURL(this.files[0]);
+    //WEBCAM PHOTO PART
+    button_webcam.addEventListener('click', async function() {
+        navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((err) => {
+                console.error(`An error occurred: ${err}`);
+            });
+        toggle_by_class('toggle-loader');
     });
+
+    video.addEventListener('canplay', (ev) => {
+        toggle_by_class('toggle-loader');
+        toggle_by_class('toggle-web');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas_stickers.width = video.videoWidth;
+        canvas_stickers.height = video.videoHeight;
+        adjust_decription(video.videoWidth + 2);
+
+    }, false);
+
+    video.addEventListener('play', () => {
+        (function loop() {
+            if (video.paused)
+                return;
+            ctx.drawImage(video, 0, 0);
+            ctx_stickers.drawImage(video, 0, 0);
+            setTimeout(loop, 1000 / 60); //fps
+            console.log(1);
+        })();
+    }, false);
+
+    button_shot.addEventListener('click', (ev) => {
+        takepicture();
+        ev.preventDefault();
+    }, false);
+
+    // STICKERS HANDLING
+
+
+    //CANCEL, POST BUTTONS 
 
     button_cancel.addEventListener("click", function() {
         console.log("HERE");
@@ -203,53 +248,12 @@ require __DIR__ . '/src/new_post.php';
                 console.error('Error:', error);
             });
     });
+</script>
 
-    button_webcam.addEventListener('click', async function() {
-        navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false
-            })
-            .then((stream) => {
-                video.srcObject = stream;
-                video.play();
-            })
-            .catch((err) => {
-                console.error(`An error occurred: ${err}`);
-            });
-        toggle_by_class('toggle-loader');
-    });
-
-    video.addEventListener('canplay', (ev) => {
-        toggle_by_class('toggle-loader');
-        toggle_by_class('toggle-web');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas_stickers.width = video.videoWidth;
-        canvas_stickers.height = video.videoHeight;
-        adjust_decription(video.videoWidth + 2);
-
-    }, false);
-
-    video.addEventListener('play', () => {
-        (function loop() {
-            if (video.paused)
-                return;
-            ctx.drawImage(video, 0, 0);
-            ctx_stickers.drawImage(video, 0, 0);
-            setTimeout(loop, 1000 / 60); //fps
-            console.log(1);
-        })();
-    }, false);
-
-    button_shot.addEventListener('click', (ev) => {
-        takepicture();
-        ev.preventDefault();
-    }, false);
-
+<!-- Helpers functions -->
+<script>
     function takepicture() {
         toggle_by_class('toggle-web2');
-        // console.log(video.videoWidth);
-        // console.log(video.videoHeight);
         ctx_stickers.drawImage(video, 0, 0);
         ctx.drawImage(video, 0, 0);
         video.pause();
@@ -264,10 +268,7 @@ require __DIR__ . '/src/new_post.php';
         // data url of the image
         console.log(image_data_url);
     };
-</script>
 
-<!-- Helpers functions -->
-<script>
     function adjust_decription(target_width) {
         const description = document.getElementById("description");
         description.style.width = `${target_width}px`;
@@ -293,13 +294,6 @@ require __DIR__ . '/src/new_post.php';
     //     // }, 2000);
     // }
 
-    function cancel_post(ctx) {
-        //button.disabled = true;
-        //toggle_on_upload();
-        // setTimeout(() => {
-        //     button.disabled = false;
-        // }, 2000);
-    }
     // function drawImageScaled(img, ctx) {
     //     var canvas = ctx.canvas;
     //     var hRatio = canvas.width / img.width;
