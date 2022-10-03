@@ -127,24 +127,41 @@ require __DIR__ . '/src/new_post.php';
         const formData = new FormData();
         const fileField = document.querySelector('input[type="file"]');
         //formData.append('stickers', stickers_data);
+
+        const foo = {
+            foundation: "Mozilla",
+            model: "box",
+            week: 45,
+            transport: "car",
+            month: 7,
+        };
+        console.log(foo);
+        console.log(JSON.stringify(foo));
+        formData.append('stickers', JSON.stringify(foo));
         formData.append('avatar', fileField.files[0]);
+
 
         //const parsedUrl = new URL(window.location.href);
         //console.log(parsedUrl);
 
-        fetch('http://localhost:8080/camagru/mine/test_upload.php', {
+        fetch('http://localhost:8080/camagru/mine/new_post.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
-                response.json();
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    // Find some way to get to execute .catch()
+                    return Promise.reject('something went wrong!')
+                }
             })
             .then((result) => {
                 console.log(result);
             })
             .catch((error) => {
                 console.error('Error:', error);
-            })
+            });
     });
 
     function cancel_post(ctx) {
