@@ -222,6 +222,16 @@ require __DIR__ . '/src/new_post.php';
         draw_to_preview();
     }
 
+    canvas_stickers.addEventListener('mousedown', function(evt) {
+        if (Object.keys(selected_stickers).length == 0)
+            return;
+        let coords = getMousePos(canvas_stickers, evt);
+        selected_stickers[last_sticker]['x'] = coords.x;
+        selected_stickers[last_sticker]['y'] = coords.y;
+        let sticker = selected_stickers[last_sticker];
+        draw_to_preview(canvas_stickers, 0, 0);
+        ctx_stickers.drawImage(sticker['img'], coords.x, coords.y);
+    })
     // function removePreview(stickerId) {
     // 	selectedStickers = selectedStickers.filter(s => s !== stickerId);
     // 	previewSelected();
@@ -423,22 +433,6 @@ require __DIR__ . '/src/new_post.php';
             track.stop();
         });
     }
-
-    canvas_stickers.addEventListener('mousedown', function(evt) {
-        if (Object.keys(selected_stickers).length == 0)
-            return;
-        console.log("1");
-        let coords = getMousePos(canvas_stickers, evt);
-        selected_stickers[last_sticker]['x'] = coords.x;
-        selected_stickers[last_sticker]['y'] = coords.y;
-        console.log(coords.x);
-        console.log(coords.y);
-        let sticker = selected_stickers[last_sticker];
-        console.log(sticker);
-        draw_to_preview(canvas_stickers, 0, 0);
-        ctx_stickers.drawImage(sticker['img'], coords.x, coords.y);
-
-    })
 
     function getMousePos(canvas_stickers, evt) {
         let rect = canvas_stickers.getBoundingClientRect();
