@@ -129,9 +129,9 @@ div.scrollmenu img {
   object-fit: contain;
 }
 
-div.scrollmenu img:hover {
+/* div.scrollmenu img:hover {
   background-color: #777;
-}
+} */
 
 .upload_element {
   width: 100%;
@@ -155,4 +155,8 @@ div.scrollmenu img:hover {
 .canvas-upload {
   /* border: solid 1px black; */
   max-width: 100% !important;
+}
+
+.selected {
+  background-color: #777;
 }

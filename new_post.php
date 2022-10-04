@@ -72,7 +72,7 @@ require __DIR__ . '/src/new_post.php';
                             </div> -->
 
                             <div class="d-flex justify-content-center align-items-center m-1 toggle-upload toggle-web d-none" style="width: 100%">
-                                <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-web1" id="btn-shot" type="button">Shoot</button>
+                                <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-web1" id="btn-shot" type="button" disabled>Select Sticker</button>
                                 <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-upload toggle-web2" id="btn-post" type="button">Post</button>
                                 <div class="or">OR</div>
                                 <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-upload toggle-web1" id="btn-cancel" type="reset">Cancel</button>
@@ -110,13 +110,14 @@ require __DIR__ . '/src/new_post.php';
     const canvas_stickers = document.getElementById("canvas-stickers");
     const ctx_stickers = canvas_stickers.getContext("2d");
     const image_input = document.querySelector("#pic-upload");
-    const pic = new Image(); // Create new pic element
+    let pic = new Image(); // Create new pic element
     const video = document.querySelector("#video");
     const button_cancel = document.getElementById('btn-cancel');
     const button_post = document.getElementById('btn-post');
     const button_webcam = document.querySelector("#open_web");
     const button_shot = document.querySelector("#btn-shot");
     const button_retry = document.querySelector("#btn-retry");
+    let selected_stickers = {};
 
     //UPLOAD PICTURE PART
     image_input.addEventListener("change", function() {
@@ -129,13 +130,10 @@ require __DIR__ . '/src/new_post.php';
     });
 
     pic.addEventListener('load', () => {
-        canvas.width = pic.naturalWidth;
-        canvas.height = pic.naturalHeight;
-        canvas_stickers.width = pic.naturalWidth;
-        canvas_stickers.height = pic.naturalHeight;
-        ctx.drawImage(pic, 0, 0);
-        ctx_stickers.drawImage(pic, 0, 0);
-
+        console.log("LOAD PIC!");
+        set_canvas_dimentions();
+        draw_to_imgBuffer();
+        draw_to_preview();
         adjust_decription(pic.naturalWidth + 2);
         display_by_class('toggle-upload');
         hide_by_class('btns-menu');
@@ -153,6 +151,18 @@ require __DIR__ . '/src/new_post.php';
         hide_by_class('btns-menu');
         display_by_class('toggle-web');
         display_by_class('toggle-web1');
+
+        set_canvas_dimentions();
+        if (pic.src)
+            console.log("See - pic.src");
+        if (pic.src !== "")
+            console.log("See - pic.src");
+        if (video.srcObject)
+            console.log("See - vide.srcObjec");
+        if (!video.paused)
+            console.log("See - !vide.paused");
+        if (video.paused)
+            console.log("See - vide.paused");
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas_stickers.width = video.videoWidth;
@@ -165,10 +175,10 @@ require __DIR__ . '/src/new_post.php';
         (function loop() {
             if (video.paused)
                 return;
-            ctx.drawImage(video, 0, 0);
-            ctx_stickers.drawImage(video, 0, 0);
-            setTimeout(loop, 1000 / 60); //16fps
+            draw_to_imgBuffer();
+            draw_to_preview();
             console.log(1);
+            setTimeout(loop, 1000 / 60); //16fps
         })();
     }, false);
 
@@ -183,28 +193,53 @@ require __DIR__ . '/src/new_post.php';
     }, false);
 
     // STICKERS HANDLING
+    function selectSticker(sticker_id) {
+        let s_name = 'stick' + sticker_id;
+        let sticker = document.getElementById('stick' + sticker_id);
 
+        if (s_name in selected_stickers) {
+            delete selected_stickers[s_name];
+            sticker.classList.remove('selected');
+        } else {
+            sticker.classList.add('selected');
+            let s_sticker = {
+                'img': sticker,
+                'x': 20,
+                'y': 50
+            }
+            selected_stickers[s_name] = s_sticker;
+        }
+
+        if (Object.keys(selected_stickers).length > 0) {
+            button_shot.disabled = false;
+            button_shot.innerHTML = "Take Photo";
+            button_post.disabled = false;
+            button_post.innerHTML = "Post";
+        } else {
+            if (video.srcObject && !pic.src) {
+                button_post.disabled = true;
+                button_post.innerHTML = "Select Stickers";
+            } else {
+                button_post.disabled = false;
+                button_post.innerHTML = "Post";
+            }
+            button_shot.disabled = true;
+            button_shot.innerHTML = "Select Stickers";
+        }
+        draw_to_preview();
+    }
+
+    // function removePreview(stickerId) {
+    // 	selectedStickers = selectedStickers.filter(s => s !== stickerId);
+    // 	previewSelected();
+    // }
+    //VIDO IS BEING STREAMED AND CTX IS REVRITTEN BY SECINDS, MEANING, THAT STICKERS SHOUKD TOO!
 
     //CANCEL, POST BUTTONS 
 
     button_cancel.addEventListener("click", function() {
         //turn off webcam here
-        if (video.srcObject) {
-            video.pause();
-            tracks = video.srcObject.getTracks();
-            tracks.forEach(function(track) {
-                track.stop();
-            });
-        } else {
-            //hide_by_class('toggle-upload');
-        }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
-        hide_by_class('toggle-web');
-        hide_by_class('toggle-web1');
-        hide_by_class('toggle-web2');
-        hide_by_class('toggle-upload');
-        display_by_class('btns-menu');
+        reset_all();
     });
 
     // BTN-POST CLICK
@@ -253,33 +288,6 @@ require __DIR__ . '/src/new_post.php';
 
 <!-- Helpers functions -->
 <script>
-    function takepicture() {
-        hide_by_class('toggle-web1')
-        display_by_class('toggle-web2');
-
-        ctx_stickers.drawImage(video, 0, 0);
-        ctx.drawImage(video, 0, 0);
-        video.pause();
-        tracks = video.srcObject.getTracks();
-        tracks.forEach(function(track) {
-            track.stop();
-        });
-
-        adjust_decription(video.videoWidth + 2);
-        let image_data_url = canvas.toDataURL('image/jpeg');
-
-        // data url of the image
-        console.log(image_data_url);
-    };
-
-    function retry() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
-        hide_by_class('toggle-web2');
-        display_by_class('toggle-web1');
-        webcam_start();
-    };
-
     async function webcam_start() {
         navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -294,6 +302,30 @@ require __DIR__ . '/src/new_post.php';
             });
         toggle_by_class('toggle-loader');
     }
+
+    function takepicture() {
+        hide_by_class('toggle-web1')
+        display_by_class('toggle-web2');
+
+        draw_to_imgBuffer();
+        draw_to_preview();
+
+        stop_webcam();
+
+        adjust_decription(video.videoWidth + 2);
+
+        // data url of the image
+        let image_data_url = canvas.toDataURL('image/jpeg');
+        console.log(image_data_url);
+    };
+
+    function retry() {
+        clear_canvases();
+        hide_by_class('toggle-web2');
+        display_by_class('toggle-web1');
+        webcam_start();
+    };
+
 
     function adjust_decription(target_width) {
         const description = document.getElementById("description");
@@ -324,6 +356,84 @@ require __DIR__ . '/src/new_post.php';
         }
     }
 
+    function clear_canvases() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function reset_stickers() {
+        Object.keys(selected_stickers).forEach((key) => {
+            let sticker = selected_stickers[key]['img'];
+            sticker.classList.remove('selected');
+        });
+        selected_stickers = {};
+    }
+
+    function reset_all() {
+
+        if (video.srcObject) {
+            stop_webcam();
+        }
+        //console.log(pic.src);
+        //console.log(pic);
+        console.log(pic.src);
+        if (pic.src) {
+            pic.setAttribute(src, '');
+            console.log("hereeee");
+            if (pic.src !== '')
+                console.log("Did not work1!!");
+        }
+        reset_stickers();
+        clear_canvases();
+        hide_by_class('toggle-web');
+        hide_by_class('toggle-web1');
+        hide_by_class('toggle-web2');
+        hide_by_class('toggle-upload');
+        display_by_class('btns-menu');
+    }
+
+    function draw_to_preview() {
+        ctx_stickers.drawImage(canvas, 0, 0);
+        draw_stickers();
+    }
+
+    function draw_to_imgBuffer() {
+        if (pic.src !== "") {
+            ctx.drawImage(pic, 0, 0);
+        } else if (video.srcObject && !video.paused) {
+            ctx.drawImage(video, 0, 0);
+        }
+    }
+
+    function set_canvas_dimentions() {
+        if (pic.src !== "") {
+            canvas.width = pic.naturalWidth;
+            canvas.height = pic.naturalHeight;
+            canvas_stickers.width = pic.naturalWidth;
+            canvas_stickers.height = pic.naturalHeight;
+        } else if (video.srcObject && !video.paused) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas_stickers.width = video.videoWidth;
+            canvas_stickers.height = video.videoHeight;
+        }
+    }
+
+    function draw_stickers() {
+        for (const key in selected_stickers) {
+            if (selected_stickers.hasOwnProperty(key)) {
+                ctx_stickers.drawImage(selected_stickers[key]['img'], selected_stickers[key]['x'], selected_stickers[key]['y']);
+            }
+        }
+    }
+
+    function stop_webcam() {
+        video.pause();
+        tracks = video.srcObject.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+    }
     // const button = document.getElementById('btn-cancel');
     // button.addEventListener('click', cancel_post(ctx));
 
