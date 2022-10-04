@@ -40,6 +40,7 @@ require __DIR__ . '/src/new_post.php';
                             <!-- CANVAS -->
                             <div class="d-flex justify-content-center flex-wrap m-1 toggle-upload toggle-web d-none " style="width: 100%">
                                 <video class="d-none" id="video" style="width: 100%" autoplay></video>
+                                <img class="d-none" src="" alt="" id="img-buffer" class="sticker-preview">
                                 <!-- <video class="toggle-upload toggle-web" id="video" style="width: 100%" autoplay></video> -->
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas-stickers"></canvas> -->
@@ -111,6 +112,7 @@ require __DIR__ . '/src/new_post.php';
     const ctx_stickers = canvas_stickers.getContext("2d");
     const image_input = document.querySelector("#pic-upload");
     let pic = new Image(); // Create new pic element
+    //const pic = document.getElementById("img-buffer");; // Create new pic element
     const video = document.querySelector("#video");
     const button_cancel = document.getElementById('btn-cancel');
     const button_post = document.getElementById('btn-post');
@@ -130,7 +132,6 @@ require __DIR__ . '/src/new_post.php';
     });
 
     pic.addEventListener('load', () => {
-        console.log("LOAD PIC!");
         set_canvas_dimentions();
         draw_to_imgBuffer();
         draw_to_preview();
@@ -153,20 +154,6 @@ require __DIR__ . '/src/new_post.php';
         display_by_class('toggle-web1');
 
         set_canvas_dimentions();
-        if (pic.src)
-            console.log("See - pic.src");
-        if (pic.src !== "")
-            console.log("See - pic.src");
-        if (video.srcObject)
-            console.log("See - vide.srcObjec");
-        if (!video.paused)
-            console.log("See - !vide.paused");
-        if (video.paused)
-            console.log("See - vide.paused");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas_stickers.width = video.videoWidth;
-        canvas_stickers.height = video.videoHeight;
         adjust_decription(video.videoWidth + 2);
 
     }, false);
@@ -376,12 +363,8 @@ require __DIR__ . '/src/new_post.php';
         }
         //console.log(pic.src);
         //console.log(pic);
-        console.log(pic.src);
-        if (pic.src) {
-            pic.setAttribute(src, '');
-            console.log("hereeee");
-            if (pic.src !== '')
-                console.log("Did not work1!!");
+        if (pic.src && pic.src != window.location.href) {
+            pic.src = "";
         }
         reset_stickers();
         clear_canvases();
@@ -398,7 +381,7 @@ require __DIR__ . '/src/new_post.php';
     }
 
     function draw_to_imgBuffer() {
-        if (pic.src !== "") {
+        if (pic.src && pic.src != window.location.href) {
             ctx.drawImage(pic, 0, 0);
         } else if (video.srcObject && !video.paused) {
             ctx.drawImage(video, 0, 0);
@@ -406,7 +389,7 @@ require __DIR__ . '/src/new_post.php';
     }
 
     function set_canvas_dimentions() {
-        if (pic.src !== "") {
+        if (pic.src && pic.src != window.location.href) {
             canvas.width = pic.naturalWidth;
             canvas.height = pic.naturalHeight;
             canvas_stickers.width = pic.naturalWidth;
