@@ -119,6 +119,8 @@ require __DIR__ . '/src/new_post.php';
     const button_webcam = document.querySelector("#open_web");
     const button_shot = document.querySelector("#btn-shot");
     const button_retry = document.querySelector("#btn-retry");
+    let last_frame;
+    let last_sticker;
     let selected_stickers = {};
 
     //UPLOAD PICTURE PART
@@ -183,16 +185,20 @@ require __DIR__ . '/src/new_post.php';
     function selectSticker(sticker_id) {
         let s_name = 'stick' + sticker_id;
         let sticker = document.getElementById('stick' + sticker_id);
-
+        last_frame = canvas_stickers;
+        last_sticker = s_name;
         if (s_name in selected_stickers) {
             delete selected_stickers[s_name];
             sticker.classList.remove('selected');
         } else {
             sticker.classList.add('selected');
+            console.log(sticker.naturalHeight);
+            console.log(sticker.naturalWidth);
+
             let s_sticker = {
                 'img': sticker,
-                'x': 20,
-                'y': 50
+                'x': (canvas.width / 2) - (sticker.naturalWidth / 2),
+                'y': canvas.height / 2
             }
             selected_stickers[s_name] = s_sticker;
         }
@@ -416,6 +422,30 @@ require __DIR__ . '/src/new_post.php';
         tracks.forEach(function(track) {
             track.stop();
         });
+    }
+
+    canvas_stickers.addEventListener('mousedown', function(evt) {
+        if (Object.keys(selected_stickers).length == 0)
+            return;
+        console.log("1");
+        let coords = getMousePos(canvas_stickers, evt);
+        selected_stickers[last_sticker]['x'] = coords.x;
+        selected_stickers[last_sticker]['y'] = coords.y;
+        console.log(coords.x);
+        console.log(coords.y);
+        let sticker = selected_stickers[last_sticker];
+        console.log(sticker);
+        draw_to_preview(canvas_stickers, 0, 0);
+        ctx_stickers.drawImage(sticker['img'], coords.x, coords.y);
+
+    })
+
+    function getMousePos(canvas_stickers, evt) {
+        let rect = canvas_stickers.getBoundingClientRect();
+        return {
+            x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+            y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+        };
     }
     // const button = document.getElementById('btn-cancel');
     // button.addEventListener('click', cancel_post(ctx));

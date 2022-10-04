@@ -1,3 +1,4 @@
+
 function myFunction() {
     var x = document.getElementById("navMenu");
     if (x.className.indexOf(" d-flex") == -1) {
