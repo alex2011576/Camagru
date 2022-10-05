@@ -4,8 +4,13 @@ require_once __DIR__ . '/libs/image_checks.php';
 if (!is_user_logged_in()) {
     redirect_to('login.php');
 }
+const allowedTypes = [
+    'data:image/png' => 'png',
+    'data:image/jpeg' => 'jpg'
+];
 const sticker_dir = __DIR__ . '/../static/stickers/';
 const upload_dir = __DIR__ . '/../static/uploaded/';
+
 if (is_post_request()) {
     if (isset($_POST['image']) && isset($_POST['stickers'])) {
 
@@ -22,42 +27,63 @@ if (is_post_request()) {
         //var_dump($_FILES);
         //var_dump($_POST);
         $data_url = $_POST['image'];
+        $is_image = getimagesize($_POST['image']);
+        // try {
+        //     throw new Exception("1111111 error message!!!!!!!!!!!!!");
+        // } catch (Exception $e) {
+        //     echo json_encode($e->getMessage());
+        //     die();
+        // }
+        if (!$is_image) {
+            echo json_encode(['error' => 'File is not an image. Only png and jpeg are supported!']);
+            die();
+        }
         list($type, $data) = explode(';', $data_url);
-        list(, $data)      = explode(',', $data);
+        if (!in_array($type, array_keys(allowedTypes))) {
+            echo json_encode(['error' => 'Wrong file format, only png and jpeg are supported!']);
+            die();
+        }
+        list(, $data) = explode(',', $data);
         $data = base64_decode($data);
-        //die();
-        //file_put_contents('./../static/uploaded/final.jpg', $data);
         $image_resource = imagecreatefromstring($data);
+        if (!$image_resource) {
+            echo json_encode(['error' => 'Something went wrong. Try again or peak another file, please!']);
+            die();
+        }
         $stickers = json_decode($_POST['stickers'], true);
         foreach ($stickers as $sticker => $value) {
-            // $path = './../static/stickers/' . $sticker . '.png';
             $path =  sticker_dir . $sticker . '.png';
-
-            //echo ($_POST['stickers']);
-            // echo (json_encode($path));
-            // die();
             $h_offset = $value['y'];
             $v_offset = $value['x'];
             $sticker_data = file_get_contents($path);
-            //$sticker_data = file_get_contents('./../static/stickers/1.png');
+            if (!$sticker_data) {
+                echo json_encode(['error' => 'Sorry, sticker is not avaliable']);
+                die();
+            }
             $sticker_gd = imagecreatefromstring($sticker_data);
-
             $width = imagesx($sticker_gd);
             $height = imagesy($sticker_gd);
-            $destination = upload_dir . $sticker . '.png';
-            // file_put_contents('./../static/uploaded/test.png', $sticker_data);
-            file_put_contents($destination, $sticker_data);
-            //$sticker = imagescale($sticker, $width, $height);
+            // $destination = upload_dir . $sticker . '.png';
+            // file_put_contents($destination, $sticker_data);
             imagecopy($image_resource, $sticker_gd, $v_offset, $h_offset, 0, 0, $width, $height);
-            //file_put_contents('./../static/uploaded/final.jpg', $data);
         }
         ob_start();
-        imagejpeg($image_resource, null, 100);
+        if (!imagejpeg($image_resource, null, 100)) {
+            echo json_encode(['error' => 'Something went wrong. Try again later!']);
+            die();
+        }
         $image_data = ob_get_contents(); // read from buffer
         ob_end_clean(); // delete buffer
         $final_destination = upload_dir . uniqid('img_') . '.jpg';
-        file_put_contents($final_destination, $image_data);
+        if (!file_put_contents($final_destination, $image_data)) {
+            echo json_encode(['error' => 'Something went wrong. Try again later!']);
+            die();
+        }
         echo ($_POST['stickers']);
         die();
     }
 }
+
+//echo ($_POST['stickers']);
+// echo (json_encode($path));
+// die();

@@ -28,7 +28,7 @@ require __DIR__ . '/src/new_post.php';
                                 <label for="pic-upload" class="btn btn-sm btn-dark post-btn m-2">
                                     Upload
                                 </label>
-                                <input class="d-none" type="file" accept="image/png, image/jpeg" id="pic-upload" name="file">
+                                <input class="d-none" type="file" id="pic-upload" name="file">
                             </div>
 
                             <!-- The part below appears when either webcam or upload is chosen -->
@@ -147,7 +147,12 @@ require __DIR__ . '/src/new_post.php';
         } else {
             reader.addEventListener("load", () => {
                 const uploaded_image = reader.result;
-                pic.src = uploaded_image;
+                console.log(reader.result);
+                if (isImage(reader.result)) {
+                    pic.src = uploaded_image;
+                } else {
+                    alert("Wrong file format! Only jpeg and png are accepted!");
+                }
             });
             reader.readAsDataURL(this.files[0]);
         }
@@ -282,6 +287,7 @@ require __DIR__ . '/src/new_post.php';
         formData.append('stickers', JSON.stringify(stickers));
         formData.append('description', JSON.stringify(description));
         formData.append('image', image_data_url);
+        console.log(image_data_url);
 
         // "http://localhost:8080/camagru/mine/src/merge_images.php"
         //fetch("http://localhost:8080/camagru/mine/new_post.php", {
@@ -470,6 +476,10 @@ require __DIR__ . '/src/new_post.php';
             x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
             y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
         };
+    }
+
+    function isImage(url) {
+        return /^data:image\/(jpg|jpeg|png|webp|avif|gif|svg)/.test(url);
     }
     // const button = document.getElementById('btn-cancel');
     // button.addEventListener('click', cancel_post(ctx));
