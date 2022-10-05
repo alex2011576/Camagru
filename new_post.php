@@ -202,11 +202,13 @@ require __DIR__ . '/src/new_post.php';
         //let s_name = 'stick' + sticker_id;
         let sticker = document.getElementById('stick' + sticker_id);
         last_frame = canvas_stickers;
-        last_sticker = s_name;
         if (s_name in selected_stickers) {
+            if (s_name === last_sticker)
+                last_sticker = 'lost_track';
             delete selected_stickers[s_name];
             sticker.classList.remove('selected');
         } else {
+            last_sticker = s_name;
             sticker.classList.add('selected');
 
             let s_sticker = {
@@ -242,6 +244,8 @@ require __DIR__ . '/src/new_post.php';
         if (!selected_stickers.hasOwnProperty(last_sticker))
             return;
         let coords = getMousePos(canvas_stickers, evt);
+        coords.x = coords.x - selected_stickers[last_sticker]['img'].naturalWidth / 2;
+        coords.y = coords.y - selected_stickers[last_sticker]['img'].naturalHeight / 2;
         selected_stickers[last_sticker]['x'] = coords.x;
         selected_stickers[last_sticker]['y'] = coords.y;
         let sticker = selected_stickers[last_sticker];
@@ -275,9 +279,9 @@ require __DIR__ . '/src/new_post.php';
         formData.append('image', image_data_url);
 
         // "http://localhost:8080/camagru/mine/src/merge_images.php"
-        fetch("http://localhost:8080/camagru/mine/new_post.php", {
-                // const parsedUrl = new URL(window.location.href);
-                //fetch(parsedUrl, {
+        //fetch("http://localhost:8080/camagru/mine/new_post.php", {
+        const parsedUrl = new URL(window.location.href);
+        fetch(parsedUrl, {
                 method: 'POST',
                 body: formData
             })
