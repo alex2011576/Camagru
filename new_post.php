@@ -275,7 +275,7 @@ require __DIR__ . '/src/new_post.php';
         formData.append('image', image_data_url);
 
         // "http://localhost:8080/camagru/mine/src/merge_images.php"
-        fetch("http://localhost:8080/camagru/mine/src/merge_images.php", {
+        fetch("http://localhost:8080/camagru/mine/new_post.php", {
                 // const parsedUrl = new URL(window.location.href);
                 //fetch(parsedUrl, {
                 method: 'POST',

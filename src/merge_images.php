@@ -52,42 +52,7 @@ if (is_post_request()) {
         imagejpeg($image_resource);
         $image_data = ob_get_contents(); // read from buffer
         ob_end_clean(); // delete buffer
-
-        // if ($image) {
-        //     imageflip($image, IMG_FLIP_HORIZONTAL);
-        // }
-        // $i = 0;
-        // while ($sticker_values[$i] !== "") {
-        // 	$sticker = file_get_contents('stickers/' . $sticker_values[$i]);
-        // 	$h_offset = $sticker_values[$i + 1];
-        // 	$v_offset = $sticker_values[$i + 2];
-        // 	$width = $sticker_values[$i + 3];
-        // 	$height = $sticker_values[$i + 4];
-
-        // 	$sticker = imagecreatefromstring($sticker);
-        // 	$sticker = imagescale($sticker, $width, $height);
-
-        // 	imagecopy($image, $sticker, $h_offset, $v_offset, 0, 0, $width, $height);
-        // 	$i += 5;
-        // }
-
-        // ob_start();
-        // imagejpeg($image);
-        // $image = ob_get_clean();
-
-        // $image = base64_encode($image);
-
-
-
-
-
-
         file_put_contents('./../static/uploaded/final.jpg', $image_data);
-
-        //$jsonARR = json_decode($_POST['stickers'], true);
-        //$jsonARR['model'] = "boxxx11";
-        //$data = json_encode($jsonARR);
-        //echo ($data);
         echo ($_POST['stickers']);
         die();
     }
