@@ -1,0 +1,101 @@
+<?php
+require __DIR__ . '/bootstrap.php';
+
+if (!is_user_logged_in()) {
+    redirect_to('login.php');
+}
+const sticker_dir = __DIR__ . '/../static/stickers/';
+if (is_post_request()) {
+    if (isset($_POST['image']) && isset($_POST['stickers'])) {
+
+        //header("Content-Type: application/json; charset=UTF-8");
+        // echo json_encode($_REQUEST);
+        // echo json_encode($_FILES);
+        // var_dump($_FILES);
+        //$test = utf8_encode($_POST['stikers']);
+
+        // $jsonStr = json_decode($_POST['stickers']);
+        // $data['model'] = "box1";
+        // $data = json_encode($data);
+        //echo $data;
+        //var_dump($_FILES);
+        //var_dump($_POST);
+
+        $data_url = $_POST['image'];
+        list($type, $data) = explode(';', $data_url);
+        list(, $data)      = explode(',', $data);
+        $data = base64_decode($data);
+        //file_put_contents('./../static/uploaded/final.jpg', $data);
+        $image_resource = imagecreatefromstring($data);
+        $stickers = json_decode($_POST['stickers'], true);
+        foreach ($stickers as $sticker => $value) {
+            // $path = './../static/stickers/' . $sticker . '.png';
+            $path =  sticker_dir . $sticker . '.png';
+
+            //echo ($_POST['stickers']);
+            // echo (json_encode($path));
+            // die();
+            $h_offset = $value['y'];
+            $v_offset = $value['x'];
+            $sticker_data = file_get_contents($path);
+            //$sticker_data = file_get_contents('./../static/stickers/1.png');
+            $sticker_gd = imagecreatefromstring($sticker_data);
+
+            $width = imagesx($sticker_gd);
+            $height = imagesy($sticker_gd);
+            file_put_contents('./../static/uploaded/test.png', $sticker_data);
+            //$sticker = imagescale($sticker, $width, $height);
+            imagecopy($image_resource, $sticker_gd, $v_offset, $h_offset, 0, 0, $width, $height);
+            file_put_contents('./../static/uploaded/final.jpg', $data);
+        }
+        ob_start();
+        imagejpeg($image_resource);
+        $image_data = ob_get_contents(); // read from buffer
+        ob_end_clean(); // delete buffer
+
+        // if ($image) {
+        //     imageflip($image, IMG_FLIP_HORIZONTAL);
+        // }
+        // $i = 0;
+        // while ($sticker_values[$i] !== "") {
+        // 	$sticker = file_get_contents('stickers/' . $sticker_values[$i]);
+        // 	$h_offset = $sticker_values[$i + 1];
+        // 	$v_offset = $sticker_values[$i + 2];
+        // 	$width = $sticker_values[$i + 3];
+        // 	$height = $sticker_values[$i + 4];
+
+        // 	$sticker = imagecreatefromstring($sticker);
+        // 	$sticker = imagescale($sticker, $width, $height);
+
+        // 	imagecopy($image, $sticker, $h_offset, $v_offset, 0, 0, $width, $height);
+        // 	$i += 5;
+        // }
+
+        // ob_start();
+        // imagejpeg($image);
+        // $image = ob_get_clean();
+
+        // $image = base64_encode($image);
+
+
+
+
+
+
+        file_put_contents('./../static/uploaded/final.jpg', $image_data);
+
+        //$jsonARR = json_decode($_POST['stickers'], true);
+        //$jsonARR['model'] = "boxxx11";
+        //$data = json_encode($jsonARR);
+        //echo ($data);
+        echo ($_POST['stickers']);
+        die();
+    }
+}
+
+//functions i need
+//imagesx($sticker), imagesy($sticker) -> get width and height of stickers
+//imageflip($image, IMG_FLIP_HORIZONTAL) do not know wht yet
+//imagecreatefromstring($sticker);
+//imagecreatefromstring($sticker);
+// /imagecopy($image, $sticker, $h_offset, $v_offset, 0, 0, $width, $height);

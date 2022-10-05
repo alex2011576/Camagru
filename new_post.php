@@ -198,7 +198,8 @@ require __DIR__ . '/src/new_post.php';
 
     // STICKERS HANDLING
     function selectSticker(sticker_id) {
-        let s_name = 'stick' + sticker_id;
+        let s_name = sticker_id;
+        //let s_name = 'stick' + sticker_id;
         let sticker = document.getElementById('stick' + sticker_id);
         last_frame = canvas_stickers;
         last_sticker = s_name;
@@ -273,8 +274,10 @@ require __DIR__ . '/src/new_post.php';
         formData.append('description', JSON.stringify(description));
         formData.append('image', image_data_url);
 
-        const parsedUrl = new URL(window.location.href);
-        fetch(parsedUrl, {
+        // "http://localhost:8080/camagru/mine/src/merge_images.php"
+        fetch("http://localhost:8080/camagru/mine/src/merge_images.php", {
+                // const parsedUrl = new URL(window.location.href);
+                //fetch(parsedUrl, {
                 method: 'POST',
                 body: formData
             })
