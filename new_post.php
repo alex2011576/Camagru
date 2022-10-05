@@ -141,11 +141,16 @@ require __DIR__ . '/src/new_post.php';
     //UPLOAD PICTURE PART
     image_input.addEventListener("change", function() {
         const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const uploaded_image = reader.result;
-            pic.src = uploaded_image;
-        });
-        reader.readAsDataURL(this.files[0]);
+        if (this.files[0].size > 4 * 1024 * 1024) {
+            alert("File is too big! Maximum size is 4Mb");
+            this.value = "";
+        } else {
+            reader.addEventListener("load", () => {
+                const uploaded_image = reader.result;
+                pic.src = uploaded_image;
+            });
+            reader.readAsDataURL(this.files[0]);
+        }
     });
 
     pic.addEventListener('load', () => {

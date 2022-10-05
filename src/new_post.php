@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/libs/image_checks.php';
 
 if (!is_user_logged_in()) {
     redirect_to('login.php');
@@ -20,11 +21,11 @@ if (is_post_request()) {
         //echo $data;
         //var_dump($_FILES);
         //var_dump($_POST);
-
         $data_url = $_POST['image'];
         list($type, $data) = explode(';', $data_url);
         list(, $data)      = explode(',', $data);
         $data = base64_decode($data);
+        //die();
         //file_put_contents('./../static/uploaded/final.jpg', $data);
         $image_resource = imagecreatefromstring($data);
         $stickers = json_decode($_POST['stickers'], true);
@@ -51,7 +52,7 @@ if (is_post_request()) {
             //file_put_contents('./../static/uploaded/final.jpg', $data);
         }
         ob_start();
-        imagejpeg($image_resource);
+        imagejpeg($image_resource, null, 100);
         $image_data = ob_get_contents(); // read from buffer
         ob_end_clean(); // delete buffer
         $final_destination = upload_dir . uniqid('img_') . '.jpg';
