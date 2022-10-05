@@ -17,6 +17,13 @@ if (is_post_request()) {
     //echo $data;
     //var_dump($_FILES);
     //var_dump($_POST);
+
+    $data_url = $_POST['image'];
+    list($type, $data) = explode(';', $data_url);
+    list(, $data)      = explode(',', $data);
+    $data = base64_decode($data);
+    file_put_contents('./static/uploaded/test.jpg', $data);
+
     $jsonARR = json_decode($_POST['stickers'], true);
     $jsonARR['model'] = "boxxx11";
     $data = json_encode($jsonARR);

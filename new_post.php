@@ -104,7 +104,7 @@ require __DIR__ . '/src/new_post.php';
 </main>
 
 <?php view('footer') ?>
-<!-- UPLOAD Canvas script -->
+<!-- EVENT HANDLERS script -->
 <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -192,8 +192,6 @@ require __DIR__ . '/src/new_post.php';
             sticker.classList.remove('selected');
         } else {
             sticker.classList.add('selected');
-            console.log(sticker.naturalHeight);
-            console.log(sticker.naturalWidth);
 
             let s_sticker = {
                 'img': sticker,
@@ -225,6 +223,8 @@ require __DIR__ . '/src/new_post.php';
     canvas_stickers.addEventListener('mousedown', function(evt) {
         if (Object.keys(selected_stickers).length == 0)
             return;
+        if (!selected_stickers.hasOwnProperty(last_sticker))
+            return;
         let coords = getMousePos(canvas_stickers, evt);
         selected_stickers[last_sticker]['x'] = coords.x;
         selected_stickers[last_sticker]['y'] = coords.y;
@@ -232,43 +232,34 @@ require __DIR__ . '/src/new_post.php';
         draw_to_preview(canvas_stickers, 0, 0);
         ctx_stickers.drawImage(sticker['img'], coords.x, coords.y);
     })
-    // function removePreview(stickerId) {
-    // 	selectedStickers = selectedStickers.filter(s => s !== stickerId);
-    // 	previewSelected();
-    // }
-    //VIDO IS BEING STREAMED AND CTX IS REVRITTEN BY SECINDS, MEANING, THAT STICKERS SHOUKD TOO!
 
     //CANCEL, POST BUTTONS 
-
     button_cancel.addEventListener("click", function() {
         //turn off webcam here
         reset_all();
     });
 
-    // BTN-POST CLICK
     button_post.addEventListener("click", function() {
 
         const formData = new FormData();
-        const fileField = document.querySelector('input[type="file"]');
-        //formData.append('stickers', stickers_data);
+        let image_data_url = canvas.toDataURL('image/jpeg');
+        let description = document.getElementById("description-input").value;
+        let stickers = {};
+        for (const key in selected_stickers) {
+            if (selected_stickers.hasOwnProperty(key)) {
+                let k_sticker = {
+                    'x': selected_stickers[key]['x'],
+                    'y': selected_stickers[key]['y']
+                }
+                stickers[key] = k_sticker;
+            }
+        }
+        formData.append('stickers', JSON.stringify(stickers));
+        formData.append('description', JSON.stringify(description));
+        formData.append('image', image_data_url);
 
-        const foo = {
-            foundation: "Mozilla",
-            model: "box",
-            week: 45,
-            transport: "car",
-            month: 7,
-        };
-        console.log(foo);
-        console.log(JSON.stringify(foo));
-        formData.append('stickers', JSON.stringify(foo));
-        formData.append('avatar', fileField.files[0]);
-
-
-        //const parsedUrl = new URL(window.location.href);
-        //console.log(parsedUrl);
-
-        fetch('http://localhost:8080/camagru/mine/new_post.php', {
+        const parsedUrl = new URL(window.location.href);
+        fetch(parsedUrl, {
                 method: 'POST',
                 body: formData
             })
