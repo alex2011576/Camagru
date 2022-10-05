@@ -79,7 +79,8 @@ if (is_post_request()) {
             echo json_encode(['error' => 'Something went wrong. Try again later!']);
             die();
         }
-        echo ($_POST['stickers']);
+        //echo ($_POST['stickers']);
+        echo json_encode(['success' => 'Photo has been uploaded successfully!']);
         die();
     }
 }
