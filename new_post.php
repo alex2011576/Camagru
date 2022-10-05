@@ -15,7 +15,7 @@ require __DIR__ . '/src/new_post.php';
             <div class="row g-5">
                 <div class="col-12 col-md-8">
                     <div class="p-0 p-md-3  border shadow-sm rounded-0 bg-light">
-                        <form class="d-flex justify-content-center flex-wrap" method="POST" enctype="multipart/form-data">
+                        <form class="d-flex justify-content-center flex-wrap" method="POST" enctype="multipart/form-data" id="form_upload">
 
                             <div class="upload_element border-bottom ">
                                 <p class="text text-center font-upload fw-bold py-2 my-2" style="width: inherit">
@@ -35,6 +35,14 @@ require __DIR__ . '/src/new_post.php';
                             <div class="d-flex justify-content-center">
                                 <div class="spinner-border toggle-loader d-none m-5" role="status">
                                     <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <!-- Modal  -->
+                            <div id="loading_modal" class="modal_loader d-flex justify-content-center align-items-center d-none">
+                                <div class="modal-content d-flex justify-content-center  align-items-center">
+                                    <div class="spinner-border" role="status" style="width: 5rem; height: 5rem;">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
                                 </div>
                             </div>
                             <!-- CANVAS -->
@@ -92,14 +100,21 @@ require __DIR__ . '/src/new_post.php';
                         </form>
                     </div>
                 </div>
-                <div class="col-12 col-md-4">
-                    <div class="p-3 border bg-light">
+                <div class="col-12 col-md-4 border bg-light p-3">
+                    <div class="d-flex d-wrap justify-content-center  align-items-center p-1 mb-2 border bg-white thumb-loader d-none" style="width:100%">
+                        <!-- <p style="width:100%">Uploading your post</p> -->
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="p-1 border bg-white">
                         Previously posted
+                    </div>
+                    <div class="d-flex justify-content-center">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 </main>
 
@@ -273,10 +288,21 @@ require __DIR__ . '/src/new_post.php';
             })
             .then((result) => {
                 console.log(result);
+                //alert("Your image was posted successfully!");
+                //hide_by_class("modal_loader");
+                //appendPhotoBar(result);
+                //maybe add alert when loaded
+
+                hide_by_class("thumb-loader");
+                reset_all();
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
+        let modal = document.getElementById("loading_modal");
+        //display_by_class("modal_loader");
+        display_by_class("thumb-loader");
+        //alert :your post is being processed
     });
 </script>
 
@@ -373,6 +399,7 @@ require __DIR__ . '/src/new_post.php';
         if (pic.src && pic.src != window.location.href) {
             pic.src = "";
         }
+        document.getElementById('form_upload').reset();
         reset_stickers();
         clear_canvases();
         hide_by_class('toggle-web');
