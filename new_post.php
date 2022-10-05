@@ -207,7 +207,7 @@ require __DIR__ . '/src/new_post.php';
             button_post.disabled = false;
             button_post.innerHTML = "Post";
         } else {
-            if (video.srcObject && !pic.src) {
+            if (video.srcObject && (!pic.src || pic.src == window.location.href)) {
                 button_post.disabled = true;
                 button_post.innerHTML = "Select Stickers";
             } else {
