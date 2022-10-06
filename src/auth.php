@@ -431,3 +431,30 @@ function delete_account(string $user_id): bool
 
     return $statement->execute();
 }
+
+/**
+ * Insert post to database
+ *
+ * @param string $image_data
+ * @param string $description
+ * @return bool
+ */
+function insert_post($image_data, $description, $owner_id): bool
+{
+    $sql = 'INSERT INTO posts(owner_id, post, post_description)
+            VALUES(:owner_id, :post, :post_description)';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':owner_id', $owner_id);
+    $statement->bindValue(':post', $image_data, PDO::PARAM_LOB);
+    $statement->bindValue(':post_description', $description);
+
+    try {
+        return $statement->execute();
+    } catch (PDOException $e) {
+        echo json_encode($e->getMessage());
+        die();
+        //  die($e->getMessage());
+    }
+}

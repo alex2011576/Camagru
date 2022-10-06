@@ -30,7 +30,7 @@ create table if not exists mycamagru_db.password_reset(
 );
 
 -- Posts table --
-create table if not exists camagru_db.posts (
+create table if not exists mycamagru_db.posts (
 	post_id int not null auto_increment primary key,
 	owner_id int not null,
 	post longblob not null,
@@ -38,7 +38,7 @@ create table if not exists camagru_db.posts (
 	created_at timestamp not null default current_timestamp(),
 	-- webcam tinyint not null default 0,
 	foreign key (owner_id)
-		references camagru_db.users (user_id)
+		references mycamagru_db.users (user_id)
 		on delete cascade
 );
 

@@ -284,7 +284,8 @@ require __DIR__ . '/src/new_post.php';
             }
         }
         formData.append('stickers', JSON.stringify(stickers));
-        formData.append('description', JSON.stringify(description));
+        //formData.append('description', JSON.stringify(description));
+        formData.append('description', description);
         formData.append('image', image_data_url);
 
         // "http://localhost:8080/camagru/mine/src/merge_images.php"
@@ -307,6 +308,7 @@ require __DIR__ . '/src/new_post.php';
                     alert(result.error);
                 } else if (result.hasOwnProperty('success')) {
                     alert(result.success);
+
                 }
                 console.log(result);
 
