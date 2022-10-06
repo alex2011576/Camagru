@@ -70,7 +70,7 @@ require __DIR__ . '/src/new_post.php';
                                         <img class="sticker img-thumbnail" id="stick7" onclick="selectSticker(7)" src="./static/stickers/7.png" alt="">
                                         <img class="sticker img-thumbnail" id="stick8" onclick="selectSticker(8)" src="./static/stickers/8.png" alt="">
                                     </div>
-                                    <input type="text" class="form-control my-1 border-0 rounded-0" name="description" id="description-input" value="" placeholder="Add description: " autocomplete="off" />
+                                    <input type="text" class="form-control my-1 border-0 rounded-0" name="description" id="description-input" value="" maxlength="200" placeholder="Add description: " autocomplete="off" />
                                 </div>
                             </div>
 
@@ -309,7 +309,7 @@ require __DIR__ . '/src/new_post.php';
                     alert(result.success);
                 }
                 console.log(result);
-                //alert("Your image was posted successfully!");
+
                 //hide_by_class("modal_loader");
                 //appendPhotoBar(result);
                 //maybe add alert when loaded

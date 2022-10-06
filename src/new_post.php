@@ -12,28 +12,11 @@ const sticker_dir = __DIR__ . '/../static/stickers/';
 const upload_dir = __DIR__ . '/../static/uploaded/';
 
 if (is_post_request()) {
-    if (isset($_POST['image']) && isset($_POST['stickers'])) {
-
-        //header("Content-Type: application/json; charset=UTF-8");
-        // echo json_encode($_REQUEST);
-        // echo json_encode($_FILES);
-        // var_dump($_FILES);
-        //$test = utf8_encode($_POST['stikers']);
-
-        // $jsonStr = json_decode($_POST['stickers']);
-        // $data['model'] = "box1";
-        // $data = json_encode($data);
-        //echo $data;
-        //var_dump($_FILES);
-        //var_dump($_POST);
+    if (isset($_POST['image']) && isset($_POST['stickers']) && isset($_POST['description'])) {
+        $description = validate_description($_POST['description']);
+        header("Content-Type: application/json; charset=UTF-8");
         $data_url = $_POST['image'];
         $is_image = getimagesize($_POST['image']);
-        // try {
-        //     throw new Exception("1111111 error message!!!!!!!!!!!!!");
-        // } catch (Exception $e) {
-        //     echo json_encode($e->getMessage());
-        //     die();
-        // }
         if (!$is_image) {
             echo json_encode(['error' => 'File is not an image. Only png and jpeg are supported!']);
             die();
@@ -72,9 +55,11 @@ if (is_post_request()) {
             echo json_encode(['error' => 'Something went wrong. Try again later!']);
             die();
         }
-        $image_data = ob_get_contents(); // read from buffer
-        ob_end_clean(); // delete buffer
+        $image_data = ob_get_contents();
+        ob_end_clean();
         $final_destination = upload_dir . uniqid('img_') . '.jpg';
+
+        //!!!save_post($image_data,)
         if (!file_put_contents($final_destination, $image_data)) {
             echo json_encode(['error' => 'Something went wrong. Try again later!']);
             die();
@@ -84,7 +69,29 @@ if (is_post_request()) {
         die();
     }
 }
+function validate_description($text)
+{
+
+    if (!empty($text)) {
+        //validate here!
+        $description = $text;
+        if (mb_strlen($description, "UTF-8") > 200) {
+            echo json_encode(['error' => 'Description is too long! Sorry, try again']);
+            die();
+        }
+        $description = htmlspecialchars($description);
+    } else {
+        $description = "";
+    }
+}
 
 //echo ($_POST['stickers']);
 // echo (json_encode($path));
 // die();
+
+// try {
+//     throw new Exception("1111111 error message!!!!!!!!!!!!!");
+// } catch (Exception $e) {
+//     echo json_encode($e->getMessage());
+//     die();
+// }
