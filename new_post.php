@@ -57,6 +57,7 @@ require __DIR__ . '/src/new_post.php';
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas"></canvas> -->
                                     <!-- here something !!! -->
+                                    <!-- fgsegw -->
                                     <canvas class="canvas-upload d-none my-1 border-0 " id="canvas"></canvas>
                                 </div>
                                 <!-- STICKERS -->
