@@ -74,12 +74,6 @@ require __DIR__ . '/src/new_post.php';
                                 </div>
                             </div>
 
-                            <!-- <div class="d-flex justify-content-center align-items-center m-1 toggle-upload d-none" style="width: 100%">
-                                <button class="btn btn-sm btn-dark post-btn m-2" id="btn-post" type="button">Post</button>
-                                <div class="or">OR</div>
-                                <button class="btn btn-sm btn-danger post-btn m-2" id="btn-cancel" type="reset">Cancel</button>
-                            </div> -->
-
                             <div class="d-flex justify-content-center align-items-center m-1 toggle-upload toggle-web d-none" style="width: 100%">
                                 <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-web1" id="btn-shot" type="button" disabled>Select Sticker</button>
                                 <button class="btn btn-sm btn-dark post-btn m-2 d-none toggle-upload toggle-web2" id="btn-post" type="button">Post</button>
@@ -88,12 +82,6 @@ require __DIR__ . '/src/new_post.php';
                                 <button class="btn btn-sm btn-danger post-btn m-2 d-none toggle-web2" id="btn-retry" type="button">Retry</button>
                             </div>
 
-
-                            <!-- <div class="upload_element border-top">
-                                <p class="text text-center fw-bold pt-2 pb-0 mt-2 mb-0 " style="width: inherit">
-                                    Choose stickers
-                                </p>
-                            </div> -->
                             <div class="bg-light">
 
                             </div>
@@ -517,17 +505,7 @@ require __DIR__ . '/src/new_post.php';
     function isImage(url) {
         return /^data:image\/(jpg|jpeg|png|webp|avif|gif|svg)/.test(url);
     }
-    // const button = document.getElementById('btn-cancel');
-    // button.addEventListener('click', cancel_post(ctx));
 
-    // function cancel_post(ctx) {
-    //     //button.disabled = true;
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     //toggle_on_upload();
-    //     // setTimeout(() => {
-    //     //     button.disabled = false;
-    //     // }, 2000);
-    // }
 
     // function drawImageScaled(img, ctx) {
     //     var canvas = ctx.canvas;
