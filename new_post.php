@@ -56,6 +56,7 @@ require __DIR__ . '/src/new_post.php';
                                 </div>
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas"></canvas> -->
+                                    <!-- here something !!! -->
                                     <canvas class="canvas-upload d-none my-1 border-0 " id="canvas"></canvas>
                                 </div>
                                 <!-- STICKERS -->
@@ -107,6 +108,9 @@ require __DIR__ . '/src/new_post.php';
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
+                    <!-- <div class="border rounded-0 d-none" style="width:100%">
+
+                    </div> -->
                     <div class="p-1 border bg-white">
                         Previously posted
                     </div>
@@ -134,6 +138,7 @@ require __DIR__ . '/src/new_post.php';
     const button_webcam = document.querySelector("#open_web");
     const button_shot = document.querySelector("#btn-shot");
     const button_retry = document.querySelector("#btn-retry");
+    let dispay_mode = "0";
     let last_frame;
     let last_sticker;
     let selected_stickers = {};
@@ -158,6 +163,9 @@ require __DIR__ . '/src/new_post.php';
     });
 
     pic.addEventListener('load', () => {
+        // canvas.style = "transform: scaleX(1);"
+        // canvas_stickers.style = "transform: scaleX(1);"
+        dispay_mode = "2";
         set_canvas_dimentions();
         draw_to_imgBuffer();
         draw_to_preview();
@@ -169,11 +177,14 @@ require __DIR__ . '/src/new_post.php';
 
     //WEBCAM PHOTO PART
     button_webcam.addEventListener('click', (ev) => {
+        dispay_mode = "2";
         webcam_start();
         ev.preventDefault();
     });
 
     video.addEventListener('canplay', (ev) => {
+        //canvas.style = "transform: scaleX(-1);"
+        //canvas_stickers.style = "transform: scaleX(-1);"
         toggle_by_class('toggle-loader');
         hide_by_class('btns-menu');
         display_by_class('toggle-web');
@@ -219,11 +230,19 @@ require __DIR__ . '/src/new_post.php';
         } else {
             last_sticker = s_name;
             sticker.classList.add('selected');
-
-            let s_sticker = {
-                'img': sticker,
-                'x': (canvas.width / 2) - (sticker.naturalWidth / 2),
-                'y': canvas.height / 2
+            let s_sticker;
+            if (dispay_mode === "2") {
+                s_sticker = {
+                    'img': sticker,
+                    'x': (canvas.width / 2) - (sticker.naturalWidth / 2),
+                    'y': canvas.height / 2
+                }
+            } else if (dispay_mode === "1") {
+                s_sticker = {
+                    'img': sticker,
+                    'x': (canvas.width / 2) + (sticker.naturalWidth / 2),
+                    'y': canvas.height / 2
+                }
             }
             selected_stickers[s_name] = s_sticker;
         }
@@ -253,13 +272,21 @@ require __DIR__ . '/src/new_post.php';
         if (!selected_stickers.hasOwnProperty(last_sticker))
             return;
         let coords = getMousePos(canvas_stickers, evt);
-        coords.x = coords.x - selected_stickers[last_sticker]['img'].naturalWidth / 2;
+        if (dispay_mode == "1") {
+            coords.x = coords.x + selected_stickers[last_sticker]['img'].naturalWidth / 2;
+        }
+        if (dispay_mode == "2") {
+            coords.x = coords.x - selected_stickers[last_sticker]['img'].naturalWidth / 2;
+        }
+        //coords.x = coords.x - selected_stickers[last_sticker]['img'].naturalWidth / 2;
         coords.y = coords.y - selected_stickers[last_sticker]['img'].naturalHeight / 2;
+
         selected_stickers[last_sticker]['x'] = coords.x;
         selected_stickers[last_sticker]['y'] = coords.y;
         let sticker = selected_stickers[last_sticker];
-        draw_to_preview(canvas_stickers, 0, 0);
-        ctx_stickers.drawImage(sticker['img'], coords.x, coords.y);
+        draw_to_preview();
+        draw_stickers();
+        //ctx_stickers.drawImage(sticker['img'], coords.x, coords.y);
     })
 
     //CANCEL, POST BUTTONS 
@@ -433,6 +460,11 @@ require __DIR__ . '/src/new_post.php';
     }
 
     function draw_to_preview() {
+        // if (pic.src && pic.src != window.location.href) {
+        //     ctx_stickers.drawImage(canvas, 0, 0);
+        // } else if (video.srcObject && !video.paused) {
+        //     ctx_stickers.drawImage(canvas, 0, 0);
+        // }
         ctx_stickers.drawImage(canvas, 0, 0);
         draw_stickers();
     }
@@ -462,7 +494,16 @@ require __DIR__ . '/src/new_post.php';
     function draw_stickers() {
         for (const key in selected_stickers) {
             if (selected_stickers.hasOwnProperty(key)) {
-                ctx_stickers.drawImage(selected_stickers[key]['img'], selected_stickers[key]['x'], selected_stickers[key]['y']);
+                let x;
+                if (dispay_mode === "1") {
+                    x = canvas.width - selected_stickers[key]['x'];
+                }
+                if (dispay_mode === "2") {
+                    x = selected_stickers[key]['x'];
+                }
+                let y = selected_stickers[key]['y'];
+                //ctx_stickers.drawImage(selected_stickers[key]['img'], selected_stickers[key]['x'], selected_stickers[key]['y']);
+                ctx_stickers.drawImage(selected_stickers[key]['img'], x, y);
             }
         }
     }
