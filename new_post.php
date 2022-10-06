@@ -52,11 +52,10 @@ require __DIR__ . '/src/new_post.php';
                                 <!-- <video class="toggle-upload toggle-web" id="video" style="width: 100%" autoplay></video> -->
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas-stickers"></canvas> -->
-                                    <canvas class=" canvas-upload my-1 border-0 " id="canvas-stickers"></canvas>
+                                    <canvas class=" canvas-upload my-1 border-0" id="canvas-stickers"></canvas>
                                 </div>
                                 <div class="d-flex justify-content-center" style="width: 100%;">
-                                    <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas"></canvas> -->
-                                    <!-- here something !!! -->
+                                    <!-- <canvas class="canvas-upload d-none my-1 border-0 " id="canvas"></canvas> -->
                                     <canvas class="canvas-upload d-none my-1 border-0 " id="canvas"></canvas>
                                 </div>
                                 <!-- STICKERS -->
@@ -177,7 +176,7 @@ require __DIR__ . '/src/new_post.php';
 
     //WEBCAM PHOTO PART
     button_webcam.addEventListener('click', (ev) => {
-        dispay_mode = "2";
+        dispay_mode = "1";
         webcam_start();
         ev.preventDefault();
     });
@@ -230,19 +229,10 @@ require __DIR__ . '/src/new_post.php';
         } else {
             last_sticker = s_name;
             sticker.classList.add('selected');
-            let s_sticker;
-            if (dispay_mode === "2") {
-                s_sticker = {
-                    'img': sticker,
-                    'x': (canvas.width / 2) - (sticker.naturalWidth / 2),
-                    'y': canvas.height / 2
-                }
-            } else if (dispay_mode === "1") {
-                s_sticker = {
-                    'img': sticker,
-                    'x': (canvas.width / 2) + (sticker.naturalWidth / 2),
-                    'y': canvas.height / 2
-                }
+            let s_sticker = {
+                'img': sticker,
+                'x': (canvas.width / 2) - (sticker.naturalWidth / 2),
+                'y': canvas.height / 2
             }
             selected_stickers[s_name] = s_sticker;
         }
@@ -272,20 +262,14 @@ require __DIR__ . '/src/new_post.php';
         if (!selected_stickers.hasOwnProperty(last_sticker))
             return;
         let coords = getMousePos(canvas_stickers, evt);
-        if (dispay_mode == "1") {
-            coords.x = coords.x + selected_stickers[last_sticker]['img'].naturalWidth / 2;
-        }
-        if (dispay_mode == "2") {
-            coords.x = coords.x - selected_stickers[last_sticker]['img'].naturalWidth / 2;
-        }
-        //coords.x = coords.x - selected_stickers[last_sticker]['img'].naturalWidth / 2;
+        coords.x = coords.x - selected_stickers[last_sticker]['img'].naturalWidth / 2;
         coords.y = coords.y - selected_stickers[last_sticker]['img'].naturalHeight / 2;
 
         selected_stickers[last_sticker]['x'] = coords.x;
         selected_stickers[last_sticker]['y'] = coords.y;
         let sticker = selected_stickers[last_sticker];
         draw_to_preview();
-        draw_stickers();
+        //draw_stickers();
         //ctx_stickers.drawImage(sticker['img'], coords.x, coords.y);
     })
 
@@ -314,6 +298,9 @@ require __DIR__ . '/src/new_post.php';
         //formData.append('description', JSON.stringify(description));
         formData.append('description', description);
         formData.append('image', image_data_url);
+        if (dispay_mode === "1") {
+            formData.append('flip', "1");
+        }
 
         // "http://localhost:8080/camagru/mine/src/merge_images.php"
         //fetch("http://localhost:8080/camagru/mine/new_post.php", {
@@ -460,12 +447,12 @@ require __DIR__ . '/src/new_post.php';
     }
 
     function draw_to_preview() {
-        // if (pic.src && pic.src != window.location.href) {
-        //     ctx_stickers.drawImage(canvas, 0, 0);
-        // } else if (video.srcObject && !video.paused) {
-        //     ctx_stickers.drawImage(canvas, 0, 0);
-        // }
-        ctx_stickers.drawImage(canvas, 0, 0);
+        ctx_stickers.clearRect(0, 0, canvas.width, canvas.height);
+        if (dispay_mode === "1") {
+            mirrorImage(ctx_stickers, canvas, 0, 0, true, false); // horizontal mirror
+        } else {
+            ctx_stickers.drawImage(canvas, 0, 0);
+        }
         draw_stickers();
     }
 
@@ -475,6 +462,18 @@ require __DIR__ . '/src/new_post.php';
         } else if (video.srcObject && !video.paused) {
             ctx.drawImage(video, 0, 0);
         }
+    }
+
+    function mirrorImage(ctx, image, x = 0, y = 0, horizontal = false, vertical = false) {
+        ctx.save(); // save the current canvas state
+        ctx.setTransform(
+            horizontal ? -1 : 1, 0, // set the direction of x axis
+            0, vertical ? -1 : 1, // set the direction of y axis
+            x + (horizontal ? image.width : 0), // set the x origin
+            y + (vertical ? image.height : 0) // set the y origin
+        );
+        ctx.drawImage(image, 0, 0);
+        ctx.restore(); // restore the state as it was when this function was called
     }
 
     function set_canvas_dimentions() {
@@ -494,16 +493,7 @@ require __DIR__ . '/src/new_post.php';
     function draw_stickers() {
         for (const key in selected_stickers) {
             if (selected_stickers.hasOwnProperty(key)) {
-                let x;
-                if (dispay_mode === "1") {
-                    x = canvas.width - selected_stickers[key]['x'];
-                }
-                if (dispay_mode === "2") {
-                    x = selected_stickers[key]['x'];
-                }
-                let y = selected_stickers[key]['y'];
-                //ctx_stickers.drawImage(selected_stickers[key]['img'], selected_stickers[key]['x'], selected_stickers[key]['y']);
-                ctx_stickers.drawImage(selected_stickers[key]['img'], x, y);
+                ctx_stickers.drawImage(selected_stickers[key]['img'], selected_stickers[key]['x'], selected_stickers[key]['y']);
             }
         }
     }
