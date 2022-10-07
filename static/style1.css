@@ -191,6 +191,7 @@ div.scrollmenu img {
 .delete-button {
   position: absolute !important;
   /* top: 0.65rem; */
+  background-color: rgba(243, 240, 240, 0.385);
   top: 4px;
   right: 3px;
   z-index: 10;
@@ -202,5 +203,5 @@ div.scrollmenu img {
 
 .delete-button:hover {
   background-color: white;
-  box-shadow: 2px 2px 4px #000000;
+  /* box-shadow: 2px 2px 4px #000000; */
 }

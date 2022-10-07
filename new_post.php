@@ -61,14 +61,14 @@ require __DIR__ . '/src/new_post.php';
                                 <!-- STICKERS -->
                                 <div class="d-flex justify-content-center flex-wrap" id="description" style="width: 100%;">
                                     <div class="scrollmenu bg-light my-0 mb-2 px-2" style="width: 100%;">
-                                        <img class="sticker img-thumbnail" id="stick1" onclick="selectSticker(1)" src="./static/stickers/1.png" alt="">
-                                        <img class="sticker img-thumbnail" id="stick2" onclick="selectSticker(2)" src="./static/stickers/2.png" alt="">
-                                        <img class="sticker img-thumbnail" id="stick3" onclick="selectSticker(3)" src="./static/stickers/3.png" alt="">
-                                        <img class="sticker img-thumbnail" id="stick4" onclick="selectSticker(4)" src="./static/stickers/4.png" alt="">
-                                        <img class="sticker img-thumbnail" id="stick5" onclick="selectSticker(5)" src="./static/stickers/5.png" alt="">
-                                        <img class="sticker img-thumbnail" id="stick6" onclick="selectSticker(6)" src="./static/stickers/6.png" alt="">
-                                        <img class="sticker img-thumbnail" id="stick7" onclick="selectSticker(7)" src="./static/stickers/7.png" alt="">
-                                        <img class="sticker img-thumbnail" id="stick8" onclick="selectSticker(8)" src="./static/stickers/8.png" alt="">
+                                        <img class="sticker" id="stick1" onclick="selectSticker(1)" src="./static/stickers/1.png" alt="">
+                                        <img class="sticker" id="stick2" onclick="selectSticker(2)" src="./static/stickers/2.png" alt="">
+                                        <img class="sticker" id="stick3" onclick="selectSticker(3)" src="./static/stickers/3.png" alt="">
+                                        <img class="sticker" id="stick4" onclick="selectSticker(4)" src="./static/stickers/4.png" alt="">
+                                        <img class="sticker" id="stick5" onclick="selectSticker(5)" src="./static/stickers/5.png" alt="">
+                                        <img class="sticker" id="stick6" onclick="selectSticker(6)" src="./static/stickers/6.png" alt="">
+                                        <img class="sticker" id="stick7" onclick="selectSticker(7)" src="./static/stickers/7.png" alt="">
+                                        <img class="sticker" id="stick8" onclick="selectSticker(8)" src="./static/stickers/8.png" alt="">
                                     </div>
                                     <input type="text" class="form-control my-1 border-0 rounded-0" name="description" id="description-input" value="" maxlength="200" placeholder="Add description: " autocomplete="off" />
                                 </div>
@@ -169,6 +169,8 @@ require __DIR__ . '/src/new_post.php';
 
     //WEBCAM PHOTO PART
     button_webcam.addEventListener('click', (ev) => {
+        button_webcam.disabled = true;
+        image_input.disabled = true;
         dispay_mode = "1";
         webcam_start();
         ev.preventDefault();
@@ -334,34 +336,6 @@ require __DIR__ . '/src/new_post.php';
         display_by_class("thumb-loader");
         //alert :your post is being processed
     });
-    //insertBerofe, .firstChild best for browser support 
-    function appendPhoto_thumbnail(savedImage) {
-        let thumbnail = document.getElementById('thumbnail');
-        let div = document.createElement('div');
-        let latest_photo = document.createElement('img');
-        let button_delete = get_delete_button();
-        //let wrapper = document.createElement('img');
-        // wrapper.classList.add("")
-        div.style.maxWidth = "100%";
-        div.classList.add("border", "my-1", "thumbnail-div");
-        latest_photo.style.maxWidth = "100%";
-        //latest_photo.classList.add("border", "my-1");
-        latest_photo.id = savedImage.post_id;
-        latest_photo.src = savedImage.url;
-        thumbnail.insertBefore(div, thumbnail.firstChild);
-        thumbnail.firstChild.insertBefore(latest_photo, thumbnail.firstChild.firstChild);
-        thumbnail.firstChild.insertBefore(button_delete, thumbnail.firstChild.firstChild);
-        display_by_class('thumbnail');
-        //thumbnail.appendChild(latest_photo);
-    }
-
-    function get_delete_button() {
-        let button_d = document.getElementsByClassName('delete-button-template');
-        let clone = button_d[0].cloneNode(true);
-        clone.classList.add('delete-button', 'border', 'border-dark');
-        clone.classList.remove('delete-button-template', 'd-none');
-        return clone;
-    }
 </script>
 
 <!-- Helpers functions -->
@@ -466,6 +440,8 @@ require __DIR__ . '/src/new_post.php';
         hide_by_class('toggle-upload');
         display_by_class('btns-menu');
         button_post.disabled = false;
+        button_webcam.disabled = false;
+        image_input.disabled = false;
     }
 
     function draw_to_preview() {
@@ -538,6 +514,41 @@ require __DIR__ . '/src/new_post.php';
 
     function isImage(url) {
         return /^data:image\/(jpg|jpeg|png|webp|avif|gif|svg)/.test(url);
+    }
+
+    //insertBerofe, .firstChild best for browser support 
+    function appendPhoto_thumbnail(savedImage) {
+        let thumbnail = document.getElementById('thumbnail');
+        let div = document.createElement('div');
+        let latest_photo = document.createElement('img');
+        let button_delete = get_delete_button();
+        //let wrapper = document.createElement('img');
+        // wrapper.classList.add("")
+        div.style.maxWidth = "100%";
+        div.classList.add("border", "my-1", "thumbnail-div");
+        latest_photo.style.maxWidth = "100%";
+        //latest_photo.classList.add("border", "my-1");
+        div.id = savedImage.post_id;
+        latest_photo.src = savedImage.url;
+        thumbnail.insertBefore(div, thumbnail.firstChild);
+        thumbnail.firstChild.insertBefore(latest_photo, thumbnail.firstChild.firstChild);
+        thumbnail.firstChild.insertBefore(button_delete, thumbnail.firstChild.firstChild);
+        display_by_class('thumbnail');
+        //thumbnail.appendChild(latest_photo);
+    }
+
+    function get_delete_button() {
+        let button_d = document.getElementsByClassName('delete-button-template');
+        let clone = button_d[0].cloneNode(true);
+        clone.classList.add('delete-button', 'border', 'border-dark');
+        clone.classList.remove('delete-button-template', 'd-none');
+        clone.setAttribute('onclick', 'delete_post()');
+        return clone;
+    }
+
+    function delete_post() {
+        let id = this.parentElement.id;
+        console.log(id);
     }
 
     // function drawImageScaled(img, ctx) {
