@@ -95,9 +95,9 @@ require __DIR__ . '/src/new_post.php';
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
-                    <!-- <div class="border rounded-0 d-none" style="width:100%">
+                    <div class="thumbnail d-none" id="thumbnail" style="width:100%">
 
-                    </div> -->
+                    </div>
                     <div class="p-1 border bg-white">
                         Previously posted
                     </div>
@@ -310,7 +310,7 @@ require __DIR__ . '/src/new_post.php';
                     alert(result.error);
                 } else if (result.hasOwnProperty('success')) {
                     alert(result.success);
-
+                    appendPhoto_thumbnail(result.image);
                 }
                 console.log(result);
 
@@ -329,6 +329,20 @@ require __DIR__ . '/src/new_post.php';
         display_by_class("thumb-loader");
         //alert :your post is being processed
     });
+
+    function appendPhoto_thumbnail(savedImage) {
+        let thumbnail = document.getElementById('thumbnail');
+        display_by_class('thumbnail');
+        //let wrapper = document.createElement('img');
+        // wrapper.classList.add("")
+        let latest_photo = document.createElement('img');
+        latest_photo.style.maxWidth = "100%";
+        latest_photo.classList.add("border", "my-1");
+        //latest_photo.id = '';
+        latest_photo.src = savedImage;
+
+        thumbnail.appendChild(latest_photo);
+    }
 </script>
 
 <!-- Helpers functions -->
