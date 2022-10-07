@@ -268,7 +268,7 @@ require __DIR__ . '/src/new_post.php';
     });
 
     button_post.addEventListener("click", function() {
-
+        this.disabled = true;
         const formData = new FormData();
         let image_data_url = canvas.toDataURL('image/jpeg');
         let description = document.getElementById("description-input").value;
@@ -317,19 +317,19 @@ require __DIR__ . '/src/new_post.php';
                 //hide_by_class("modal_loader");
                 //appendPhotoBar(result);
                 //maybe add alert when loaded
-
                 hide_by_class("thumb-loader");
-                reset_all();
             })
             .catch((error) => {
                 console.error('Error:', error);
+                hide_by_class("thumb-loader");
             });
         let modal = document.getElementById("loading_modal");
         //display_by_class("modal_loader");
+        reset_all();
         display_by_class("thumb-loader");
         //alert :your post is being processed
     });
-
+    //insertBerofe, .firstChild best for browser support 
     function appendPhoto_thumbnail(savedImage) {
         let thumbnail = document.getElementById('thumbnail');
         display_by_class('thumbnail');
@@ -340,8 +340,8 @@ require __DIR__ . '/src/new_post.php';
         latest_photo.classList.add("border", "my-1");
         //latest_photo.id = '';
         latest_photo.src = savedImage;
-
-        thumbnail.appendChild(latest_photo);
+        thumbnail.insertBefore(latest_photo, thumbnail.firstChild);
+        //thumbnail.appendChild(latest_photo);
     }
 </script>
 
@@ -446,6 +446,7 @@ require __DIR__ . '/src/new_post.php';
         hide_by_class('toggle-web2');
         hide_by_class('toggle-upload');
         display_by_class('btns-menu');
+        button_post.disabled = false;
     }
 
     function draw_to_preview() {
