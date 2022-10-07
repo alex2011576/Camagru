@@ -103,6 +103,11 @@ require __DIR__ . '/src/new_post.php';
                     </div>
                     <div class="d-flex justify-content-center">
                     </div>
+                    <button href="#" class="btn pic-btn d-none delete-button-template">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" color="black">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -332,16 +337,30 @@ require __DIR__ . '/src/new_post.php';
     //insertBerofe, .firstChild best for browser support 
     function appendPhoto_thumbnail(savedImage) {
         let thumbnail = document.getElementById('thumbnail');
-        display_by_class('thumbnail');
+        let div = document.createElement('div');
+        let latest_photo = document.createElement('img');
+        let button_delete = get_delete_button();
         //let wrapper = document.createElement('img');
         // wrapper.classList.add("")
-        let latest_photo = document.createElement('img');
+        div.style.maxWidth = "100%";
+        div.classList.add("border", "my-1", "thumbnail-div");
         latest_photo.style.maxWidth = "100%";
-        latest_photo.classList.add("border", "my-1");
+        //latest_photo.classList.add("border", "my-1");
         latest_photo.id = savedImage.post_id;
         latest_photo.src = savedImage.url;
-        thumbnail.insertBefore(latest_photo, thumbnail.firstChild);
+        thumbnail.insertBefore(div, thumbnail.firstChild);
+        thumbnail.firstChild.insertBefore(latest_photo, thumbnail.firstChild.firstChild);
+        thumbnail.firstChild.insertBefore(button_delete, thumbnail.firstChild.firstChild);
+        display_by_class('thumbnail');
         //thumbnail.appendChild(latest_photo);
+    }
+
+    function get_delete_button() {
+        let button_d = document.getElementsByClassName('delete-button-template');
+        let clone = button_d[0].cloneNode(true);
+        clone.classList.add('delete-button', 'border', 'border-dark');
+        clone.classList.remove('delete-button-template', 'd-none');
+        return clone;
     }
 </script>
 
@@ -520,7 +539,6 @@ require __DIR__ . '/src/new_post.php';
     function isImage(url) {
         return /^data:image\/(jpg|jpeg|png|webp|avif|gif|svg)/.test(url);
     }
-
 
     // function drawImageScaled(img, ctx) {
     //     var canvas = ctx.canvas;
