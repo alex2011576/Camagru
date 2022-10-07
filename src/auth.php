@@ -458,3 +458,26 @@ function insert_post($image_data, $description, $owner_id): bool
         //  die($e->getMessage());
     }
 }
+
+/**
+ * 
+ * Extract last post by user_id;
+ * return asocciative array[post_id] or false.
+ * 
+ * @param $user_id
+ * @return mixed
+ */
+function extract_last_post($user_id): mixed
+{
+
+    $sql = 'SELECT post_id
+            FROM posts
+            WHERE owner_id=:owner_id
+            ORDER BY created_at DESC LIMIT 1';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':owner_id', $user_id);
+    $statement->execute();
+
+    return $statement->fetch(PDO::FETCH_ASSOC);
+}

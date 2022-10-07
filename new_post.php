@@ -338,8 +338,8 @@ require __DIR__ . '/src/new_post.php';
         let latest_photo = document.createElement('img');
         latest_photo.style.maxWidth = "100%";
         latest_photo.classList.add("border", "my-1");
-        //latest_photo.id = '';
-        latest_photo.src = savedImage;
+        latest_photo.id = savedImage.post_id;
+        latest_photo.src = savedImage.url;
         thumbnail.insertBefore(latest_photo, thumbnail.firstChild);
         //thumbnail.appendChild(latest_photo);
     }

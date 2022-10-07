@@ -71,11 +71,15 @@ if (is_post_request()) {
             echo json_encode(['error' => 'Something went wrong. Try again later!']);
             die();
         }
+        $post_id = extract_last_post($_SESSION['user_id']);
         $response_image = "data:image/jpeg;base64," . base64_encode($image_data);
         //echo ($_POST['stickers']);
         echo json_encode([
             'success' => 'Photo has been uploaded successfully!',
-            'image' => $response_image
+            'image' => [
+                'url' => $response_image,
+                'post_id' => $post_id['post_id']
+            ]
         ]);
         die();
     }
@@ -112,6 +116,11 @@ function save_post($image_data, $description, $post_owner)
         die();
     }
 }
+
+//To consider:
+//I probalby should do try->catch and throw errors instead of echoing them one by one which reduces readibility
+//Create unique post_id insted of autoincrementing
+
 
 //echo ($_POST['stickers']);
 // echo (json_encode($path));
