@@ -481,3 +481,15 @@ function extract_last_post($user_id): mixed
 
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
+
+function delete_post($user_id, $post_id): bool
+{
+    $sql = 'DELETE FROM posts
+            WHERE owner_id = :owner_id AND post_id = :post_id';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':owner_id', $user_id);
+    $statement->bindValue(':post_id', $post_id);
+
+    return $statement->execute();
+}

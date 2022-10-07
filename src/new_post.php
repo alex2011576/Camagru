@@ -82,6 +82,24 @@ if (is_post_request()) {
             ]
         ]);
         die();
+    } else if (isset($_POST['post_id'])) {
+
+        header("Content-Type: application/json; charset=UTF-8");
+        $fields = [
+            'post_id' => 'int | required'
+        ];
+        $errors = [];
+        $inputs = [];
+        [$inputs, $errors] = filter($_POST, $fields);
+        if ($errors) {
+            echo json_encode(['error' => $errors['post_id']]);
+        }
+        if (!delete_post($_SESSION['user_id'], $inputs['post_id'])) {
+            echo json_encode(['error' => "Couldn't delete your post!"]);
+            die();
+        }
+        echo json_encode(['success' => 'Post was deleted!']);
+        die();
     }
 } else if (is_get_request()) {
     //extract_posts();

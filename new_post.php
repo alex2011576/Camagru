@@ -528,7 +528,7 @@ require __DIR__ . '/src/new_post.php';
         div.classList.add("border", "my-1", "thumbnail-div");
         latest_photo.style.maxWidth = "100%";
         //latest_photo.classList.add("border", "my-1");
-        div.id = savedImage.post_id;
+        div.setAttribute('data-post-id', savedImage.post_id);
         latest_photo.src = savedImage.url;
         thumbnail.insertBefore(div, thumbnail.firstChild);
         thumbnail.firstChild.insertBefore(latest_photo, thumbnail.firstChild.firstChild);
@@ -542,13 +542,41 @@ require __DIR__ . '/src/new_post.php';
         let clone = button_d[0].cloneNode(true);
         clone.classList.add('delete-button', 'border', 'border-dark');
         clone.classList.remove('delete-button-template', 'd-none');
-        clone.setAttribute('onclick', 'delete_post()');
+        clone.setAttribute('onclick', 'delete_post(this)');
         return clone;
     }
 
-    function delete_post() {
-        let id = this.parentElement.id;
-        console.log(id);
+    function delete_post(t_element) {
+        let id = t_element.parentElement.getAttribute('data-post-id');
+        const parsedUrl = new URL(window.location.href);
+        const formData = new FormData();
+        t_element.parentElement.classList.add('d-none');
+        formData.append('post_id', id);
+        fetch(parsedUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    return Promise.reject('something went wrong!')
+                }
+            })
+            .then((result) => {
+                if (result.hasOwnProperty('error')) {
+                    alert(result.error);
+                    t_element.parentElement.classList.remove('d-none');
+                } else if (result.hasOwnProperty('success')) {
+                    //alert(result.success);
+                    t_element.parentElement.remove();
+                }
+                console.log(result);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                t_element.parentElement.classList.remove('d-none');
+            });
     }
 
     // function drawImageScaled(img, ctx) {
