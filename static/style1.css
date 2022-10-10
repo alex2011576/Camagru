@@ -205,3 +205,14 @@ div.scrollmenu img {
   background-color: white;
   /* box-shadow: 2px 2px 4px #000000; */
 }
+
+@media screen and (min-width: 601px) {
+  .thumb-title {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .thumb-title {
+    font-size: 4vw;
+  }
+}

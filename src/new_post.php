@@ -64,8 +64,11 @@ if (is_post_request()) {
         $image_data = ob_get_contents();
         ob_end_clean();
         $final_destination = upload_dir . uniqid('img_') . '.jpg';
-
+        // User-ID debugging
+        // echo json_encode(['error' => $_SESSION['user_id']]);
+        // die();
         save_post($image_data, $description, $_SESSION['user_id']);
+        // save_post($image_data, $description, 2);
 
         if (!file_put_contents($final_destination, $image_data)) {
             echo json_encode(['error' => 'Something went wrong. Try again later!']);
@@ -102,6 +105,28 @@ if (is_post_request()) {
         die();
     }
 } else if (is_get_request()) {
+    $inputs = [];
+    $errors = [];
+    $inputs['thumbnail'] = extract_posts_by_id($_SESSION['user_id']);
+    //var_dump($inputs);
+    // foreach ($inputs['thumbnail'] as $key => $value) {
+    //     die();
+
+    // }
+    if ($inputs['thumbnail'] === false) {
+        redirect_with_message(
+            'new_post.php',
+            'Something went wrong! Please, log out and log-in again!',
+            FLASH_ERROR
+        );
+        //$errors['thumbnail'] = "Couldn't get your posts!";
+    } else {
+        // var_dump($inputs);
+        //die();
+        foreach ($inputs['thumbnail'] as $post => $val) {
+            $inputs['thumbnail'][$post]['post'] = "data:image/jpeg;base64," . base64_encode($val['post']);
+        }
+    }
     //extract_posts();
 }
 

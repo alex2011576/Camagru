@@ -453,7 +453,7 @@ function insert_post($image_data, $description, $owner_id): bool
     try {
         return $statement->execute();
     } catch (PDOException $e) {
-        echo json_encode($e->getMessage());
+        echo json_encode(['error' => $e->getMessage()]);
         die();
         //  die($e->getMessage());
     }
@@ -477,9 +477,44 @@ function extract_last_post($user_id): mixed
 
     $statement = db()->prepare($sql);
     $statement->bindValue(':owner_id', $user_id);
-    $statement->execute();
+    try {
+        $statement->execute();
+    } catch (PDOException $e) {
+        echo json_encode(['error' => $e->getMessage()]);
+        die();
+        //  die($e->getMessage());
+    }
 
     return $statement->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * 
+ * Extract all posts by user_id;
+ * return asocciative array[] of posts or false.
+ * 
+ * @param $user_id
+ * @return mixed
+ */
+function extract_posts_by_id($user_id): mixed
+{
+
+    $sql = 'SELECT post_id, post
+            FROM posts
+            WHERE owner_id=:owner_id
+            ORDER BY created_at DESC';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':owner_id', $user_id);
+    try {
+        $statement->execute();
+    } catch (PDOException $e) {
+        echo json_encode(['error' => $e->getMessage()]);
+        die();
+        //  die($e->getMessage());
+    }
+
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function delete_post($user_id, $post_id): bool

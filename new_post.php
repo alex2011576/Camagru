@@ -48,7 +48,7 @@ require __DIR__ . '/src/new_post.php';
                             <!-- CANVAS -->
                             <div class="d-flex justify-content-center flex-wrap m-1 toggle-upload toggle-web d-none " style="width: 100%">
                                 <video class="d-none" id="video" style="width: 100%" autoplay></video>
-                                <img class="d-none" src="" alt="" id="img-buffer" class="sticker-preview">
+                                <!-- <img class="d-none" src="" alt="" id="img-buffer" class="sticker-preview"> -->
                                 <!-- <video class="toggle-upload toggle-web" id="video" style="width: 100%" autoplay></video> -->
                                 <div class="d-flex justify-content-center" style="width: 100%;">
                                     <!-- <canvas class=" canvas-upload my-1 border-0 " id="canvas-stickers"></canvas> -->
@@ -69,6 +69,14 @@ require __DIR__ . '/src/new_post.php';
                                         <img class="sticker" id="stick6" onclick="selectSticker(6)" src="./static/stickers/6.png" alt="">
                                         <img class="sticker" id="stick7" onclick="selectSticker(7)" src="./static/stickers/7.png" alt="">
                                         <img class="sticker" id="stick8" onclick="selectSticker(8)" src="./static/stickers/8.png" alt="">
+                                        <img class="sticker" id="stick9" onclick="selectSticker(9)" src="./static/stickers/9.png" alt="">
+                                        <img class="sticker" id="stick10" onclick="selectSticker(10)" src="./static/stickers/10.png" alt="">
+                                        <img class="sticker" id="stick11" onclick="selectSticker(11)" src="./static/stickers/11.png" alt="">
+                                        <img class="sticker" id="stick12" onclick="selectSticker(12)" src="./static/stickers/12.png" alt="">
+                                        <img class="sticker" id="stick13" onclick="selectSticker(13)" src="./static/stickers/13.png" alt="">
+                                        <img class="sticker" id="stick14" onclick="selectSticker(14)" src="./static/stickers/14.png" alt="">
+                                        <img class="sticker" id="stick15" onclick="selectSticker(15)" src="./static/stickers/15.png" alt="">
+                                        <img class="sticker" id="stick16" onclick="selectSticker(16)" src="./static/stickers/16.png" alt="">
                                     </div>
                                     <input type="text" class="form-control my-1 border-0 rounded-0" name="description" id="description-input" value="" maxlength="200" placeholder="Add description: " autocomplete="off" />
                                 </div>
@@ -88,18 +96,41 @@ require __DIR__ . '/src/new_post.php';
                         </form>
                     </div>
                 </div>
+                <!-- Thumbnail -->
                 <div class="col-12 col-md-4 border bg-light p-3">
+                    <!-- <div class="p-1 border bg-white d-flex justify-content-center"> -->
+                    <div class="p-1 d-flex justify-content-center">
+                        <p class="text text-center thumb-title fw-bold" style="width: inherit">
+                            Previously posted
+                        </p>
+                    </div>
                     <div class="d-flex d-wrap justify-content-center  align-items-center p-1 mb-2 border bg-white thumb-loader d-none" style="width:100%">
                         <!-- <p style="width:100%">Uploading your post</p> -->
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
-                    <div class="thumbnail d-none" id="thumbnail" style="width:100%">
+                    <div class="thumbnail " id="thumbnail" style="width:100%">
+                        <?php if (isset($inputs['thumbnail']) && !empty($inputs['thumbnail'])) : ?>
+                            <?php foreach ($inputs['thumbnail'] as $post => $value) { ?>
+                                <div class="border m-1 thumbnail-div" data-post-id=" <?= $value['post_id'] ?>">
+                                    <button href="#" class="btn pic-btn delete-button border border-dark" onclick="delete_post(this)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" color="black">
+                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"></path>
+                                        </svg>
+                                    </button>
+                                    <img src="<?= $value['post'] ?>" style="width:100%">
+                                </div>
 
-                    </div>
-                    <div class="p-1 border bg-white">
-                        Previously posted
+                            <?php } ?>
+                            <div class="alert d-none no-posts-alert">
+                                <?= "You didn't post anything yet! :)" ?>
+                            </div>
+                        <?php else : ?>
+                            <div class="alert no-posts-alert">
+                                <?= "You didn't post anything yet! :)" ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="d-flex justify-content-center">
                     </div>
@@ -533,7 +564,8 @@ require __DIR__ . '/src/new_post.php';
         thumbnail.insertBefore(div, thumbnail.firstChild);
         thumbnail.firstChild.insertBefore(latest_photo, thumbnail.firstChild.firstChild);
         thumbnail.firstChild.insertBefore(button_delete, thumbnail.firstChild.firstChild);
-        display_by_class('thumbnail');
+        //display_by_class('thumbnail');
+        hide_by_class('no-posts-alert');
         //thumbnail.appendChild(latest_photo);
     }
 
@@ -569,6 +601,10 @@ require __DIR__ . '/src/new_post.php';
                     t_element.parentElement.classList.remove('d-none');
                 } else if (result.hasOwnProperty('success')) {
                     //alert(result.success);
+                    if (t_element.parentElement.parentElement.childElementCount === 2) {
+                        display_by_class('no-posts-alert');
+                    }
+                    //console.log(t_element.parentElement.parentElement.childElementCount);
                     t_element.parentElement.remove();
                 }
                 console.log(result);
@@ -577,6 +613,7 @@ require __DIR__ . '/src/new_post.php';
                 console.error('Error:', error);
                 t_element.parentElement.classList.remove('d-none');
             });
+
     }
 
     // function drawImageScaled(img, ctx) {
