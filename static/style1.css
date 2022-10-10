@@ -108,3 +108,111 @@ h1 {
     font-size: 2rem!important;
     margin-left: 1rem;
 } */
+
+/* NEW POST */
+div.scrollmenu {
+  background-color: #333;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  /* overflow: auto; */
+  white-space: nowrap;
+  height: 12vw;
+  max-height: 130px;
+  min-height: 50px;
+}
+
+div.scrollmenu img {
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  object-fit: contain;
+}
+
+/* div.scrollmenu img:hover {
+  background-color: #777;
+} */
+
+.upload_element {
+  width: 100%;
+}
+@media screen and (min-width: 601px) {
+  .upload_element {
+    font-size: 30px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .upload_element {
+    font-size: 5vw;
+  }
+}
+@media screen and (min-width: 601px) {
+  .post-btn {
+    font-size: 1.3rem !important;
+  }
+}
+
+.canvas-upload {
+  /* border: solid 1px black; */
+  max-width: 100% !important;
+}
+
+.selected {
+  background-color: #777;
+}
+
+/* modal */
+.modal_loader {
+  /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1030; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto; /* 15% from the top and centered */
+  border: 1px solid #888;
+  width: 7rem;
+  height: 7rem; /* Could be more or less, depending on screen size */
+}
+
+.thumbnail-div {
+  position: relative;
+}
+
+.delete-button {
+  position: absolute !important;
+  /* top: 0.65rem; */
+  background-color: rgba(243, 240, 240, 0.385);
+  top: 4px;
+  right: 3px;
+  z-index: 10;
+  display: block;
+  /* padding: 0.25rem 0.5rem; */
+  /* border: 1px solid;
+  border-radius: 0.25rem; */
+}
+
+.delete-button:hover {
+  background-color: white;
+  /* box-shadow: 2px 2px 4px #000000; */
+}
+
+@media screen and (min-width: 601px) {
+  .thumb-title {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .thumb-title {
+    font-size: 4vw;
+  }
+}
