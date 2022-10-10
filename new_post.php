@@ -9,9 +9,16 @@ require __DIR__ . '/src/new_post.php';
 <main class="" style="width: 100%">
 
 
-    <div class="container-fluid d-flex justify-content-center">
-
-        <div class="container mt-2 p-0 mx-0 mx-md-3">
+    <div class="container-fluid d-flex justify-content-center ">
+        <!-- Modal  -->
+        <div id="loading_modal" class="modal_loader d-flex justify-content-center align-items-center">
+            <div class="modal-content d-flex justify-content-center  align-items-center">
+                <div class="spinner-border" role="status" style="width: 5rem; height: 5rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-2 p-0 mx-0 mx-md-3 page-wrapper">
             <div class="row g-5">
                 <div class="col-12 col-md-8">
                     <div class="p-0 p-md-3  border shadow-sm rounded-0 bg-light">
@@ -110,7 +117,7 @@ require __DIR__ . '/src/new_post.php';
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
-                    <div class="thumbnail " id="thumbnail" style="width:100%">
+                    <div class="thumbnail" id="thumbnail" style="width:100%">
                         <?php if (isset($inputs['thumbnail']) && !empty($inputs['thumbnail'])) : ?>
                             <?php foreach ($inputs['thumbnail'] as $post => $value) { ?>
                                 <div class="border m-1 thumbnail-div" data-post-id=" <?= $value['post_id'] ?>">
@@ -153,8 +160,7 @@ require __DIR__ . '/src/new_post.php';
     const canvas_stickers = document.getElementById("canvas-stickers");
     const ctx_stickers = canvas_stickers.getContext("2d");
     const image_input = document.querySelector("#pic-upload");
-    let pic = new Image(); // Create new pic element
-    //const pic = document.getElementById("img-buffer");; // Create new pic element
+    let pic = new Image();
     const video = document.querySelector("#video");
     const button_cancel = document.getElementById('btn-cancel');
     const button_post = document.getElementById('btn-post');
@@ -165,6 +171,11 @@ require __DIR__ . '/src/new_post.php';
     let last_frame;
     let last_sticker;
     let selected_stickers = {};
+
+    window.onload = function() {
+        //display_by_class('page-wrapper');
+        hide_by_class('modal_loader');
+    }
 
     //UPLOAD PICTURE PART
     image_input.addEventListener("change", function() {
@@ -615,16 +626,4 @@ require __DIR__ . '/src/new_post.php';
             });
 
     }
-
-    // function drawImageScaled(img, ctx) {
-    //     var canvas = ctx.canvas;
-    //     var hRatio = canvas.width / img.width;
-    //     var vRatio = canvas.height / img.height;
-    //     var ratio = Math.min(hRatio, vRatio);
-    //     var centerShift_x = (canvas.width - img.width * ratio) / 2;
-    //     var centerShift_y = (canvas.height - img.height * ratio) / 2;
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     ctx.drawImage(img, 0, 0, img.width, img.height,
-    //         centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
-    // }
 </script>
