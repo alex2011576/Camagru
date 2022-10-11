@@ -3,6 +3,7 @@ $stmt = db()->prepare("SELECT COUNT(*) FROM posts");
 $stmt->execute();
 $rows = $stmt->fetch();
 
+// die("Error fetching data! Invalid page number!!!");
 // get total no. of pages
 $total_pages = ceil($rows[0] / $row_limit);
 if ($total_pages == 0) {
@@ -169,8 +170,10 @@ function get_posts($offset, $row_limit)
 
 function is_owner($owner)
 {
-    if ($owner == $_SESSION['username'])
-        return true;
+    if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+        if ($owner == $_SESSION['username'])
+            return true;
+    }
     return false;
 }
 ?>

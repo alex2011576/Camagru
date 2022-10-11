@@ -41,23 +41,6 @@ if (is_user_logged_in()) {
     const posts_container = document.querySelector(".posts-container");
     let page_no = 1;
 
-    // console.log(parsedUrl);
-    // posts_container.addEventListener("load", function() {
-    //     fetch('http://localhost:8080/camagru/mine/feed_test.php')
-    //         .then(function(response) {
-    //             return response.text();
-    //         })
-    //         .then(function(body) {
-    //             posts_container.appendChild(body);
-    //         })
-    //         .catch(function(error) {
-    //             console.log(error);
-    //         });
-    // });
-
-    // http://localhost:8080/camagru/mine/ajax_feed.php
-
-
     (() => {
         const formData = new FormData();
         const parsedUrl = new URL(window.location.href);
