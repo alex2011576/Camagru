@@ -38,12 +38,16 @@ if (is_post_request()) {
         include __DIR__ . '/../ajax_feed.php';
         die();
         // get total no. of pages
-    } else {
-        $page_no = 1;
-        include __DIR__ . '/../ajax_feed.php';
+    }
+    if (isset($_POST["delete_post"]) && !empty($_POST["delete_post"])) {
+        if (!delete_post($_SESSION['user_id'], $_POST['post_id'])) {
+            echo json_encode(['error' => "Couldn't delete your post!"]);
+            die();
+        }
+        echo json_encode(['success' => 'Post was deleted!']);
         die();
     }
-
+    die();
     // get record starting position
     // $start = (($page_no - 1) * $row_limit);
 

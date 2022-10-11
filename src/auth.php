@@ -491,7 +491,8 @@ function extract_last_post($user_id): mixed
 /**
  * 
  * Extract all posts by user_id;
- * return asocciative array[] of posts or false.
+ * return asocciative array['post_id', 'post'] 
+ * containing post_id and blob or false
  * 
  * @param $user_id
  * @return mixed
@@ -516,6 +517,34 @@ function extract_posts_by_id($user_id): mixed
 
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
+
+/**
+ * 
+ * Extract all posts
+ * return asocciative array[] containing post_id and blob posts or false.
+ * @param $user_id
+ * @return mixed
+ */
+// function get_posts(): mixed
+// {
+
+//     $sql = 'SELECT post_id, post, post_description, 
+//             FROM posts
+//             WHERE owner_id=:owner_id
+//             ORDER BY created_at DESC';
+
+//     $statement = db()->prepare($sql);
+//     $statement->bindValue(':owner_id', $user_id);
+//     try {
+//         $statement->execute();
+//     } catch (PDOException $e) {
+//         echo json_encode(['error' => $e->getMessage()]);
+//         die();
+//         //  die($e->getMessage());
+//     }
+
+//     return $statement->fetchAll(PDO::FETCH_ASSOC);
+// }
 
 function delete_post($user_id, $post_id): bool
 {
