@@ -26,7 +26,6 @@ try {
     echo "DB connection failed: " . $e->getMessage();
     die();
 }
-echo "here";
 $db_check = null;
 $conn = null;
 

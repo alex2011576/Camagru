@@ -59,17 +59,13 @@ create table if not exists mycamagru_db.likes (
 create table if not exists mycamagru_db.comments (
 	comment_id int auto_increment primary key,
 	post_id int not null,
-	post_owner_id int not null,
 	comment varchar(250) not null,
 	comment_owner_id int not null,
 	created_at timestamp not null default current_timestamp(),
 	foreign key (post_id)
 		references mycamagru_db.posts (post_id)
 		on delete cascade,
-	foreign key (post_owner_id)
-		references mycamagru_db.users (user_id)
-		on delete cascade,
-	foreign key (commentator_id)
+	foreign key (comment_owner_id)
 		references mycamagru_db.users (user_id)
 		on delete cascade
 );

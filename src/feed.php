@@ -47,6 +47,14 @@ if (is_post_request()) {
         echo json_encode(['success' => 'Post was deleted!']);
         die();
     }
+    if (isset($_POST["like"])) {
+    }
+    if (isset($_POST["comment"])) {
+    }
+    if (isset($_POST["delete_like"]) && !empty($_POST["delete_like"])) {
+    }
+    if (isset($_POST["delete_comment"]) && !empty($_POST["delete_comment"])) {
+    }
     die();
     // get record starting position
     // $start = (($page_no - 1) * $row_limit);

@@ -5,6 +5,10 @@ $rows = $stmt->fetch();
 
 // get total no. of pages
 $total_pages = ceil($rows[0] / $row_limit);
+if ($total_pages == 0) {
+    echo "no posts";
+    die();
+}
 if ($page_no > $total_pages || $page_no < 1) {
     echo "no change";
     die();
