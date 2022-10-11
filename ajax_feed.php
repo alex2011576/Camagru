@@ -5,12 +5,14 @@ $rows = $stmt->fetch();
 
 // get total no. of pages
 $total_pages = ceil($rows[0] / $row_limit);
-$page_no = 1;
-$offset = ($page_no - 1) * $row_limit;
+if ($page_no > $total_pages || $page_no < 1) {
+    echo "no change";
+    die();
+}
 
+$offset = ($page_no - 1) * $row_limit;
 $articles = get_posts($offset, $row_limit);
 // set logged check before
-$logged_in = false;
 // var_dump($articles);
 // die();
 foreach ($articles as $article => $values) {
@@ -64,7 +66,7 @@ foreach ($articles as $article => $values) {
     <article class="card my-3 border border-light shadow-sm rounded-0 rounded-top">
         <div class="card-header">@<?= $values['username'] ?></div>
         <div class="card-body p-0">
-            <img src="http://localhost:8080/camagru/ilona/uploads/img_62d6ca64e688e.jpg" class="card-img-top rounded-0 picture" alt="..." />
+            <img src="<?= "data:image/jpeg;base64," . base64_encode($values['post']) ?>" class="card-img-top rounded-0 picture" alt="..." />
         </div>
         <section class="card-body d-inline-flex justify-content-between py-0 px-1">
             <div class="">
@@ -79,26 +81,29 @@ foreach ($articles as $article => $values) {
                     </svg>
                 </button>
             </div>
-            <div>
-                <button href="#" class="btn pic-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" color="black">
-                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"></path>
-                    </svg>
-                </button>
-            </div>
+            <?php if (is_owner($values['username'])) : ?>
+                <div>
+                    <button href="#" class="btn pic-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" color="black">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            <?php endif; ?>
         </section>
         <section class="card-body sec-likes p-0 pb-1 ps-3">
             <span class="text-start likes fw-bold m-0">2 like(s)</span>
         </section>
         <section class="card-body sec-comments p-0">
-            <div class="a-sec p-0 pb-1 px-3">
-                <span class="text-start comment-a float-start fw-bold m-0 pe-2"><?= $values['username'] ?></span>
-                <span class="post-description">fdhbdfhgfdsghdrhgfdsgfdshjdgfarhtjyrtu,mtdyhrsgaefwdwqertwrayetsujrydktujhgsdfasathtsjdmnbgsfdsfatgshejrdymhnsdgsfearehsjtryhtgraf
-                    fdsvfhggsdfgdgdsgdhdshdgshgdshdgshgdshdgshdsghdgshdghgdshgds
-                    dgssdghs sghdfhgdsgh hsdhds dshsd</span>
-                <p class="text-start m-0 my-1 text-muted">Hide comments</p>
+            <div class="a-sec p-0 pb-1 px-3" style="height:fit-content; ">
+                <!-- <span class="text-start comment-a float-start fw-bold m-0 pe-2"><?= $values['username'] ?></span> -->
+                <span class="text-start comment-a fw-bold m-0 pe-2"><?= $values['username'] ?></span>
+                <span class="post-description" style="width:100%"><?= $values['post_description'] ?></span>
             </div>
-            <!-- Actual comments section -->
+            <!-- <div class="px-3" style="width:100%">
+                <p class="text-start m-0 my-1 text-muted">Hide comments</p>
+            </div> -->
+            <!-- Actual comments section  ADD IF (!EMPTY())-->
             <?php if (is_user_logged_in()) : ?>
                 <div class="comments border-top border-1 pt-1 bg-light">
                 <?php else : ?>
@@ -115,7 +120,6 @@ foreach ($articles as $article => $values) {
                         </div>
                     </div>
 
-                    <!-- COMMENT W/ DELETE B -->
                     <div class=" comment container-fluid d-inline-flex align-items-center pe-0 mb-2 ">
                         <div class="comment-text pe-1 border-end">
                             <span class="text-start comment-a float-start fw-bold m-0 pe-2">aleksei:</span>
@@ -130,16 +134,17 @@ foreach ($articles as $article => $values) {
                     </div>
         </section>
         <div class="card-footer text-muted bg-white ps-1 pe-0">
-            <div class="comment-input input-group m-0 border-0">
+            <!-- <div class="comment-input input-group m-0 border-0">
                 <input type="text" class="form-control border-0" placeholder="Add a comment..." aria-label="Add comment" aria-describedby="button-addon2" />
                 <button class="btn text-muted fw-bold border-0" type="button" id="button-pos2">
                     Post
                 </button>
-            </div>
+            </div> -->
         </div>
     </article>
 <?php
 }
+
 function get_posts($offset, $row_limit)
 {
 
@@ -158,4 +163,10 @@ function get_posts($offset, $row_limit)
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function is_owner($owner)
+{
+    if ($owner == $_SESSION['username'])
+        return true;
+    return false;
+}
 ?>

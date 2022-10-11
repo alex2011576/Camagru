@@ -24,6 +24,10 @@ $errors = [];
 // }
 
 if (is_get_request()) {
+    $stmt = db()->prepare("SELECT COUNT(*) FROM posts");
+    $stmt->execute();
+    $rows = $stmt->fetch();
+    $total_pages = ceil($rows[0] / $row_limit);
 }
 if (is_post_request()) {
 
@@ -31,6 +35,9 @@ if (is_post_request()) {
         $page_no = filter_var($_POST["page"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
         if (!is_numeric($page_no))
             die("Error fetching data! Invalid page number!!!");
+        include __DIR__ . '/../ajax_feed.php';
+        die();
+        // get total no. of pages
     } else {
         $page_no = 1;
         include __DIR__ . '/../ajax_feed.php';
