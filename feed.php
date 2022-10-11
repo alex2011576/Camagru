@@ -39,7 +39,6 @@ if (is_user_logged_in()) {
 
 <script>
     const posts_container = document.querySelector(".posts-container");
-    const parsedUrl = new URL(window.location.href);
     let page_no = 1;
 
     // console.log(parsedUrl);
@@ -61,8 +60,9 @@ if (is_user_logged_in()) {
 
     (() => {
         const formData = new FormData();
+        const parsedUrl = new URL(window.location.href);
         formData.append('page', 1);
-        fetch('http://localhost:8080/camagru/mine/feed.php', {
+        fetch(parsedUrl, {
                 method: 'POST',
                 body: formData
             })
