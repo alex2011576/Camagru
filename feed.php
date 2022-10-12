@@ -147,4 +147,47 @@ if (is_user_logged_in()) {
                 article.classList.remove('d-none');
             });
     }
+
+    function toggle_like(element) {
+        const formData = new FormData();
+        const parsedUrl = new URL(window.location.href);
+        let post_id = element.getAttribute('data-post-id');
+        let likes_counter = document.querySelector(`span[data-post-id="${post_id}"]`);
+        formData.append('like', 1);
+        formData.append('post_id', post_id);
+        fetch(parsedUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text()
+                } else {
+                    // Find some way to get to execute .catch()
+                    return Promise.reject('something went wrong!')
+                }
+            })
+            .then((result) => {
+                if (result !== "error") {
+                    element.innerHTML = result;
+                } else {
+                    alert("Error, reload page!");
+                }
+            })
+            .catch((error) => {
+                alert("Error, reload page!")
+            });
+        if (likes_counter.getAttribute('data-switch-on') === "1") {
+            likes_counter.setAttribute('data-switch-on', "0");
+            likes_counter.innerHTML = (my_atoi(likes_counter.innerHTML) + -1) + " like(s)";
+        } else {
+            likes_counter.setAttribute('data-switch-on', "1");
+            likes_counter.innerHTML = (my_atoi(likes_counter.innerHTML) + 1) + " like(s)";
+        }
+    }
+
+
+    function login_alert() {
+        alert("For logged in users only!");
+    }
 </script>

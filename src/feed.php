@@ -47,14 +47,40 @@ if (is_post_request()) {
         echo json_encode(['success' => 'Post was deleted!']);
         die();
     }
-    if (isset($_POST["like"])) {
-    }
+
+    // if (isset($_POST["like"]) && !empty($_POST["like"])) {
+    //     if (!put_like($_POST["post_id"], $_SESSION['user_id'])) {
+    //         die("error");
+    //     } else {
+    //         $like_id = true;
+    //         include __DIR__ . '/inc/like.php';
+    //         die();
+    //     }
+    // }
+
     if (isset($_POST["comment"])) {
     }
-    if (isset($_POST["delete_like"]) && !empty($_POST["delete_like"])) {
+
+    if (isset($_POST["like"]) && !empty($_POST["like"])) {
+        $like_id = check_like($_POST['post_id'], $_SESSION['user_id']);
+        if (!$like_id) {
+            if (!put_like($_POST["post_id"], $_SESSION['user_id'])) {
+                die("error");
+            }
+            $like_id = true;
+        } else {
+            if (!delete_like($like_id, $_SESSION['user_id'])) {
+                die("error");
+            }
+            $like_id = false;
+        }
+        include __DIR__ . '/inc/like.php';
+        die();
     }
+
     if (isset($_POST["delete_comment"]) && !empty($_POST["delete_comment"])) {
     }
+
     die();
     // get record starting position
     // $start = (($page_no - 1) * $row_limit);
