@@ -186,6 +186,11 @@ if (is_user_logged_in()) {
         }
     }
 
+    function focus_comment(element) {
+        let post_id = element.getAttribute('data-post-id');
+        let input = document.querySelector(`input[data-post-id="${post_id}"]`);
+        input.focus();
+    }
 
     function login_alert() {
         alert("For logged in users only!");

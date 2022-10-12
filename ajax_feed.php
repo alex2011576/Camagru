@@ -105,7 +105,7 @@ foreach ($articles as $article => $values) {
                         </svg>
                         </button>
                         <?php if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) : ?>
-                            <button class="btn pic-btn">
+                            <button class="btn pic-btn" data-post-id="<?= $values['post_id'] ?>" onclick=focus_comment(this)>
                             <?php else : ?>
                                 <button class="btn pic-btn" onclick=login_alert();>
                                 <?php endif; ?>
@@ -173,7 +173,7 @@ foreach ($articles as $article => $values) {
         <div class="card-footer text-muted bg-white ps-1 pe-0">
             <?php if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) : ?>
                 <div class="comment-input input-group m-0 border-0">
-                    <input type="text" class="form-control border-0" placeholder="Add a comment..." aria-label="Add comment" />
+                    <input type="text" class="form-control border-0" data-post-id="<?= $values['post_id'] ?>" placeholder="Add a comment..." aria-label="Add comment" />
                     <button class="btn text-muted fw-bold border-0" type="button" id="button-pos2">
                         Post
                     </button>
