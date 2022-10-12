@@ -20,7 +20,10 @@ $articles = get_posts($offset, $row_limit);
 // set logged check before
 // var_dump($articles);
 // die();
+
 foreach ($articles as $article => $values) {
+    $likes = load_likes($values['post_id'], $values['owner_id']);
+    var_dump($likes);
 ?>
     <!-- <article class="card my-3 border border-light shadow-sm rounded-0 rounded-top">
         <div class="card-header">@<?= $values['username'] ?></div>
@@ -97,7 +100,7 @@ foreach ($articles as $article => $values) {
             <?php endif; ?>
         </section>
         <section class="card-body sec-likes p-0 pb-1 ps-3">
-            <span class="text-start likes fw-bold m-0">2 like(s)</span>
+            <span class="text-start likes fw-bold m-0"><?= $likes['count'] ?> like(s)</span>
         </section>
         <section class="card-body sec-comments p-0">
             <div class="a-sec p-0 pb-1 px-3" style="height:fit-content; ">
@@ -166,6 +169,47 @@ function get_posts($offset, $row_limit)
     $statement->bindValue(':row_limit', (int) $row_limit, PDO::PARAM_INT);
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function load_likes($post_id, $user_id)
+{
+    $sql1 = 'SELECT user_id FROM likes
+            WHERE post_id = :post_id';
+    $sql2 = 'SELECT user_id FROM likes
+            WHERE post_id = :post_id AND user_id = :user_id';
+    // 'SELECT like_id lokes.post_id, 
+    //         posts.owner_id, posts.post, 
+    //         posts.post_description
+    //         FROM posts 
+    //         JOIN users ON posts.owner_id = users.user_id 
+    //         ORDER BY posts.created_at DESC
+    //         LIMIT :offset , :row_limit';
+
+    try {
+        $count = db()->prepare($sql1);
+        $count->bindValue(':post_id', (int) $post_id, PDO::PARAM_INT);
+        $count->execute();
+        $count = $count->fetchColumn();
+        if ($count === false) {
+            $count = 0;
+        }
+        if (isset($user_id) && !empty($user_id)) {
+
+            $liked = db()->prepare($sql2);
+            $liked->bindValue(':post_id', (int) $post_id, PDO::PARAM_INT);
+            $liked->bindValue(':user_id', (int) $user_id, PDO::PARAM_INT);
+            $liked->execute();
+
+            $liked = $liked->rowCount();
+        }
+        return ([
+            'liked' => $liked,
+            'count' => $count
+        ]);
+    } catch (Exception $e) {
+        die('Error: ' . $e->getMessage());
+        //  die($e->getMessage());
+    }
 }
 
 function is_owner($owner)
