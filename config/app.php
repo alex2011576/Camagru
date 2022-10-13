@@ -1,7 +1,11 @@
 <?php
 
-const APP_URL = 'http://localhost:8080/camagru/mine';
+$url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+[$url,] = explode('config', $url);
+$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+//const APP_URL = 'http://localhost:8080/camagru/mine';
 const SENDER_EMAIL_ADDRESS = 'no-reply@camagru.com';
+define("APP_URL", $escaped_url);
 date_default_timezone_set('Europe/Helsinki');
 
 

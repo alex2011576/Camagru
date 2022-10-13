@@ -538,3 +538,22 @@ function is_owner($owner)
     }
     return false;
 }
+
+function notifications_status($post_id)
+{
+    $sql = 'SELECT  users.notifications, users.email
+        FROM users
+        JOIN posts ON posts.owner_id = users.user_id
+        WHERE posts.post_id = :post_id';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':post_id', $post_id);
+    try {
+        $statement->execute();
+        return $statement->fetchALL(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die();
+        // echo json_encode(['error' => $e->getMessage()]);
+        //  die($e->getMessage());
+    }
+}

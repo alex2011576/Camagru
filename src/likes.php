@@ -95,7 +95,7 @@ function put_like($post_id, $user_id)
     try {
         return $statement->execute();
     } catch (PDOException $e) {
-        echo json_encode(['error' => $e->getMessage()]);
+        // echo json_encode(['error' => $e->getMessage()]);
         die();
         //  die($e->getMessage());
     }
