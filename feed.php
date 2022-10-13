@@ -17,8 +17,7 @@ if (is_user_logged_in()) {
         <h3>No posts here yet!</h3>
         <h5 class="mt-3"> Do you want to be the first one ? </h5>
     </div>
-    <div class="container-fluid justify-content-center posts-container" style="max-width: 600px; min-height: 2000px">
-    </div>
+    <div class="container-fluid justify-content-center posts-container" style="max-width: 600px; min-height: 2000px"></div>
     <nav aria-label="Page navigation" class="page-navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -58,7 +57,8 @@ if (is_user_logged_in()) {
                 }
             })
             .then((result) => {
-                if (result !== "no change" && result !== "no posts") {
+                //console.log(reult);
+                if (result !== "no changes" && result !== "no posts") {
                     let page = document.getElementById('current-page');
                     posts_container.innerHTML = result;
                     page.innerHTML = page_no;
@@ -87,16 +87,16 @@ if (is_user_logged_in()) {
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
+            .then((response) => {
                 if (response.ok) {
-                    return response.text()
+                    return response.text();
                 } else {
                     // Find some way to get to execute .catch()
-                    return Promise.reject('something went wrong!')
+                    return Promise.reject('something went wrong!');
                 }
             })
             .then((result) => {
-                if (result !== "no change" && result !== "no posts") {
+                if ((result !== "no changes") && (result !== "no posts")) {
                     let page = document.getElementById('current-page');
                     posts_container.innerHTML = result;
                     page.innerHTML = page_no;
