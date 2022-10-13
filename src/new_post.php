@@ -130,36 +130,6 @@ if (is_post_request()) {
     //extract_posts();
 }
 
-function validate_description($text)
-{
-    if (!empty($text)) {
-        //validate here!
-        $description = $text;
-        if (mb_strlen($description, "UTF-8") > 200) {
-            echo json_encode(['error' => 'Description is too long! Sorry, try again']);
-            die();
-        }
-        $description = htmlspecialchars($description);
-    } else {
-        $description = "";
-    }
-    return $description;
-}
-
-function save_post($image_data, $description, $post_owner)
-{
-    $user = find_user_by_username($_SESSION['username']);
-    if ($user && is_user_active($user)) {
-        if (!insert_post($image_data, $description, $post_owner)) {
-            echo json_encode(['error' => 'Failed to upload your post! Please, try again!']);
-            die();
-        }
-    } else {
-        echo json_encode(['error' => 'We could not access your account data! You will be logged out!']);
-        die();
-    }
-}
-
 //To consider:
 //I probalby should do try->catch and throw errors instead of echoing them one by one which reduces readibility
 //Create unique post_id insted of autoincrementing

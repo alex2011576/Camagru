@@ -125,23 +125,3 @@ foreach ($articles as $article => $values) {
     </article>
 <?php
 }
-
-function get_posts($offset, $row_limit)
-{
-
-    $sql = 'SELECT users.username, posts.post_id, 
-            posts.owner_id, posts.post, 
-            posts.post_description
-            FROM posts 
-            JOIN users ON posts.owner_id = users.user_id 
-            ORDER BY posts.created_at DESC
-            LIMIT :offset , :row_limit';
-
-    $statement = db()->prepare($sql);
-    $statement->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
-    $statement->bindValue(':row_limit', (int) $row_limit, PDO::PARAM_INT);
-    $statement->execute();
-    return $statement->fetchAll(PDO::FETCH_ASSOC);
-}
-
-?>
