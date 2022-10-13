@@ -66,7 +66,7 @@ if (is_post_request()) {
 
         $notification_status = notifications_status($_POST['post_id']);
         $post_owner_id = get_post_owner($_POST['post_id']);
-        if ($notification_status['notifications'] === 1 && $post_owner_id != $_SESSION['user_id']) {
+        if (($notification_status['notifications'] === 1) && ($post_owner_id !== $_SESSION['user_id'])) {
             $email = $notification_status['email'];
             send_notification($email, $_SESSION['username'], 'New comment');
         }

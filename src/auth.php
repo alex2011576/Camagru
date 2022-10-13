@@ -443,7 +443,7 @@ function notifications_status($post_id)
     $statement->bindValue(':post_id', $post_id);
     try {
         $statement->execute();
-        return $statement->fetchALL(PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         die();
         // echo json_encode(['error' => $e->getMessage()]);
