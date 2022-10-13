@@ -2,9 +2,6 @@
 $stmt = db()->prepare("SELECT COUNT(*) FROM posts");
 $stmt->execute();
 $rows = $stmt->fetch();
-// die();
-// die("Error fetching data! Invalid page number!!!");
-// get total no. of pages
 $total_pages = ceil($rows[0] / $row_limit);
 if ($total_pages == 0) {
     header("Content-Type: text/plain");
@@ -39,7 +36,6 @@ foreach ($articles as $article => $values) {
         $color_hidden = "red";
         $switch_on = 0;
     }
-    //var_dump($likes);
 ?>
     <article class="card my-3 border border-light shadow-sm rounded-0 rounded-top" data-post-id="<?= $values['post_id'] ?>">
         <div class="card-header">@<?= $values['username'] ?></div>
@@ -94,9 +90,9 @@ foreach ($articles as $article => $values) {
             </div> -->
             <!-- Actual comments section  ADD IF (!EMPTY())-->
             <?php if (is_user_logged_in()) : ?>
-                <div class="comments border-top border-1 py-1 bg-light">
+                <div class="comments border-top border-1 py-1 bg-light" data-post-id="<?= $values['post_id'] ?>">
                 <?php else : ?>
-                    <div class="comments border-top border-1 pt-1 bg-light d-none">
+                    <div class="comments border-top border-1 pt-1 bg-light d-none" data-post-id="<?= $values['post_id'] ?>">
                     <?php endif; ?>
                     <!-- COMMENTS! -->
                     <?php foreach ($comments as $comment => $c_val) { ?>
@@ -114,26 +110,16 @@ foreach ($articles as $article => $values) {
                             <?php endif; ?>
                         </div>
                     <?php } ?>
-                    <!-- <div class="comment container-fluid d-inline-flex align-items-center pe-0 mb-2">
-                            <div class="comment-text pe-1 pe-3">
-                                <span class="text-start comment-a float-start fw-bold m-0 pe-2">erik:</span>
-                                <span class="post-description">gfdsfgf sgdg sgfdsgds gdfsgdfs sddgdsgds fdsgdfsg dsdfgfdsg
-                                    fdsgdfsgds dfgdfs sdgdfsg sdgdfsgfdsggd sbdss gdbg bgf
-                                    dbdgbfgdbgd shdssfgdfghdsf dsgdbgfvfdss dsgbgfvdfs bgbvd
-                                    bdsdbvfd fs</span>
-                            </div>
-                        </div> -->
-
                     </div>
         </section>
         <div class="card-footer text-muted bg-white ps-1 pe-0">
             <?php if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) : ?>
-                <div class="comment-input input-group m-0 border-0">
-                    <input type="text" class="form-control border-0" data-post-id="<?= $values['post_id'] ?>" placeholder="Add a comment..." aria-label="Add comment" />
-                    <button class="btn text-muted fw-bold border-0" type="button" id="button-pos2">
+                <form class="comment-input input-group m-0 border-0" action="" method="post">
+                    <input type="text" class="form-control border-0" data-post-id="<?= $values['post_id'] ?>" placeholder="Add a comment..." aria-label="Add comment" autocomplete="off" required />
+                    <button class="btn text-muted fw-bold border-0" type="submit" data-post-id="<?= $values['post_id'] ?>" onclick=add_comment(this)>
                         Post
                     </button>
-                </div>
+                </form>
             <?php endif; ?>
         </div>
     </article>
@@ -158,14 +144,4 @@ function get_posts($offset, $row_limit)
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
-
-
-function is_owner($owner)
-{
-    if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
-        if ($owner == $_SESSION['username'])
-            return true;
-    }
-    return false;
-}
 ?>

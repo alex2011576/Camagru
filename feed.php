@@ -218,6 +218,47 @@ if (is_user_logged_in()) {
         //comment.style.display = none;
     }
 
+    function add_comment(element) {
+        event.preventDefault();
+        const formData = new FormData();
+        const parsedUrl = new URL(window.location.href);
+        let post_id = element.getAttribute('data-post-id');
+        let input = document.querySelector(`input[data-post-id="${post_id}"]`);
+        if (input.value === "") {
+            return;
+        }
+        let comments = document.querySelector(`div[data-post-id="${post_id}"]`);
+        formData.append('comment', input.value);
+        formData.append('post_id', post_id);
+        fetch(parsedUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text()
+                } else {
+                    // Find some way to get to execute .catch()
+                    return Promise.reject('something went wrong!')
+                }
+            })
+            .then((result) => {
+                if (result === "error") {
+                    alert("Failure to add comment");
+                } else if (result === "limit") {
+                    alert("Comment is to big! 200 charachters max");
+                } else if (result === "empty") {
+                    alert("Comment is empty!");
+                } else {
+                    comments.innerHTML = result;
+                    input.value = "";
+                }
+            })
+            .catch((error) => {
+                alert("Error, reload page!")
+            });
+    }
+
     function focus_comment(element) {
         let post_id = element.getAttribute('data-post-id');
         let input = document.querySelector(`input[data-post-id="${post_id}"]`);

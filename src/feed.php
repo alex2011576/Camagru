@@ -29,17 +29,6 @@ if (is_post_request()) {
         echo json_encode(['success' => 'Post was deleted!']);
         die();
     }
-    // if (isset($_POST["like"]) && !empty($_POST["like"])) {
-    //     if (!put_like($_POST["post_id"], $_SESSION['user_id'])) {
-    //         die("error");
-    //     } else {
-    //         $like_id = true;
-    //         include __DIR__ . '/inc/like.php';
-    //         die();
-    //     }
-    // }
-    if (isset($_POST["comment"])) {
-    }
 
     if (isset($_POST["like"]) && !empty($_POST["like"])) {
         if (!is_user_logged_in()) {
@@ -67,11 +56,14 @@ if (is_post_request()) {
         }
         die();
     }
-    // get record starting position
-    // $start = (($page_no - 1) * $row_limit);
 
-    // $results = db()->prepare("SELECT * FROM posts ORDER BY created_at DESC LIMIT $start, $row_limit");
-    // $results->execute();
-
-    // $results->fetchALL(PDO::FETCH_ASSOC);
+    if (isset($_POST["comment"]) && isset($_POST['post_id'])) {
+        if (!is_user_logged_in() || empty($_POST['post_id']) || empty($_POST['comment'])) {
+            die("error");
+        }
+        $comment = validate_comment($_POST['comment']);
+        add_comment($comment, $_POST['post_id'], $_SESSION['user_id']);
+        include __DIR__ . '/inc/comment.php';
+        die();
+    }
 }

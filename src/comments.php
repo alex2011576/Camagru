@@ -15,7 +15,8 @@ function load_comments($post_id)
         $stm->execute();
         return $stm->fetchALL(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
-        die('Error: ' . $e->getMessage());
+        die("error");
+        // die('Error: ' . $e->getMessage());
         //  die($e->getMessage());
     }
 }
@@ -30,4 +31,37 @@ function delete_comment($comment_id, $user_id)
     $statement->bindValue(':comment_owner_id', $user_id);
 
     return $statement->execute();
+}
+
+function add_comment($comment, $post_id, $user_id)
+{
+    $sql = 'INSERT INTO comments(post_id, comment, comment_owner_id)
+            VALUES(:post_id, :comment, :comment_owner_id)';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':post_id', $post_id);
+    $statement->bindValue(':comment', $comment);
+    $statement->bindValue(':comment_owner_id', $user_id);
+
+    try {
+        return $statement->execute();
+    } catch (PDOException $e) {
+        //son_encode(['error' => $e->getMessage()]);
+        die("error");
+    }
+}
+
+function validate_comment($text)
+{
+    if (!empty($text)) {
+        //validate here!
+        $comment = $text;
+        if (mb_strlen($comment, "UTF-8") > 200) {
+            die("limit");
+        }
+        $comment = htmlspecialchars($comment);
+    } else {
+        die("empty");
+    }
+    return $comment;
 }
