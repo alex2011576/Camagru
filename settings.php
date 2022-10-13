@@ -23,10 +23,10 @@ require __DIR__ . '/src/settings.php';
         <form class="form-container border border-light shadow-sm  px-4 py-3 mt-3 mb-2" method="post">
             <p class="h5 text-center fw-normal my-2">Notifications Settings</p>
             <div class="d-grid pt-3 pb-2">
-                <button class="btn btn-secondary" type="button">Unsubscribe</button>
+                <button class="btn btn-dark" type="button" id=btn-unsub onclick="subcription_change(2)" <?= ($inputs['sub'] === 2 ? "disabled" : '') ?>>Unsubscribe</button>
             </div>
             <div class="d-grid pt-3 pb-2">
-                <button class="btn btn-dark" type="button">Subscribe</button>
+                <button class="btn btn-dark" type="button" id="btn-sub" onclick="subcription_change(1)" <?= ($inputs['sub'] === 1 ? "disabled" : '') ?>>Subscribe</button>
             </div>
         </form>
         <!-- Change Email-->
@@ -107,3 +107,43 @@ require __DIR__ . '/src/settings.php';
 </main>
 
 <?php view('footer') ?>
+
+<script>
+    const btn_sub = document.getElementById("btn-sub");
+    const btn_unsub = document.getElementById("btn-unsub");
+
+    function subcription_change(num) {
+
+        const formData = new FormData();
+        const parsedUrl = new URL(window.location.href);
+        btn_sub.disabled = true;
+        btn_unsub.disabled = true;
+        formData.append('sub', num);
+        fetch(parsedUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    // Find some way to get to execute .catch()
+                    return Promise.reject('something went wrong!')
+                }
+            })
+            .then((result) => {
+                if (result.hasOwnProperty('error')) {
+                    alert(result.error);
+                } else if (result.hasOwnProperty('success')) {
+                    if (num == 1) {
+                        btn_unsub.disabled = false;
+                    } else if (num == 2) {
+                        btn_sub.disabled = false;
+                    }
+                }
+            })
+            .catch((error) => {
+                alert('Error:', error);
+            });
+    }
+</script>

@@ -147,7 +147,24 @@ if (is_post_request()) {
             );
         }
     }
+
+    if (isset($_POST['sub'])) {
+        $sub_v = filter_var($_POST["sub"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
+        if (!is_numeric($sub_v)) {
+            die(json_encode(["error" => "BAD BAD BOY!"]));
+        }
+        if (!change_subscription($sub_v, $_SESSION['user_id'])) {
+            die(json_encode(["error" => ":("]));
+        }
+        die(json_encode(["success" => ":)"]));
+    }
+
     //maybe some error handling
 } else if (is_get_request()) {
     [$inputs, $errors] = session_flash('inputs', 'errors');
+    if (check_notifications_status($_SESSION['user_id']) == 1) {
+        $inputs['sub'] = 1;
+    } else {
+        $inputs['sub'] = 2;
+    }
 }

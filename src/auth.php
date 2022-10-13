@@ -450,3 +450,36 @@ function notifications_status($post_id)
         //  die($e->getMessage());
     }
 }
+
+function check_notifications_status($user_id)
+{
+    $sql = 'SELECT  users.notifications
+    FROM users
+    WHERE user_id = :user_id';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':user_id', $user_id);
+    try {
+        $statement->execute();
+        return $statement->fetchColumn();
+    } catch (PDOException $e) {
+        die();
+        // echo json_encode(['error' => $e->getMessage()]);
+        //  die($e->getMessage());
+    }
+}
+
+function change_subscription($sub_v, $user_id)
+{
+
+    $sql = 'UPDATE users
+    SET notifications = :mode
+    WHERE user_id = :user_id';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':mode', $sub_v);
+    $statement->bindValue(':user_id', $user_id);
+
+    return $statement->execute();
+}
