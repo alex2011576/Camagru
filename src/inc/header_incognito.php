@@ -19,7 +19,7 @@
   <!-- Header NOT Logged in -->
   <header class="navbar sticky-top shadow-sm bg-light">
     <nav class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="feed.php">
         <h1 class="fs-2 fw-bolder pt-2 ps-lg-3">Camagru</h1>
       </a>
       <ul class="nav px-0 justify-content-end flex-nowrap">

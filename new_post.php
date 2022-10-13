@@ -237,7 +237,6 @@ require __DIR__ . '/src/new_post.php';
                 return;
             draw_to_imgBuffer();
             draw_to_preview();
-            console.log(1);
             setTimeout(loop, 1000 / 60); //16fps
         })();
     }, false);
@@ -361,15 +360,13 @@ require __DIR__ . '/src/new_post.php';
                     alert(result.success);
                     appendPhoto_thumbnail(result.image);
                 }
-                console.log(result);
-
                 //hide_by_class("modal_loader");
                 //appendPhotoBar(result);
                 //maybe add alert when loaded
                 hide_by_class("thumb-loader");
             })
             .catch((error) => {
-                console.error('Error:', error);
+                alert('Error:', error);
                 hide_by_class("thumb-loader");
             });
         let modal = document.getElementById("loading_modal");
@@ -392,7 +389,7 @@ require __DIR__ . '/src/new_post.php';
                 video.play();
             })
             .catch((err) => {
-                console.error(`An error occurred: ${err}`);
+                alert(`An error occurred: ${err}`);
             });
         toggle_by_class('toggle-loader');
     }
@@ -409,8 +406,8 @@ require __DIR__ . '/src/new_post.php';
         adjust_decription(video.videoWidth + 2);
 
         // data url of the image
-        let image_data_url = canvas.toDataURL('image/jpeg');
-        console.log(image_data_url);
+        // let image_data_url = canvas.toDataURL('image/jpeg');
+        // console.log(image_data_url);
     };
 
     function retry() {
@@ -426,29 +423,29 @@ require __DIR__ . '/src/new_post.php';
         description.style.width = `${target_width}px`;
     }
 
-    function toggle_by_class(class_name) {
-        const boxes = document.getElementsByClassName(class_name);
+    // function toggle_by_class(class_name) {
+    //     const boxes = document.getElementsByClassName(class_name);
 
-        for (const box of boxes) {
-            box.classList.toggle('d-none');
-        }
-    }
+    //     for (const box of boxes) {
+    //         box.classList.toggle('d-none');
+    //     }
+    // }
 
-    function display_by_class(class_name) {
-        const boxes = document.getElementsByClassName(class_name);
+    // function display_by_class(class_name) {
+    //     const boxes = document.getElementsByClassName(class_name);
 
-        for (const box of boxes) {
-            box.classList.remove('d-none');
-        }
-    }
+    //     for (const box of boxes) {
+    //         box.classList.remove('d-none');
+    //     }
+    // }
 
-    function hide_by_class(class_name) {
-        const boxes = document.getElementsByClassName(class_name);
+    // function hide_by_class(class_name) {
+    //     const boxes = document.getElementsByClassName(class_name);
 
-        for (const box of boxes) {
-            box.classList.add('d-none');
-        }
-    }
+    //     for (const box of boxes) {
+    //         box.classList.add('d-none');
+    //     }
+    // }
 
     function clear_canvases() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -484,6 +481,8 @@ require __DIR__ . '/src/new_post.php';
         button_post.disabled = false;
         button_webcam.disabled = false;
         image_input.disabled = false;
+        button_shot.disabled = true;
+        button_shot.innerHTML = "Select Stickers";
     }
 
     function draw_to_preview() {
@@ -618,10 +617,11 @@ require __DIR__ . '/src/new_post.php';
                     //console.log(t_element.parentElement.parentElement.childElementCount);
                     t_element.parentElement.remove();
                 }
-                console.log(result);
+                // console.log(result);
             })
             .catch((error) => {
-                console.error('Error:', error);
+                // console.error('Error:', error);
+                alert('Error:', error);
                 t_element.parentElement.classList.remove('d-none');
             });
 

@@ -50,6 +50,7 @@ h1 {
 .comments {
   overflow-y: auto;
   max-height: 15em;
+  box-shadow: inset 0px 0px 3px 1px #9a9a994d !important;
 }
 
 .comment-text {

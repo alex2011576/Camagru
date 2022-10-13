@@ -432,99 +432,21 @@ function delete_account(string $user_id): bool
     return $statement->execute();
 }
 
-/**
- * Insert post to database
- *
- * @param string $image_data
- * @param string $description
- * @return bool
- */
-function insert_post($image_data, $description, $owner_id): bool
+function notifications_status($post_id)
 {
-    $sql = 'INSERT INTO posts(owner_id, post, post_description)
-            VALUES(:owner_id, :post, :post_description)';
+    $sql = 'SELECT  users.notifications, users.email
+        FROM users
+        JOIN posts ON posts.owner_id = users.user_id
+        WHERE posts.post_id = :post_id';
 
     $statement = db()->prepare($sql);
-
-    $statement->bindValue(':owner_id', $owner_id);
-    $statement->bindValue(':post', $image_data, PDO::PARAM_LOB);
-    $statement->bindValue(':post_description', $description);
-
-    try {
-        return $statement->execute();
-    } catch (PDOException $e) {
-        echo json_encode(['error' => $e->getMessage()]);
-        die();
-        //  die($e->getMessage());
-    }
-}
-
-/**
- * 
- * Extract last post by user_id;
- * return asocciative array[post_id] or false.
- * 
- * @param $user_id
- * @return mixed
- */
-function extract_last_post($user_id): mixed
-{
-
-    $sql = 'SELECT post_id
-            FROM posts
-            WHERE owner_id=:owner_id
-            ORDER BY created_at DESC LIMIT 1';
-
-    $statement = db()->prepare($sql);
-    $statement->bindValue(':owner_id', $user_id);
-    try {
-        $statement->execute();
-    } catch (PDOException $e) {
-        echo json_encode(['error' => $e->getMessage()]);
-        die();
-        //  die($e->getMessage());
-    }
-
-    return $statement->fetch(PDO::FETCH_ASSOC);
-}
-
-/**
- * 
- * Extract all posts by user_id;
- * return asocciative array[] of posts or false.
- * 
- * @param $user_id
- * @return mixed
- */
-function extract_posts_by_id($user_id): mixed
-{
-
-    $sql = 'SELECT post_id, post
-            FROM posts
-            WHERE owner_id=:owner_id
-            ORDER BY created_at DESC';
-
-    $statement = db()->prepare($sql);
-    $statement->bindValue(':owner_id', $user_id);
-    try {
-        $statement->execute();
-    } catch (PDOException $e) {
-        echo json_encode(['error' => $e->getMessage()]);
-        die();
-        //  die($e->getMessage());
-    }
-
-    return $statement->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function delete_post($user_id, $post_id): bool
-{
-    $sql = 'DELETE FROM posts
-            WHERE owner_id = :owner_id AND post_id = :post_id';
-
-    $statement = db()->prepare($sql);
-    $statement->bindValue(':owner_id', $user_id);
     $statement->bindValue(':post_id', $post_id);
-
-    return $statement->execute();
+    try {
+        $statement->execute();
+        return $statement->fetchALL(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die();
+        // echo json_encode(['error' => $e->getMessage()]);
+        //  die($e->getMessage());
+    }
 }

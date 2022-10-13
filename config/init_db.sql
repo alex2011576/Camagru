@@ -36,8 +36,36 @@ create table if not exists mycamagru_db.posts (
 	post longblob not null,
 	post_description varchar(250) not null,
 	created_at timestamp not null default current_timestamp(),
-	-- webcam tinyint not null default 0,
 	foreign key (owner_id)
+		references mycamagru_db.users (user_id)
+		on delete cascade
+);
+
+-- Likes table --
+create table if not exists mycamagru_db.likes (
+	like_id	int auto_increment primary key,
+	post_id int not null,
+	user_id int not null,
+	unique key post_and_user_unique (post_id, user_id),
+	foreign key (post_id)
+		references mycamagru_db.posts (post_id)
+		on delete cascade,
+	foreign key (user_id)
+		references mycamagru_db.users (user_id)
+		on delete cascade 
+);
+
+-- Comment table --
+create table if not exists mycamagru_db.comments (
+	comment_id int auto_increment primary key,
+	post_id int not null,
+	comment varchar(250) not null,
+	comment_owner_id int not null,
+	created_at timestamp not null default current_timestamp(),
+	foreign key (post_id)
+		references mycamagru_db.posts (post_id)
+		on delete cascade,
+	foreign key (comment_owner_id)
 		references mycamagru_db.users (user_id)
 		on delete cascade
 );
