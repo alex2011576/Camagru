@@ -9,6 +9,7 @@ if (is_get_request()) {
     $total_pages = ceil($rows[0] / $row_limit);
 }
 if (is_post_request()) {
+    ob_clean();
     if (isset($_POST["page"])) {
         $page_no = filter_var($_POST["page"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
         if (!is_numeric($page_no)) {
@@ -19,8 +20,9 @@ if (is_post_request()) {
         die();
         // get total no. of pages
     }
+
     if (isset($_POST["delete_post"]) && !empty($_POST["delete_post"])) {
-        if (!delete_post($_SESSION['user_id'], $_POST['post_id'])) {
+        if (!is_user_logged_in() || !delete_post($_SESSION['user_id'], $_POST['post_id'])) {
             echo json_encode(['error' => "Couldn't delete your post!"]);
             die();
         }
@@ -38,7 +40,11 @@ if (is_post_request()) {
     // }
     if (isset($_POST["comment"])) {
     }
+
     if (isset($_POST["like"]) && !empty($_POST["like"])) {
+        if (!is_user_logged_in()) {
+            die("error");
+        }
         $like_id = check_like($_POST['post_id'], $_SESSION['user_id']);
         if (!$like_id) {
             if (!put_like($_POST["post_id"], $_SESSION['user_id'])) {
@@ -54,7 +60,12 @@ if (is_post_request()) {
         include __DIR__ . '/inc/like.php';
         die();
     }
+
     if (isset($_POST["delete_comment"]) && !empty($_POST["delete_comment"])) {
+        if (!is_user_logged_in() || !delete_comment($_POST['comment_id'], $_SESSION['user_id'])) {
+            die("error");
+        }
+        die();
     }
     // get record starting position
     // $start = (($page_no - 1) * $row_limit);

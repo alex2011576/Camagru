@@ -32,6 +32,10 @@ function hide_by_class(class_name) {
     }
 }
 
+function toggle_display(element) {
+  element.classList.toggle('d-none');
+}
+
 var my_atoi = function(str) {
   var i = 0;
   var sign = 1;

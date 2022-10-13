@@ -186,6 +186,38 @@ if (is_user_logged_in()) {
         }
     }
 
+    function delete_comment(element) {
+        const formData = new FormData();
+        const parsedUrl = new URL(window.location.href);
+        let comment_id = element.getAttribute('data-comment-id');
+        let comment = document.querySelector(`div[data-comment-id="${comment_id}"]`);
+        formData.append('delete_comment', 1);
+        formData.append('comment_id', comment_id);
+        fetch(parsedUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text()
+                } else {
+                    // Find some way to get to execute .catch()
+                    return Promise.reject('something went wrong!')
+                }
+            })
+            .then((result) => {
+                if (result === "error") {
+                    toggle_display(comment);
+                    alert("Failure to delete comment");
+                }
+            })
+            .catch((error) => {
+                alert("Error, reload page!")
+            });
+        toggle_display(comment);
+        //comment.style.display = none;
+    }
+
     function focus_comment(element) {
         let post_id = element.getAttribute('data-post-id');
         let input = document.querySelector(`input[data-post-id="${post_id}"]`);

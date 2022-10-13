@@ -19,3 +19,15 @@ function load_comments($post_id)
         //  die($e->getMessage());
     }
 }
+
+function delete_comment($comment_id, $user_id)
+{
+    $sql = 'DELETE FROM comments
+            WHERE comment_id = :comment_id AND comment_owner_id = :comment_owner_id';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':comment_id', $comment_id);
+    $statement->bindValue(':comment_owner_id', $user_id);
+
+    return $statement->execute();
+}
