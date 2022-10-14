@@ -68,7 +68,7 @@ function validate_comment($text)
 
 function send_notification($email, $commentator, $subject): void
 {
-    $feed_url = APP_URL . 'fdf.php';
+    $feed_url = APP_URL . '/feed.php';
     $message = <<<MESSAGE
             Your post just recieved new comment from the user @$commentator.
             You can check it out here: $feed_url

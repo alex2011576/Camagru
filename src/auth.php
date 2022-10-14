@@ -224,11 +224,7 @@ function find_unverified_user(string $activation_code, string $email)
     $statement->bindValue(':email', $email);
     $statement->execute();
     $user = $statement->fetch(PDO::FETCH_ASSOC);
-    // var_dump($activation_code);
-    // var_dump($user['activation_code']);
-    // var_dump($email);
-    // var_dump($user);
-    // die();
+
     if ($user) {
         // already expired, delete the in active user with expired activation code
         if ((int)$user['expired'] === 1) {
@@ -248,7 +244,8 @@ function find_unverified_user(string $activation_code, string $email)
 function activate_user(int $user_id): bool
 {
     $sql = 'UPDATE users
-            SET active = 1,
+            SET active = 1, 
+                activation_code = "activated",
                 activated_at = CURRENT_TIMESTAMP
             WHERE user_id=:user_id';
 

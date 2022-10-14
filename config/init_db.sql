@@ -59,7 +59,7 @@ create table if not exists mycamagru_db.likes (
 create table if not exists mycamagru_db.comments (
 	comment_id int auto_increment primary key,
 	post_id int not null,
-	comment varchar(250) not null,
+	comment varchar(1000) not null,
 	comment_owner_id int not null,
 	created_at timestamp not null default current_timestamp(),
 	foreign key (post_id)

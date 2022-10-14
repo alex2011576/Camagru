@@ -140,10 +140,10 @@ if (is_user_logged_in()) {
                 } else if (result.hasOwnProperty('success')) {
                     article.remove();
                 }
-                console.log(result);
+                //console.log(result);
             })
             .catch((error) => {
-                console.error('Error:', error);
+                //console.error('Error:', error);
                 article.classList.remove('d-none');
             });
     }

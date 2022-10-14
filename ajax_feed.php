@@ -115,7 +115,7 @@ foreach ($articles as $article => $values) {
         <div class="card-footer text-muted bg-white ps-1 pe-0">
             <?php if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) : ?>
                 <form class="comment-input input-group m-0 border-0" action="" method="post">
-                    <input type="text" class="form-control border-0" data-post-id="<?= $values['post_id'] ?>" placeholder="Add a comment..." aria-label="Add comment" autocomplete="off" required />
+                    <input type="text" class="form-control border-0" maxlength="200" data-post-id="<?= $values['post_id'] ?>" placeholder="Add a comment..." aria-label="Add comment" autocomplete="off" required />
                     <button class="btn text-muted fw-bold border-0" type="submit" data-post-id="<?= $values['post_id'] ?>" onclick=add_comment(this)>
                         Post
                     </button>

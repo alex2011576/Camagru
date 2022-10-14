@@ -70,10 +70,10 @@ if (is_post_request()) {
         save_post($image_data, $description, $_SESSION['user_id']);
         // save_post($image_data, $description, 2);
 
-        if (!file_put_contents($final_destination, $image_data)) {
-            echo json_encode(['error' => 'Something went wrong. Try again later!']);
-            die();
-        }
+        // if (!file_put_contents($final_destination, $image_data)) {
+        //     echo json_encode(['error' => 'Something went wrong. Try again later!']);
+        //     die();
+        // }
         $post_id = extract_last_post($_SESSION['user_id']);
         $response_image = "data:image/jpeg;base64," . base64_encode($image_data);
         //echo ($_POST['stickers']);
