@@ -10,7 +10,7 @@ $errors = [];
 if (is_post_request()) {
 
     [$inputs, $errors] = filter($_POST, [
-        'identifier' => 'string | required'
+        'identifier' => 'string | required | between: 1, 200'
     ]);
 
     if ($errors) {

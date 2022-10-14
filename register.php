@@ -19,7 +19,7 @@ require __DIR__ . '/src/register.php';
             </p>
             <div class="row mb-3">
                 <div class="">
-                    <input name="email" type="email" class="form-control bg-light" placeholder="Email" aria-label="Email" aria-describedby="" autocomplete="on" value="<?= $inputs['email'] ?? '' ?>" required />
+                    <input name="email" type="email" class="form-control bg-light" maxlength="50" placeholder="Email" aria-label="Email" aria-describedby="" autocomplete="on" value="<?= $inputs['email'] ?? '' ?>" required />
                 </div>
                 <small class="text-danger"><?= $errors['email'] ?? '' ?></small>
             </div>
@@ -41,7 +41,7 @@ require __DIR__ . '/src/register.php';
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input name="password2" type="password" class="form-control bg-light" placeholder="Confirm Password" aria-label="confirm-password" aria-describedby="cpassHelp" autocomplete="on" value="<?= $inputs['password2'] ?? '' ?>" required />
+                    <input name="password2" type="password" class="form-control bg-light" placeholder="Confirm Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}" aria-label="confirm-password" aria-describedby="cpassHelp" autocomplete="on" value="<?= $inputs['password2'] ?? '' ?>" required />
                     <div id="cpassHelp" class="form-text"></div>
                 </div>
                 <small class="text-danger"><?= $errors['password2'] ?? '' ?></small>

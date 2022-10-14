@@ -6,8 +6,8 @@ if (is_user_logged_in()) {
 
 if (is_post_request()) {
     $fields = [
-        'password' => 'string | required | secure',
-        'password2' => 'string | required | same: password'
+        'password' => 'string | required | secure | between: 1, 200',
+        'password2' => 'string | required | same: password | between: 1, 200'
     ];
     // custom messages
     $messages = [

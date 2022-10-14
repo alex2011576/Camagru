@@ -20,13 +20,13 @@ require __DIR__ . '/src/login.php';
       <p class="logo-h2 fw-bolder text-center mt-5 pt-1 mb-5" style="width:inherit">Camagru</p>
       <div class="row mb-3">
         <div class="">
-          <input type="text" name="username" class="form-control bg-light" placeholder="Username" aria-label="Username" aria-describedby="" autocomplete="on" value="<?= $inputs['username'] ?? '' ?>" required>
+          <input type="text" name="username" class="form-control bg-light" placeholder="Username" aria-label="Username" aria-describedby="" title="Username should be 3-15 characters, no spaces allowed." pattern="^(?!.*\s)(\w|\W){3,15}$" autocomplete="on" value="<?= $inputs['username'] ?? '' ?>" required>
         </div>
         <small class="text-danger"><?= $errors['username'] ?? '' ?></small>
       </div>
       <div class="row mb-3">
         <div class="">
-          <input type="password" name="password" class="form-control bg-light" id="" placeholder="Password" aria-label="Password" autocomplete="on" required>
+          <input type="password" name="password" class="form-control bg-light" id="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}" placeholder="Password" aria-label="Password" autocomplete="on" required>
         </div>
         <small class="text-danger"><?= $errors['password'] ?? '' ?></small>
       </div>

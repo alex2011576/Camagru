@@ -10,7 +10,7 @@ $inputs = [];
 if (is_post_request()) {
     $fields = [
         'username' => 'string | required | alphanumeric | between: 3, 15 | unique: users, username',
-        'email' => 'email | required | email | unique: users, email',
+        'email' => 'email | required | email | between 3, 50 | unique: users, email',
         'password' => 'string | required | secure',
         'password2' => 'string | required | same: password',
         //'agree' => 'string | required'

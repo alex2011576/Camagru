@@ -22,13 +22,13 @@ require __DIR__ . '/src/reset_pass.php';
             </p>
             <div class="row mb-3">
                 <div class="">
-                    <input name="password" type="password" class="form-control bg-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}" placeholder="New Password" aria-label="new-password" aria-describedby="passHel" autocomplete="on" value="<?= $inputs['password'] ?? '' ?>" required />
+                    <input name="password" type="password" class="form-control bg-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,200}" placeholder="New Password" aria-label="new-password" aria-describedby="passHel" autocomplete="on" value="<?= $inputs['password'] ?? '' ?>" required />
                     <small class="text-danger"><?= $errors['password'] ?? '' ?></small>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input name="password2" type="password" class="form-control bg-light" placeholder="Confirm New Password" aria-label="confirm-password" aria-describedby="cpassHelp" autocomplete="on" value="<?= $inputs['password2'] ?? '' ?>" required />
+                    <input name="password2" type="password" class="form-control bg-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,200}" placeholder="Confirm New Password" aria-label="confirm-password" aria-describedby="cpassHelp" autocomplete="on" value="<?= $inputs['password2'] ?? '' ?>" required />
                     <div id="cpassHelp" class="form-text"></div>
                 </div>
                 <small class="text-danger"><?= $errors['password2'] ?? '' ?></small>

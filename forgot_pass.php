@@ -27,7 +27,7 @@ require __DIR__ . '/src/forgot_pass.php';
             </p>
             <div class="row mb-3">
                 <div class="">
-                    <input type="text" name="identifier" class="form-control bg-light" placeholder="Username or Email" aria-label="Username or Email" aria-describedby="" autocomplete="on" value="<?= $inputs['identifier'] ?? '' ?>">
+                    <input type="text" name="identifier" class="form-control bg-light" maxlength="200" placeholder="Username or Email" aria-label="Username or Email"  autocomplete="on" value="<?= $inputs['identifier'] ?? '' ?>" required>
                 </div>
                 <small class="text-danger"><?= $errors['identifier'] ?? '' ?></small>
             </div>

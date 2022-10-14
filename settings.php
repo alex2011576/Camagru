@@ -35,13 +35,13 @@ require __DIR__ . '/src/settings.php';
             <div class="row mb-3">
                 <!-- <label for="" class="col-form-label">New Email</label> -->
                 <div class="">
-                    <input type="email" name="new_email" autocomplete="on" class="form-control bg-light" placeholder="New email" aria-label="New Email">
+                    <input type="email" name="new_email" autocomplete="on" class="form-control bg-light" maxlength="50" placeholder="New email" aria-label="New Email" required>
                 </div>
                 <small class="text-danger"><?= $errors['new_email'] ?? '' ?></small>
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" name="password" autocomplete="on" class="form-control bg-light" placeholder="Password" aria-label="Password">
+                    <input type="password" name="password" autocomplete="on" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}" class="form-control bg-light" placeholder="Password" aria-label="Password" required>
                 </div>
 
             </div>
@@ -54,13 +54,13 @@ require __DIR__ . '/src/settings.php';
             <p class="h5 text-center fw-normal mt-2 mb-3">Change Username</p>
             <div class="row mb-3">
                 <div class="">
-                    <input type="text" name="new_username" class="form-control bg-light" placeholder="New Username" aria-label="New Username" aria-describedby="">
+                    <input type="text" name="new_username" class="form-control bg-light" title="Username should be 3-15 characters, no spaces allowed." pattern="^(?!.*\s)(\w|\W){3,15}$" placeholder="New Username" aria-label="New Username" required>
                 </div>
                 <small class="text-danger"><?= $errors['new_username'] ?? '' ?></small>
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" name="password" autocomplete="on" class="form-control bg-light" placeholder="Password" aria-label="Add comment">
+                    <input type="password" name="password" autocomplete="on" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}" class="form-control bg-light" placeholder="Password" aria-label="Add comment" required>
                 </div>
             </div>
             <div class="d-grid pt-2 pb-2">
@@ -72,18 +72,18 @@ require __DIR__ . '/src/settings.php';
             <p class="h5 text-center fw-normal mt-2 mb-3">Change Password</p>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" name="password" autocomplete="on" class="form-control bg-light" placeholder="Old Password" aria-label="Old Password" aria-describedby="">
+                    <input type="password" name="password" autocomplete="on" class="form-control bg-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,200}" placeholder="Old Password" aria-label="Old Password" required>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" name="new_password" autocomplete="on" class="form-control bg-light" placeholder="New Password" aria-label="New Password" aria-describedby="">
+                    <input type="password" name="new_password" autocomplete="on" class="form-control bg-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,200}" placeholder="New Password" aria-label="New Password"  required>
                 </div>
                 <small class="text-danger"><?= $errors['new_password'] ?? '' ?></small>
             </div>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" name="new_password2" autocomplete="on" class="form-control bg-light" placeholder="Confirm New Password" aria-label="Confirm New Password">
+                    <input type="password" name="new_password2" autocomplete="on" class="form-control bg-light" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,200}" placeholder="Confirm New Password" aria-label="Confirm New Password" required>
                 </div>
                 <small class="text-danger"><?= $errors['new_password2'] ?? '' ?></small>
             </div>
@@ -96,7 +96,7 @@ require __DIR__ . '/src/settings.php';
             <p class="h5 text-center fw-normal mt-2 mb-3">Delete Account</p>
             <div class="row mb-3">
                 <div class="">
-                    <input type="password" name="password" class="form-control bg-light" placeholder="Confirm With Password" aria-label="Confirm With Password" aria-describedby="" autocomplete="on">
+                    <input type="password" name="password" class="form-control bg-light" placeholder="Confirm With Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}" aria-label="Confirm With Password" aria-describedby="" autocomplete="on" required>
                 </div>
             </div>
             <div class="d-grid pt-2 pb-2">
