@@ -470,11 +470,10 @@ function change_subscription($sub_v, $user_id)
 {
 
     $sql = 'UPDATE users
-    SET notifications = :mode
-    WHERE user_id = :user_id';
+        SET notifications = :mode
+        WHERE user_id = :user_id';
 
     $statement = db()->prepare($sql);
-
     $statement->bindValue(':mode', $sub_v);
     $statement->bindValue(':user_id', $user_id);
 

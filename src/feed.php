@@ -16,7 +16,7 @@ if (is_post_request()) {
             die("Error fetching data! Invalid page number!!!");
         }
         ob_clean();
-        include __DIR__ . '/../ajax_feed.php';
+        include __DIR__ . '/inc/ajax_feed.php';
         die();
         // get total no. of pages
     }
