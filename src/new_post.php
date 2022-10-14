@@ -33,13 +33,17 @@ if (is_post_request()) {
             echo json_encode(['error' => 'Something went wrong. Try again or peak another file, please!']);
             die();
         }
+        $stickers = json_decode($_POST['stickers'], true);
         if (isset($_POST['flip'])) {
             if (!imageflip($image_resource, IMG_FLIP_HORIZONTAL)) {
                 echo json_encode(['error' => 'Something went wrong. Try again or peak another file, please!']);
                 die();
             }
+            if (empty($stickers)) {
+                echo json_encode(['error' => 'Picture was taken without stickers!']);
+                die();
+            }
         }
-        $stickers = json_decode($_POST['stickers'], true);
         foreach ($stickers as $sticker => $value) {
             $path =  sticker_dir . $sticker . '.png';
             $h_offset = $value['y'];
