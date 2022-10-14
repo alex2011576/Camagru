@@ -186,11 +186,20 @@ require __DIR__ . '/src/new_post.php';
         } else {
             reader.addEventListener("load", () => {
                 const uploaded_image = reader.result;
-                if (isImage(reader.result)) {
-                    pic.src = uploaded_image;
+                
+                if (isImage(uploaded_image)) {
+                    testImage(uploaded_image)
+                        .then(() => {
+                            pic.src = uploaded_image;
+                        })
+                        .catch(() => {
+                            alert("Corrupt file!");
+                        });
+
                 } else {
                     alert("Wrong file format! Only jpeg and png are accepted!");
                 }
+
             });
             reader.readAsDataURL(this.files[0]);
         }
@@ -625,5 +634,31 @@ require __DIR__ . '/src/new_post.php';
                 t_element.parentElement.classList.remove('d-none');
             });
 
+    }
+
+    function testImage(url) {
+
+        // Define the promise
+        const imgPromise = new Promise(function imgPromise(resolve, reject) {
+
+            // Create the image
+            const imgElement = new Image();
+
+            // When image is loaded, resolve the promise
+            imgElement.addEventListener('load', function imgOnLoad() {
+                resolve(this);
+            });
+
+            // When there's an error during load, reject the promise
+            imgElement.addEventListener('error', function imgOnError() {
+                reject();
+            })
+
+            // Assign URL
+            imgElement.src = url;
+
+        });
+
+        return imgPromise;
     }
 </script>
