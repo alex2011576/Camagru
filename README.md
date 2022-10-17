@@ -29,8 +29,4 @@ MVC (model - view - controller) approach was attempted.
 -server-side CONTROLLER and MODEL are located in SRC and CONFIG foldrs. 
 -most controller files are coupled to their VIEW counterparts.
 -additionaly, there are separate blocks dedicated for general usage by multiple pages. All of the general blocks are connected in bootstrap.php.
--attempted to add scalability and abstraction by creation of a universal system for filtering, santitzation, validation and flushing of inputs and errors.
-
-
-written in PHP on the back-end and Html, Css, Vanilla JavaScript and Bootstrap on the front-end. Based on MariaDB. Simple photo-gallery application allowing user to make basic photo and video editing using a webcam and some predefined images (stickers). 
-
+-attempted to add scalability and abstraction by creation of a universal system for filtering, santitzation, validation and flushing of inputs and errors. 
