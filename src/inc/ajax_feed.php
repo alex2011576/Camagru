@@ -26,6 +26,7 @@ foreach ($articles as $article => $values) {
         $comments = load_comments($values['post_id']);
     } else {
         $likes = load_likes($values['post_id'], 0);
+        $comments = [];
     }
     if ($likes['like_id'] !== 0) {
         $color = "red";
