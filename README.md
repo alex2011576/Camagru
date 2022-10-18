@@ -42,6 +42,7 @@ Full-stack photo-gallery web application allowing users to make basic photo and 
 git clone https://github.com/alex2011576/Camagru.git Camagru
 ```
 APP_URL is defaulted to 'http://localhost:8080/Camagru/' in 'config/app.php'
+
 3. modify the **$DB_USER** and **$DB_PASSWORD** variables in the file 'config/database.php', with the username and password you provided when installing MAMP
 4. start the MariaDB and Apache Web servers using 'manager-osx.app' in the MAMP root folder (Manage Servers -> Start All)
 5. configure mail sender for the PHP `mail()` function to work
