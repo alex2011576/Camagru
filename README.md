@@ -19,9 +19,11 @@ Full-stack photo-gallery web application allowing users to make basic photo and 
 
 ## Security measures taken:
 
-- module for scalable and abstracted sanitization and validation of inputs to prevent XSS attacks, 
-- PDO SQL bindings against SQL injections,
-- session regeneration to prevent Session Fixation.
+- module for scalable and abstracted sanitization and validation of inputs to prevent **XSS attacks **
+- PDO SQL bindings against **SQL injections**
+- session regeneration to prevent **Session Fixation**
+- hashing + 1-way encryption of passwords and tokens
+- access limitations
 
 ## Design:
 
