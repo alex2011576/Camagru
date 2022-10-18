@@ -53,9 +53,9 @@ This project is about building a photo-gallery web application that allows users
 1. install [Bitnami MAMP](https://bitnami.com/stack/mamp)
 2. clone this repository to the '.../apache2/htdocs/' derictory in your MAMP install path:
 ```
-git clone https://github.com/alex2011576/Camagru.git Camagru
+git clone https://github.com/alex2011576/Camagru.git camagru
 ```
-APP_URL is defaulted to 'http://localhost:8080/Camagru/' in 'config/app.php'
+APP_URL is defaulted to 'http://localhost:8080/camagru/' in 'config/app.php'
 
 3. modify the **$DB_USER** and **$DB_PASSWORD** variables in the file 'config/database.php', with the username and password you provided when installing MAMP
 4. start the MariaDB and Apache Web servers using 'manager-osx.app' in the MAMP root folder (Manage Servers -> Start All)
@@ -63,9 +63,9 @@ APP_URL is defaulted to 'http://localhost:8080/Camagru/' in 'config/app.php'
 6. app is ready to use in your browser, using address http://localhost:8080/Camagru
 
 ## SCREENSHOTS
-
+  
 ### Desktop
-
+  
 ![Screen Shot 2022-10-18 at 18 24 26](https://user-images.githubusercontent.com/84226106/196474068-f6b72817-fdc0-44dc-a09c-e050a48bfcc0.png)
 ![Screen Shot 2022-10-18 at 18 24 18](https://user-images.githubusercontent.com/84226106/196474069-69c3a598-db4b-44dc-bb02-775f10778771.png)
 ![Screen Shot 2022-10-18 at 18 24 10](https://user-images.githubusercontent.com/84226106/196474084-0b60be8e-7931-4e15-b52f-e9ce2a2b6c1f.png)
@@ -76,6 +76,7 @@ APP_URL is defaulted to 'http://localhost:8080/Camagru/' in 'config/app.php'
 ![Screen Shot 2022-10-18 at 18 08 12](https://user-images.githubusercontent.com/84226106/196474124-49dd4e34-5d28-457e-9b7f-5418f8840718.png)
 
 ### Mobile
+  
 ![Screen Shot 2022-10-18 at 18 19 38](https://user-images.githubusercontent.com/84226106/196476130-ae697b87-a682-4f70-b9bc-b3f8f2dc9d68.png)
   
 ![Screen Shot 2022-10-18 at 18 20 19](https://user-images.githubusercontent.com/84226106/196476795-a036cbfe-4409-4703-914e-fb72cd546953.png)
