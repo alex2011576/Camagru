@@ -1,9 +1,11 @@
 # Camagru
-This project is about building a photo-gallery web application that allows users to _make_, _share_ and _react to_ basic photo and video edits with a webcam and some predefined images (stickers). 
+This project is about building a photo-gallery web application that allows users to _make_, _share_ and _react to_ basic photo and video edits with a webcam and some predefined images (stickers).
   In my implementation editing is displayed in a live preview.
+  
   As with any other 42 project, there were some constraints:
 * It had to be written in PHP.
 * Every framework, micro-framework or library that you don’t create are totally forbidden (except for CSS frameworks that don’t need JavaScript).
+* Final superposing of stickers had to happen on the server-side.
 
 
 ## Technologies used:
@@ -14,29 +16,36 @@ This project is about building a photo-gallery web application that allows users
 
 ## Functionality:
 
+1. **new_post.php**
 - users are able to take pictures with a webcamera and upload images,
-- apply stickers to to the pictures (taken/uploaded) in a live preview,
-- see all uploaded pictures with description (posts) in a feed,
+- apply (also move/remove) stickers to to the pictures (taken/uploaded) in a live preview,
+- see all previous posts of the logged-in user
+2. **feed.php**
+- see all posts (uploaded pictures with descriptions, likes and comments),
 - possibility to like, comment posts,
-- delete own posts, likes and comments,
+- delete own: posts, likes and comments,
+3. **other pages**
 - subsribe/unsubscribe to notifications about new comments on own posts,
 - register, login, logout, recover/change password, change email, username, delete account etc. (with activation links and tokens for password reset being sent to email).
+  
+## Security measures and other features:
 
-## Security measures taken:
-
-- module for scalable and abstracted sanitization and validation of inputs to prevent **XSS attacks **
-- PDO SQL bindings against **SQL injections**
-- session regeneration to prevent **Session Fixation**
-- hashing + 1-way encryption of passwords and tokens
-- access limitations
+- abstracted module for sanitization and validation of inputs (**XSS attacks**)
+- PDO MySQL bindings (**SQL injections**)
+- session regeneration (**Session Fixation**)
+- **hashing and 1-way encryption** of passwords and tokens
+- get->post->get system (to avoid accidental double post request)
+- flushing of messages, inputs and errors,
+- ajaxified posting, liking, commenting and pagination
 
 ## Design:
 
 **MVC (model - view - controller) approach was attempted.**
-- root directory containes the VIEW part (witch some additional VIEW components in src/inc/ directory),
-- server-side CONTROLLER and MODEL are located in SRC and CONFIG foldrs. 
+- root directory containes the VIEW part (witch some additional VIEW components in src/inc/ directory).
+- server-side CONTROLLER and MODEL are located in SRC and CONFIG folders. 
 - most controller files are coupled to their VIEW counterparts.
-- additionaly, there are separate blocks dedicated for general usage by multiple pages. All of the general blocks are connected in bootstrap.php.
+- additionaly, there are separate blocks dedicated for general usage by multiple pages. 
+- all of the general blocks are connected in bootstrap.php.
 - attempted to add scalability and abstraction by creation of a universal system for filtering, santitzation, validation and flushing of inputs and errors. 
 
 ## Installation guide
