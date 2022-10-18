@@ -4,7 +4,7 @@ Full-stack photo-gallery web application allowing users to make basic photo and 
 ## Technologies used:
 
 1. Client-side: CSS, HTML, BootStrap, JavaScript Vanilla (Fetch API, FileReader API, FormData API, Media Capture and Streams API and Canvas API),
-2. Server-side: PHP (Standard Library), MySQL
+2. Server-side: PHP (Standard Library), MariaDB
 3. Deployment: MAMP local Apache server
 
 ## Functionality:
@@ -33,3 +33,16 @@ Full-stack photo-gallery web application allowing users to make basic photo and 
 - most controller files are coupled to their VIEW counterparts.
 - additionaly, there are separate blocks dedicated for general usage by multiple pages. All of the general blocks are connected in bootstrap.php.
 - attempted to add scalability and abstraction by creation of a universal system for filtering, santitzation, validation and flushing of inputs and errors. 
+
+## Installation guide
+
+1. install [Bitnami MAMP](https://bitnami.com/stack/mamp)
+2. clone this repository to the '.../apache2/htdocs/' derictory in your MAMP install path:
+```
+git clone https://github.com/SeanTroy/Camagru.git Camagru
+```
+APP_URL is defaulted to 'http://localhost:8080/Camagru/' in 'config/app.php'
+3. modify the **$DB_USER** and **$DB_PASSWORD** variables in the file 'config/database.php', with the username and password you provided when installing MAMP
+4. start the MariaDB and Apache Web servers using 'manager-osx.app' in the MAMP root folder (Manage Servers -> Start All)
+5. configure mail sender for the PHP `mail()` function to work
+6. app is ready to use in your browser, using address http://localhost:8080/Camagru
