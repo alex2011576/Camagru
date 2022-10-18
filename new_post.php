@@ -186,7 +186,7 @@ require __DIR__ . '/src/new_post.php';
         } else {
             reader.addEventListener("load", () => {
                 const uploaded_image = reader.result;
-                
+
                 if (isImage(uploaded_image)) {
                     testImage(uploaded_image)
                         .then(() => {
@@ -347,8 +347,6 @@ require __DIR__ . '/src/new_post.php';
             formData.append('flip', "1");
         }
 
-        // "http://localhost:8080/camagru/mine/src/merge_images.php"
-        //fetch("http://localhost:8080/camagru/mine/new_post.php", {
         const parsedUrl = new URL(window.location.href);
         fetch(parsedUrl, {
                 method: 'POST',
