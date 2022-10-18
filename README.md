@@ -4,8 +4,8 @@ Full-stack photo-gallery web application allowing users to make basic photo and 
 #Technologies used:
 
 1.Client-side: CSS, HTML, BootStrap, JavaScript Vanilla (Fetch API, FileReader API, FormData API, Media Capture and Streams API and Canvas API),
-2.Server-side: PHP (Standard Library)
-
+2.Server-side: PHP (Standard Library), MySQL
+3.Deployment: MAMP local Apache server
 #Functionality:
 
 -users are able to take pictures with a webcamera and upload images,
