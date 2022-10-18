@@ -39,7 +39,7 @@ Full-stack photo-gallery web application allowing users to make basic photo and 
 1. install [Bitnami MAMP](https://bitnami.com/stack/mamp)
 2. clone this repository to the '.../apache2/htdocs/' derictory in your MAMP install path:
 ```
-git clone https://github.com/SeanTroy/Camagru.git Camagru
+git clone https://github.com/alex2011576/Camagru.git Camagru
 ```
 APP_URL is defaulted to 'http://localhost:8080/Camagru/' in 'config/app.php'
 3. modify the **$DB_USER** and **$DB_PASSWORD** variables in the file 'config/database.php', with the username and password you provided when installing MAMP
