@@ -35,7 +35,8 @@ This project is about building a photo-gallery web application that allows users
 - session regeneration (**Session Fixation**)
 - **hashing and 1-way encryption** of passwords and tokens
 - get->post->get system (to avoid accidental double post request)
-- flushing of messages, inputs and errors,
+- evaluate size, format and onload promises of each uploaded file to confirm image 
+- flushing of messages, inputs and errors
 - ajaxified posting, liking, commenting and pagination
 
 ## Design:
