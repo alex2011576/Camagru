@@ -1,5 +1,9 @@
 # Camagru
-Full-stack photo-gallery web application allowing users to make basic photo and video editing using a webcam and some predefined images (stickers). 
+Full-stack photo-gallery web application allowing users to make basic photo and video editing using a webcam and some predefined images (stickers). As with any other 42 projects, there were some constraints:
+
+    It had to be written in PHP.
+    Every framework, micro-framework or library that you don’t create are totally forbidden (except for CSS frameworks that doesn’t need JavaScript).
+
 
 ## Technologies used:
 
